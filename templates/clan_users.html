@@ -1,0 +1,46 @@
+{% extends 'layout.html' %}
+
+{% block header %}
+<div class="container">
+  <h3><a href="/">dcde.ga (β)</a> / {{ clan_data["name"] }} [{{ clan_data["callsign"] }}]</h3>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- <div class="clan-search">
+  <input type="search" name="clan_name" id="clan_name" placeholder="유저 검색하기">
+</div> -->
+<div class="user-nav">
+  <h2><span class="online-count">0</span>명 온라인</h2>
+  <div class="page-btn-wrap">
+    <button id="prevPage">이전</button>
+    <button id="nextPage">이후</button>
+  </div>
+</div>
+<div class="user-list-wrapper">
+  <div class="user-list">
+    <!-- <div class="user-wrap">
+      <div class="user">
+        <div class="emblem"></div>
+        <div class="display-name">테스트</div>
+        <button class="copy" data-clipboard-text="">복사</button>
+      </div>
+    </div> -->
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+  $(document).ready(function () {
+    const groupId = "{{clan_data['id']}}";
+    getClanOnlineMembers(groupId);
+    $("#prevPage").click(prevPage);
+    $("#nextPage").click(nextPage);
+  });
+
+  $(window).resize(function () {
+    setPage(CURRENT_PAGE);
+  })
+</script>
+{% endblock %}
