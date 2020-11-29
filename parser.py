@@ -23,6 +23,16 @@ def parse_clan_info(group_id: int):
     return data["id"], data
 
 
+def save_clan_info(group_id: int):
+    with open("data/clan.json", "r", encoding="utf-8") as f:
+        db: dict = json.load(f)
+    k, v = parse_clan_info(group_id)
+    db[k] = v
+    with open("data/clan.json", "w", encoding="utf-8") as f:
+        json.dump(db, f, ensure_ascii=False, indent=2)
+
+
+
 async def parse_all_members(group_id: int):
     destiny = pydest.Pydest("3632dd9656a54c6d90b31777940b2581")
     resp = await destiny.api.get_members_of_group(group_id)
@@ -38,8 +48,7 @@ async def parse_all_members(group_id: int):
 
 async def save_all_members(group_id: int):
     data: dict = await parse_all_members(group_id)
-    data = {}
-    print(data)
+    # print(data)
     with open("data/user.json", "r", encoding="utf-8") as f:
         db: dict = json.load(f)
     db.update(data)
@@ -74,6 +83,6 @@ def profile(membership_id, membership_type=3):
 
 
 if __name__ == '__main__':
-    # print(parse_clan_info(3269437))
+    save_clan_info(3269437)
     loop = asyncio.get_event_loop()
     loop.run_until_complete(save_all_members(3269437))
