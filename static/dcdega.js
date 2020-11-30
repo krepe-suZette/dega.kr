@@ -50,7 +50,7 @@ var prevPage = function() {
 
 var _setUserCount = function(n) {
     var total_user = $(".user").length;
-    if (total_user== n) return;
+    if (total_user == n) return;
     else if (total_user < n) {
         // 부족한 경우
         for(i=total_user; i<n; i++) $(".user-list").append(DOM_USER.clone());
@@ -78,7 +78,7 @@ var _requestSteamIDs = function(arr) {
 var getSteamIDs = function(arr) {
     // arr: [membershipId, ...]
     var r = {};
-    var failList = new Array();
+    var failList = [];
     arr.forEach(el => {
         var val = localStorage.getItem(el);
         if (val === null) failList.push(el);
@@ -119,14 +119,14 @@ var getClanOnlineMembers = function(groupId) {
         // 00명 온라인 문구 수정
         $(".online-count").text(arr_online.length);
         
-        // 클랜 멤버 목록 정렬
-        arr_members.sort(function(a, b) {
-            if (a.isOnline != b.isOnline) return a.isOnline ? -1 : 11;
-            else return a.destinyUserInfo.LastSeenDisplayName < b.destinyUserInfo.LastSeenDisplayName ? -1 : a.destinyUserInfo.LastSeenDisplayName > b.destinyUserInfo.LastSeenDisplayName ? 1: 0;
-        });
-
         // 온라인 멤버의 스팀ID 값을 불러오기
         var steamId = getSteamIDs(arr_online.map(el => el.destinyUserInfo.membershipId));
+        // 클랜 멤버 목록 정렬
+        arr_members.sort(function(a, b) {
+            if (a.isOnline !== b.isOnline) return a.isOnline ? -1 : 1;
+            else if (a.destinyUserInfo.membershipId in steamId !== b.destinyUserInfo.membershipId) return a.destinyUserInfo.membershipId in steamId ? -1 : 1;
+            else return a.destinyUserInfo.LastSeenDisplayName < b.destinyUserInfo.LastSeenDisplayName ? -1 : a.destinyUserInfo.LastSeenDisplayName > b.destinyUserInfo.LastSeenDisplayName ? 1: 0;
+        });
 
         // 클랜 멤버를 실제 화면에 반영
         arr_members.forEach(function(element, idx) {
