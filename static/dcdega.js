@@ -2,7 +2,7 @@ var PAGE_CAPACITY = 0;
 var MAX_PAGE = 0;
 var CURRENT_PAGE = 0;
 var API_KEY = "3632dd9656a54c6d90b31777940b2581";
-var DOM_USER = $("<div class='user-wrap'><div class='user'><div class='emblem'></div><div class='display-name'></div><button class='copy' data-clipboard-text=''>복사</button></div></div>");
+var DOM_USER = $("<div class='user-wrap'><div class='user'><div class='emblem'></div><div class='display-name'></div><button class='copy material-icons' data-clipboard-text=''>content_copy</button></div></div>");
 
 var clipboard;
 
@@ -34,18 +34,25 @@ var setPage = function(p) {
     });
     PAGE_CAPACITY = page_count;
     MAX_PAGE = max_page;
+    CURRENT_PAGE = p;
+
+    // console.log(CURRENT_PAGE + " / " + MAX_PAGE);
+
+    if (CURRENT_PAGE === 0) $("#prevPage").attr("disabled", true);
+    else $("#prevPage").attr("disabled", false);
+
+    if (CURRENT_PAGE === MAX_PAGE) $("#nextPage").attr("disabled", true);
+    else $("#nextPage").attr("disabled", false);
 }
 
 var nextPage = function() {
     if (MAX_PAGE < CURRENT_PAGE + 1) return;
     setPage(CURRENT_PAGE + 1);
-    CURRENT_PAGE += 1;
 }
 
 var prevPage = function() {
     if (CURRENT_PAGE < 1) return;
     setPage(CURRENT_PAGE - 1);
-    CURRENT_PAGE -= 1;
 }
 
 var _setUserCount = function(n) {
@@ -130,7 +137,7 @@ var getClanOnlineMembers = function(groupId) {
 
         // 클랜 멤버를 실제 화면에 반영
         arr_members.forEach(function(element, idx) {
-            $(arr_user_list[idx]).find(".display-name").text(element.destinyUserInfo.LastSeenDisplayName);
+            $(arr_user_list[idx]).find(".display-name").text(element.destinyUserInfo.LastSeenDisplayName).attr("title", element.destinyUserInfo.LastSeenDisplayName);
             $(arr_user_list[idx]).removeClass("error");
 
             if (element.isOnline) {

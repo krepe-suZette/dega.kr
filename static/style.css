@@ -65,7 +65,7 @@ ul {
 .clan-info-row {
     padding: 0.5em 1em;
     box-sizing: border-box;
-    transition: 0.1s;
+    display: flex;
 }
 
 .clan-info-row:hover {
@@ -73,7 +73,24 @@ ul {
 }
 
 .clan-info-row li {
-    display: inline-block;
+    display: block;
+    margin-right: 0.2rem;
+}
+
+.col.clan-icon {
+    flex: 0 0 auto;
+}
+
+.col.clan-name {
+    flex: 0 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+}
+
+.col.clan-callsign {
+    flex: 0 0 auto;
 }
 
 .col.clan-callsign::before {
@@ -86,12 +103,44 @@ ul {
 .col.clan-motto {
     color: #9f9f9f;
     font-style: italic;
+    flex: 0 9 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
 }
 .col.clan-motto::before, .col.clan-motto::after {
     content: "\"";
 }
 
-/* 유저 목록 */
+/* 유저 목록 페이지 */
+.nav-btn-wrap {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.nav-btn-wrap button {
+    color: #dddddd;
+    background-color: transparent;
+    border: 2px solid #dddddd;
+    outline: none;
+    height: 2.8rem;
+    width: 2.8rem;
+    margin: 0 4px;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.nav-btn-wrap button:hover {
+    color: white;
+    border: 4px double white;
+}
+.nav-btn-wrap button:disabled {
+    color: #43494c;
+    border: 2px solid #434343;
+    cursor: auto;
+}
+
 .user-list {
     display: flex;
     width: 100%;
@@ -122,21 +171,29 @@ ul {
     margin: 2px;
     line-height: 36px;
     background-color: rgba(0, 0, 0, 0.4);
+    flex: 0 0 auto;
 }
 
 .user .display-name {
     padding-left: 1em;
+    box-sizing: border-box;
     line-height: 36px;
     font-size: 1.1em;
     flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
 }
 
 .user .copy {
-    background-color: rgba(0, 0, 0, 0.2);
     border: none;
     outline: none;
-    margin: 0 1em;
+    margin-left: 1em;
+    margin-right: 0.2em;
     color: white;
+    background-color: transparent;
+    flex-shrink: 0;
 }
 
 .hide {
@@ -162,6 +219,7 @@ ul {
 
 .copy {
     display: none;
+    cursor: pointer;
 }
 .copy:active {
     transform: scale(0.9);
@@ -182,6 +240,9 @@ ul {
 }
 
 @media (max-width: 480px) {
+    .col.clan-motto {
+        display: none;
+    }
     .user-wrap {
         width: 100%;
     }
