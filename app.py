@@ -32,5 +32,14 @@ def api_get_steam_id():
     return jsonify({n: user_data[n]["Steam"]["steamID"] for n in arr if user_data.get(n, {}).get("Steam")})
 
 
+@app.route("/api/frontend/update")
+def _update_db():
+    with open("data/clan.json", encoding="utf-8") as f:
+        clan_data.update(json.load(f))
+    with open("data/user.json", encoding="utf-8") as f:
+        user_data.update(json.load(f))
+    return jsonify({"status": "success"})
+
+
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0")
