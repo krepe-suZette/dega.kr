@@ -20,6 +20,8 @@ header {
     color: #FFFFFF;
 }
 
+/* /clan, 검색창 */
+
 .clan-search {
     margin: 1em 0 2em;
 }
@@ -42,6 +44,22 @@ input:focus {
     border: none;
     border-bottom: 2px solid yellow;
 }
+
+input[type=search]::-webkit-search-cancel-button{
+    -webkit-appearance: none;
+    height: 1em;
+    width: 1em;
+    background: url("/static/img/clear-white-18dp.svg") no-repeat 50% 50%;
+    background-size: auto;
+    pointer-events: none;
+    opacity: 0;
+}
+input[type="search"]:focus::-webkit-search-cancel-button {
+    opacity: .3;
+    pointer-events: all;
+}
+
+/* 클랜 목록 */
 
 .clan-list-wrapper {
     margin: 2em 0;
@@ -108,9 +126,10 @@ ul {
     text-overflow: ellipsis;
     white-space: nowrap;
     display: block;
+    padding-right: 0.2em;
 }
 .col.clan-motto::before, .col.clan-motto::after {
-    content: "\"";
+    content: '"';
 }
 
 /* 유저 목록 페이지 */
@@ -189,6 +208,7 @@ ul {
 .user .copy {
     border: none;
     outline: none;
+    display: none;
     margin-left: 1em;
     margin-right: 0.2em;
     color: white;

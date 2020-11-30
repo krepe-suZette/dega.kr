@@ -9,7 +9,7 @@
 
 {% block content %}
 <div class="clan-search">
-  <input type="search" name="clan_name" id="clan_name" placeholder="클랜 검색하기">
+  <input type="search" name="clan_search" id="clan_search" placeholder="클랜 검색하기">
 </div>
 <div class="clan-list-wrapper">
   <ul class="clan-list">
@@ -27,4 +27,14 @@
     {% endfor %}
   </ul>
 </div>
+{% endblock %}
+
+{% block script %}
+<script>
+  $(document).ready(function () {
+    $("#clan_search").on('input', function () {
+        filterClanList($(this).val());
+    })
+  });
+</script>
 {% endblock %}

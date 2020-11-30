@@ -13,6 +13,7 @@
 <div class="user-nav">
   <h2><span class="online-count">0</span>명 온라인</h2>
   <div class="nav-btn-wrap">
+    <button id="refresh" class="material-icons" disabled>refresh</button>
     <button id="prevPage" class="material-icons" disabled>arrow_back</button>
     <button id="nextPage" class="material-icons" disabled>arrow_forward</button>
   </div>
@@ -37,6 +38,7 @@
     getClanOnlineMembers(groupId);
     $("#prevPage").click(prevPage);
     $("#nextPage").click(nextPage);
+    $("#refresh").click(refreshMembers);
   });
 
   $(window).resize(function () {

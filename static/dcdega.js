@@ -3,8 +3,29 @@ var MAX_PAGE = 0;
 var CURRENT_PAGE = 0;
 var API_KEY = "3632dd9656a54c6d90b31777940b2581";
 var DOM_USER = $("<div class='user-wrap'><div class='user'><div class='emblem'></div><div class='display-name'></div><button class='copy material-icons' data-clipboard-text=''>content_copy</button></div></div>");
+var GROUP_ID;
 
 var clipboard;
+
+
+// ================ /clan ================ //
+var filterClanList = function(s) {
+    // $(".clan-info").hide();
+    console.log(s);
+    var rows = $( ".clan-info" );
+    console.log(rows);
+    rows.each(function() {
+        if (this.innerText.indexOf(s) > -1) {
+            $(this).show();
+        }
+        else {
+            $(this).hide();
+        }
+    });
+};
+
+
+// ================ /clan/<group_id> ================ //
 
 var getMaxUserCount = function() {
     ww = $( window ).width();
@@ -111,6 +132,8 @@ var clipboardInitialize = function() {
 }
 
 var getClanOnlineMembers = function(groupId) {
+    $("#refresh").attr("disabled", true);
+    GROUP_ID = groupId;
     $.ajax({
         url: "https://www.bungie.net/Platform/GroupV2/" + groupId + "/Members/",
         headers: {
@@ -131,13 +154,13 @@ var getClanOnlineMembers = function(groupId) {
         // 클랜 멤버 목록 정렬
         arr_members.sort(function(a, b) {
             if (a.isOnline !== b.isOnline) return a.isOnline ? -1 : 1;
-            else if (a.destinyUserInfo.membershipId in steamId !== b.destinyUserInfo.membershipId) return a.destinyUserInfo.membershipId in steamId ? -1 : 1;
+            else if ((a.destinyUserInfo.membershipId in steamId) !== (b.destinyUserInfo.membershipId in steamId)) return (a.destinyUserInfo.membershipId in steamId) ? -1 : 1;
             else return a.destinyUserInfo.LastSeenDisplayName < b.destinyUserInfo.LastSeenDisplayName ? -1 : a.destinyUserInfo.LastSeenDisplayName > b.destinyUserInfo.LastSeenDisplayName ? 1: 0;
         });
 
         // 클랜 멤버를 실제 화면에 반영
         arr_members.forEach(function(element, idx) {
-            $(arr_user_list[idx]).find(".display-name").text(element.destinyUserInfo.LastSeenDisplayName).attr("title", element.destinyUserInfo.LastSeenDisplayName);
+            $(arr_user_list[idx]).find(".display-name").html(element.destinyUserInfo.LastSeenDisplayName).attr("title", element.destinyUserInfo.LastSeenDisplayName);
             $(arr_user_list[idx]).removeClass("error");
 
             if (element.isOnline) {
@@ -160,5 +183,12 @@ var getClanOnlineMembers = function(groupId) {
 
         setPage(0);
         clipboardInitialize();
+        $("#refresh").attr("disabled", false);
     });
 }
+
+var refreshMembers = function() {
+    getClanOnlineMembers(GROUP_ID);
+}
+
+
