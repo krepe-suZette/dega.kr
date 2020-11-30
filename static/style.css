@@ -133,6 +133,41 @@ ul {
 }
 
 /* 유저 목록 페이지 */
+.user-nav {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin: 0.8rem 0;
+}
+
+.nav-online {
+    box-sizing: border-box;
+    padding-left: 1rem;
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.nav-online h2 {
+    margin: 0;
+}
+
+.nav-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 2.8rem;
+    margin-right: 0.5em;
+    flex: 0 0 auto;
+    /* align-content: flex-end; */
+}
+
+.nav-info * {
+    font-size: 1em;
+    line-height: 1.1em;
+    text-align: end;
+}
+
 .nav-btn-wrap {
     display: flex;
     justify-content: flex-end;
@@ -165,10 +200,8 @@ ul {
     width: 100%;
     flex-direction: column;
     flex-wrap: wrap;
-    /* justify-content: space-around; */
     align-content: flex-start;
     height: calc(100vh - 10rem);
-    /* overflow-x: hidden; */
 }
 
 .user-wrap {
@@ -227,12 +260,6 @@ ul {
     background-color: #303335;
 }
 
-.user-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
 .online .copy {
     display: block;
 }
@@ -265,5 +292,16 @@ ul {
     }
     .user-wrap {
         width: 100%;
+    }
+    .nav-online .info-online {
+        display: none;
+    }
+}
+
+
+@media (min-width: 480px) {
+    .nav-info .info-online {
+        visibility: hidden;
+        order: -1;
     }
 }

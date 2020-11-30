@@ -58,6 +58,7 @@ var setPage = function(p) {
     CURRENT_PAGE = p;
 
     // console.log(CURRENT_PAGE + " / " + MAX_PAGE);
+    $(".info-page").text(`${CURRENT_PAGE + 1} / ${MAX_PAGE + 1} 페이지`);
 
     if (CURRENT_PAGE === 0) $("#prevPage").attr("disabled", true);
     else $("#prevPage").attr("disabled", false);
@@ -132,7 +133,7 @@ var clipboardInitialize = function() {
 }
 
 var getClanOnlineMembers = function(groupId) {
-    $("#refresh").attr("disabled", true);
+    $("#refresh").attr("disabled", true).text("hourglass_bottom");
     GROUP_ID = groupId;
     $.ajax({
         url: "https://www.bungie.net/Platform/GroupV2/" + groupId + "/Members/",
@@ -147,7 +148,7 @@ var getClanOnlineMembers = function(groupId) {
         var arr_user_list = $(".user");
 
         // 00명 온라인 문구 수정
-        $(".online-count").text(arr_online.length);
+        $(".info-online").text(`${arr_online.length} / ${arr_members.length} 온라인`);
         
         // 온라인 멤버의 스팀ID 값을 불러오기
         var steamId = getSteamIDs(arr_online.map(el => el.destinyUserInfo.membershipId));
@@ -183,7 +184,11 @@ var getClanOnlineMembers = function(groupId) {
 
         setPage(0);
         clipboardInitialize();
-        $("#refresh").attr("disabled", false);
+        $("#refresh").text("done").attr("disabled", false);
+    }).fail(function () {
+        $("#refresh").text("error_outline").attr("disabled", false);
+    }).always(function() {
+        setTimeout(() => {$("#refresh").text("refresh")}, 1000);
     });
 }
 
