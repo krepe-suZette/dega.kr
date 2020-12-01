@@ -1,5 +1,4 @@
 import json
-import time
 
 from flask import Flask, render_template, jsonify, request
 
@@ -23,8 +22,13 @@ def clan():
 
 @app.route("/clan/<group_id>")
 def clan_page(group_id: str):
-    return render_template("clan_users.html", clan_data=clan_data.get(group_id))
+    if group_id in clan_data:
+        return render_template("clan_users.html", clan_data=clan_data.get(group_id))
+    else:
+        return render_template("404.html"), 404
 
+
+# ==== API SECTION ====
 
 @app.route("/api/getSteamID")
 def api_get_steam_id():
@@ -39,6 +43,13 @@ def _update_db():
     with open("data/user.json", encoding="utf-8") as f:
         user_data.update(json.load(f))
     return jsonify({"status": "success"})
+
+
+# ==== ERROR HANDLING SECTION ====
+
+@app.errorhandler(404)
+def error_404(e):
+    return render_template("404.html"), 404
 
 
 if __name__ == '__main__':
