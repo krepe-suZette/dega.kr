@@ -1,5 +1,7 @@
 {% extends 'layout.html' %}
 
+{% block title %}{{ super()}} / {{clan_data["name"]}}{% endblock %}
+
 {% block header %}
 <div class="container">
   <h3><a href="/">dcde.ga (β)</a> / {{ clan_data["name"] }} [{{ clan_data["callsign"] }}]</h3>
