@@ -4,6 +4,7 @@
   {% include "tracker.html" %}
   {% set title_s %}{% block title %}dcde.ga (β){% endblock %}{% endset %}
   <meta charset="UTF-8">
+  <!-- Favicon / icon -->
   <link rel="apple-touch-icon" sizes="180x180" href="/static/icon/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/static/icon/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/static/icon/favicon-16x16.png">
@@ -13,6 +14,7 @@
   <meta name="msapplication-TileColor" content="#4a56a8">
   <meta name="msapplication-config" content="/static/icon/browserconfig.xml">
   <meta name="theme-color" content="#4a56a8">
+  <!-- meta -->
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta name="description" content="데스티니 가디언즈 클랜원 합류 코드 쉽게 복사하기">
@@ -36,6 +38,7 @@
   <title>{{ title_s }}</title>
 </head>
 <body>
+  {% include "tracker2.html" %}
   <header>
     {% block header %}
     <div class="container">
