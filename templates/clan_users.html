@@ -3,9 +3,14 @@
 {% block title %}{{ super()}} / {{clan_data["name"]}}{% endblock %}
 
 {% block header %}
-<div class="container">
-  <h3><a href="/">dcde.ga (β)</a> / {{ clan_data["name"] }} [{{ clan_data["callsign"] }}]</h3>
-</div>
+<div class="nav-icon"><a href="/"><img src="/static/img/icon-transparent.svg" alt="icon"></a></div>
+<div class="nav-logo hide-small"><a href="/">dcde.ga</a></div>
+<div class="nav-path"><a href="/clan">
+  <span>/&nbsp;</span>
+  <div class="clan-name">{{ clan_data["name"] }}</div>
+  <div class="clan-callsign">[{{ clan_data["callsign"] }}]</div>
+</a></div>
+<div class="nav-path"><a href="https://www.bungie.net/ko/ClanV2?groupid={{ clan_data['id'] }}" class="material-icons">link</a></div>
 {% endblock %}
 
 {% block content %}
@@ -23,9 +28,7 @@
     <button id="nextPage" class="material-icons" disabled>arrow_forward</button>
   </div>
 </div>
-<div class="user-list-wrapper">
-  <div class="user-list">
-  </div>
+<div class="user-list">
 </div>
 {% endblock %}
 

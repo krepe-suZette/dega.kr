@@ -29,9 +29,9 @@ var filterClanList = function(s) {
 
 var getMaxUserCount = function() {
     ww = $( window ).width();
-    if (ww > 1024) c = 4;
-    else if (ww > 768) c = 3;
-    else if (ww > 480) c = 2;
+    if (ww > 1440) c = 4;
+    else if (ww > 960) c = 3;
+    else if (ww > 640) c = 2;
     else c = 1;
     return parseInt($(".user-list").height() / 44) * c;
 };

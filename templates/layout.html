@@ -40,12 +40,12 @@
 <body>
   {% include "tracker2.html" %}
   <header>
-    {% block header %}
-    <div class="container">
-      <h1><a href="/">dcde.ga (β)</a></h1>
-      <p>데스티니 가디언즈 클랜원 합류 코드 쉽게 복사하기</p>
-    </div>
-    {% endblock %}
+    <nav class="container">
+      {% block header %}
+      <div class="nav-icon"><a href="/"><img src="/static/img/icon-transparent.svg" alt="icon"></a></div>
+      <div class="nav-logo"><a href="/">dcde.ga</a></div>
+      {% endblock %}
+    </nav>
   </header>
   
   <main>

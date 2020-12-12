@@ -8,22 +8,20 @@
 <div class="clan-search">
   <input type="search" name="clan_search" id="clan_search" placeholder="클랜 검색하기">
 </div>
-<div class="clan-list-wrapper">
-  <ul class="clan-list">
-    {% for clan_id, clan in clan_data.items() %}
-    <li class="clan-info">
-      <a href="/clan/{{ clan_id }}">
-        <ul class="clan-info-row">
-          <li class="col clan-icon">▷</li>
-          <li class="col clan-name">{{ clan["name"] }}</li>
-          <li class="col clan-callsign">{{ clan["callsign"] }}</li>
-          <li class="col clan-motto">{{ clan["motto"] }}</li>
-        </ul>
-      </a>
-    </li>
-    {% endfor %}
-  </ul>
-</div>
+<ul class="clan-list">
+  {% for clan_id, clan in clan_data.items() %}
+  <li class="clan-info">
+    <a href="/clan/{{ clan_id }}">
+      <ul class="clan-info-row">
+        <li class="col clan-icon">▷</li>
+        <li class="col clan-name">{{ clan["name"] }}</li>
+        <li class="col clan-callsign">{{ clan["callsign"] }}</li>
+        <li class="col clan-motto">{{ clan["motto"] }}</li>
+      </ul>
+    </a>
+  </li>
+  {% endfor %}
+</ul>
 {% endblock %}
 
 {% block script %}
