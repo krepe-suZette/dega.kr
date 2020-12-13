@@ -11,9 +11,7 @@ var clipboard;
 // ================ /clan ================ //
 var filterClanList = function(s) {
     // $(".clan-info").hide();
-    console.log(s);
     var rows = $( ".clan-info" );
-    console.log(rows);
     rows.each(function() {
         if (this.innerText.indexOf(s) > -1) {
             $(this).show();
@@ -22,6 +20,22 @@ var filterClanList = function(s) {
             $(this).hide();
         }
     });
+};
+
+var _cmpNameASC = function (a, b) {return a.innerText > b.innerText ? 1 : -1;};
+var _cmpNameDESC = function (a, b) {return a.innerText > b.innerText ? -1 : 1;};
+var _cmpGroupIdASC = function(a, b) {
+    var num_a = parseInt(/\/clan\/(\d+)/.exec(a.children[0].href)[1])
+    var num_b = parseInt(/\/clan\/(\d+)/.exec(b.children[0].href)[1])
+    return num_a - num_b;
+};
+var _cmpGroupIdDESC = function(a, b) {
+    return -_cmpGroupIdASC(a, b);
+};
+
+var sortClanList = function(e) {
+    var cmp = {"nameASC": _cmpNameASC, "nameDESC": _cmpNameDESC, "idASC": _cmpGroupIdASC, "idDESC": _cmpGroupIdDESC};
+    $(".clan-list > li").sort(cmp[e.value]).appendTo(".clan-list")
 };
 
 
