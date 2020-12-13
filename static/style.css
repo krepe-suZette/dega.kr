@@ -4,7 +4,7 @@ body {
     color: white;
 }
 header {
-    background-color: rgb(74, 86, 168);
+    background-color: #4a56a8;
     height: 3.5rem;
 }
 main {
@@ -66,6 +66,7 @@ a:link, a:visited, a:hover {
 }
 ul {
     list-style: none;
+    line-height: 1.2em;
     margin: 0;
     padding: 0;
 }
@@ -322,6 +323,101 @@ input[type="search"]:focus::-webkit-search-cancel-button {
 .copy:active {
     transform: scale(0.9);
 }
+
+/* /update-log */
+.update-log {
+    padding-top: 2rem;
+}
+.update-log ul {
+    list-style: disc;
+    padding-inline-start: 30px;
+}
+
+/* / (root) */
+section.root {
+    /* height: 100vh; */
+    margin-bottom: 4rem;
+}
+section.root * {
+    text-align: center;
+}
+.desc-img {
+    box-sizing: border-box;
+    border: 0.25rem solid #dddddd;
+    border-radius: 0.5rem;
+    padding: 0.25rem;
+    display: block;
+    object-fit: contain;
+    max-width: 100%;
+}
+.r0 {
+    height: calc(100vh - 3.5rem);
+}
+.r0-bg {
+    height: 100vh;
+    background-color: #4a56a8;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.item-wrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 1rem;
+    flex-wrap: wrap;
+    /* overflow: hidden; */
+}
+.r0-logo {
+    display: flex;
+    align-items: center;
+    font-size: 4rem;
+    font-weight: bold;
+    padding: 1rem 0;
+}
+.r0-logo img {
+    width: 6rem;
+    height: 6rem;
+}
+.r0-intro {
+    text-align: center;
+    word-break: keep-all;
+}
+.r0-nav {
+    display: flex;
+    justify-content: center;
+    align-content: flex-start;
+    flex-wrap: wrap;
+    margin: 1rem 0;
+}
+.r0-nav a {
+    background-color: transparent;
+    border: 0.125rem solid #FFFFFF;
+    border-radius: 0.25rem;
+    color: #FFFFFF;
+    margin: 0.25rem;
+    padding: 0.5rem;
+    box-sizing: border-box;
+}
+.r0-nav a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+@media only screen and (max-width: 400px) {
+    .r0-logo {
+        flex-direction: column;
+        font-size: 3rem;
+    }
+    .r0-logo img {
+        width: 8rem;
+        height: 8rem;
+    }
+}
+
 
 /* 작은화면들 */
 
