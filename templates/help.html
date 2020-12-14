@@ -1,0 +1,46 @@
+{% extends 'layout.html' %}
+
+{% block header %}
+{{ super() }}
+{% endblock %}
+
+{% block content %}
+<section>
+  <h2>기본 이용 방법 </h2>
+  <img src="/static/img/help_1.png" alt="클랜 목록 페이지" class="desc-img">
+  <p>클랜 목록 페이지에서 내 클랜을 찾아줍니다. 내 클랜이 목록에 없다면 클랜 추가 신청을 해주세요.</p>
+  <img src="/static/img/help_2.png" alt="클랜 페이지" class="desc-img">
+  <p>클랜 페이지로 들어가면 약간의 로딩 후 온라인 멤버 목록을 볼 수 있습니다. </p>
+  <ol>
+    <li>클립보드로 복사<br />누르면 "/합류 &lt;합류코드&gt;"가 클립보드로 복사됩니다. 게임 내 채팅창에서 Ctrl + v를 통해 붙혀넣을 수 있습니다.</li>
+    <li>새로고침<br />현재 온라인 멤버 목록으로 새로고침합니다. API상의 문제로 실시간 반영이 되지 않을 수 있습니다.</li>
+    <li>이전/다음 페이지<br />이전 페이지 또는 다음 페이지로 이동합니다.</li>
+    <li>클랜 정보 바로가기<br />새 창에서 Bungie.net의 해당 클랜 소개 페이지를 엽니다.</li>
+  </ol>
+
+  <hr>
+
+  <h2>클랜 추가 신청</h2>
+  <p>추가 예정입니다.</p>
+
+  <hr>
+
+  <h2>스팀 오버레이 웹 브라우저에서 사용하기</h2>
+  <img src="/static/img/2.png" alt="스팀 오버레이" class="desc-img">
+  <p><b>dcde.ga</b>를 스팀 오버레이 웹 브라우저와 함께 사용하면 더욱 간편하게 서비스를 이용할 수 있습니다.</p>
+  <img src="/static/img/help_3.png" alt="스팀 오버레이" class="desc-img">
+  <p>게임 화면에서 스팀 오버레이 단축키(기본값: Shift+Tab)을 사용하면 위와 같은 화면이 나옵니다.</p>
+  <ol>
+    <li>웹 브라우저<br>실행시 설정한 홈페이지가 오버레이 안에서 열립니다.</li>
+    <li>설정<br>웹 브라우저를 비롯한 설정이 가능합니다.</li>
+  </ol>
+  <img src="/static/img/help_4.png" alt="스팀 오버레이 설정" class="desc-img">
+  <p>설정 > 웹 브라우저를 눌러주세요. 웹 브라우저 홈페이지(3)를 자신이 속한 클랜 페이지 주소로 변경하면 더 편하게 이용이 가능합니다.</p>
+  <hr>
+
+  <h2>주의사항</h2>
+  <p>Bungie.net 설정의 "계정 & 연결" 탭에서 "공개 프로필에 표시" 설정을 활성화하지 않은 경우 온라인이더라도 합류 코드 복사가 불가능 할 수 있습니다. 설정을 다시 해준 후 관리자에게 요청해주세요.</p>
+  <p>이미 등록된 자신의 정보를 삭제하고 싶다면 디스코드 Krepe#4364 또는 트위터 <a href="https://twitter.com/krepe_suZette">@krepe_suZette</a>로 연락해주세요.</p>
+  <p>본 사이트는 Chrome 또는 Chromium 기반 브라우저에 최적화되어 있습니다.</p>
+</section>
+{% endblock %}

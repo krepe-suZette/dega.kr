@@ -43,6 +43,10 @@ nav {
     display: flex;
 }
 
+section {
+    padding: 1rem 0;
+}
+
 .container {
     margin: 0 auto;
     max-width: 1280px;
@@ -66,9 +70,11 @@ a:link, a:visited, a:hover {
 }
 ul {
     list-style: none;
-    line-height: 1.2em;
     margin: 0;
     padding: 0;
+}
+ul, ol, p {
+    line-height: 1.4em;
 }
 select {
     -webkit-appearance: none;
@@ -337,6 +343,7 @@ input[type="search"]:focus::-webkit-search-cancel-button {
 section.root {
     /* height: 100vh; */
     margin-bottom: 4rem;
+    padding: 0;
 }
 section.root * {
     text-align: center;
@@ -346,6 +353,7 @@ section.root * {
     border: 0.25rem solid #dddddd;
     border-radius: 0.5rem;
     padding: 0.25rem;
+    margin: 2rem 0 1rem;
     display: block;
     object-fit: contain;
     max-width: 100%;
