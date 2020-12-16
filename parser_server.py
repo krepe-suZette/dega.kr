@@ -19,13 +19,9 @@ with open("API_KEY", "r") as f:
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 fmt = logging.Formatter("%(asctime)s|%(levelname)s|%(message)s")
-ch = logging.StreamHandler()
 fh = logging.FileHandler("parser.log", "a", encoding="utf-8")
-ch.setLevel(logging.INFO)
 fh.setLevel(logging.INFO)
-ch.setFormatter(fmt)
 fh.setFormatter(fmt)
-logger.addHandler(ch)
 logger.addHandler(fh)
 
 
@@ -226,5 +222,9 @@ async def test():
 
 
 if __name__ == '__main__':
+    # ch = logging.StreamHandler()
+    # ch.setLevel(logging.INFO)
+    # ch.setFormatter(fmt)
+    # logger.addHandler(ch)
     # asyncio.run(test(), debug=True)
     asyncio.run(run(), debug=True)
