@@ -12,6 +12,9 @@ _path = "./parser.sock"
 _host = "localhost"
 _port = 50001
 
+with open("API_KEY", "r") as f:
+    API_KEY = f.read().strip()
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 fmt = logging.Formatter("%(asctime)s|%(levelname)s|%(message)s")
@@ -126,7 +129,7 @@ class Parser:
 
 
 async def worker(queue):
-    parser = Parser("3632dd9656a54c6d90b31777940b2581")
+    parser = Parser(API_KEY)
     logger.info("[Worker] Start!")
 
     while True:
