@@ -221,7 +221,7 @@ var _hideClanContainer = function() {
 }
 
 var _editClanContainer = function(name, callsign, motto, count, group_id) {
-    $(".clan-name").text(name);
+    $(".clan-name").html(name);
     $(".clan-callsign").text(callsign);
     $(".clan-motto").text(motto);
     $(".clan-member-count").text(count + "명")

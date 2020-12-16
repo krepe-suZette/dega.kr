@@ -2,6 +2,7 @@ import asyncio
 import json
 import re
 import logging
+import html
 
 import aiohttp
 import aiofile
@@ -102,11 +103,11 @@ class Parser:
             return False, "Clan member count must be 10 or more"
         data = {
             "id": resp_dict["Response"]["detail"]["groupId"],
-            "name": resp_dict["Response"]["detail"]["name"],
+            "name": html.unescape(resp_dict["Response"]["detail"]["name"]),
             "icon": "",
-            "callsign": resp_dict["Response"]["detail"]["clanInfo"]["clanCallsign"],
-            "motto": resp_dict["Response"]["detail"]["motto"],
-            "about": resp_dict["Response"]["detail"]["about"]
+            "callsign": html.unescape(resp_dict["Response"]["detail"]["clanInfo"]["clanCallsign"]),
+            "motto": html.unescape(resp_dict["Response"]["detail"]["motto"]),
+            "about": html.unescape(resp_dict["Response"]["detail"]["about"])
         }
         self.clan[data["id"]] = data
         await self.commit()
