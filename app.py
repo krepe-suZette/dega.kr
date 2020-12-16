@@ -1,15 +1,10 @@
-import json
 from flask import Flask, render_template, jsonify, request
 
-from parser_client import Client
-
+from parser_client import Client, Data
 
 app = Flask("main")
 p_client = Client(("localhost", 50001))
-with open("data/clan.json", encoding="utf-8") as f:
-    clan_data: dict = json.load(f)
-with open("data/user.json", encoding="utf-8") as f:
-    user_data: dict = json.load(f)
+data = Data()
 
 
 @app.route("/")
@@ -34,13 +29,15 @@ def help():
 
 @app.route("/clan")
 def clan():
-    return render_template("clan.html", clan_data=clan_data)
+    data.update()
+    return render_template("clan.html", clan_data=data.clan)
 
 
 @app.route("/clan/<group_id>")
 def clan_page(group_id: str):
-    if group_id in clan_data:
-        return render_template("clan_users.html", clan_data=clan_data.get(group_id))
+    data.update()
+    if group_id in data.clan:
+        return render_template("clan_users.html", clan_data=data.clan.get(group_id))
     else:
         return render_template("404.html"), 404
 
@@ -49,8 +46,9 @@ def clan_page(group_id: str):
 
 @app.route("/api/getSteamID")
 def api_get_steam_id():
+    data.update()
     arr: list = request.args.getlist("id")
-    return jsonify({n: user_data[n]["Steam"]["steamID"] for n in arr if user_data.get(n, {}).get("Steam") and user_data[n].get("isPublic", True)})
+    return jsonify({n: data.user[n]["Steam"]["steamID"] for n in arr if data.user.get(n, {}).get("Steam") and data.user[n].get("isPublic", True)})
 
 
 @app.route("/api/clan/add/<group_id>")
@@ -72,12 +70,9 @@ def api_user_update():
     pass
 
 
-@app.route("/api/frontend/update")
+@app.route("/api/update")
 def _update_db():
-    with open("data/clan.json", encoding="utf-8") as f:
-        clan_data.update(json.load(f))
-    with open("data/user.json", encoding="utf-8") as f:
-        user_data.update(json.load(f))
+    data.update()
     return jsonify({"status": "success"})
 
 

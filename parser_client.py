@@ -1,6 +1,7 @@
 import asyncio
 import socket
 import json
+import os
 
 _path = "./parser.sock"
 _host = "localhost"
@@ -43,6 +44,28 @@ class Client:
                 return "Socket connection Error"
         data = self.sock.recv(1024)
         return data.decode()
+
+
+class Data:
+    def __init__(self):
+        with open("data/clan.json", encoding="utf-8") as f:
+            self.clan: dict = json.load(f)
+        with open("data/user.json", encoding="utf-8") as f:
+            self.user: dict = json.load(f)
+        self.last_edit_clan = os.path.getmtime("data/clan.json")
+        self.last_edit_user = os.path.getmtime("data/user.json")
+
+    def update(self):
+        if self.last_edit_clan < os.path.getmtime("data/clan.json"):
+            print("clan update")
+            self.last_edit_clan = os.path.getmtime("data/clan.json")
+            with open("data/clan.json", encoding="utf-8") as f:
+                self.clan: dict = json.load(f)
+        if self.last_edit_user < os.path.getmtime("data/user.json"):
+            print("user update")
+            self.last_edit_user = os.path.getmtime("data/user.json")
+            with open("data/user.json", encoding="utf-8") as f:
+                self.user: dict = json.load(f)
 
 
 async def run():
