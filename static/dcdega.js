@@ -210,4 +210,70 @@ var refreshMembers = function() {
     getClanOnlineMembers(GROUP_ID);
 }
 
+// ================ /request ================ //
+var _showClanContainer = function() {
+    $(".clan-container").show()
+    $(".error-msg-box").hide()
+}
+var _hideClanContainer = function() {
+    $(".clan-container").hide()
+    $(".error-msg-box").show().find("h2").text("검색 결과가 없습니다.")
+}
 
+var _editClanContainer = function(name, callsign, motto, count, group_id) {
+    $(".clan-name").text(name);
+    $(".clan-callsign").text(callsign);
+    $(".clan-motto").text(motto);
+    $(".clan-member-count").text(count + "명")
+    $(".link-btn").attr("href", "https://www.bungie.net/ko/ClanV2?groupid=" + group_id)
+    $(".request-btn").attr("data-groupId", group_id)
+}
+
+var getGroupByName = function(name) {
+    _hideClanContainer();
+    $(".error-msg-box h2").text("검색중...")
+    $.ajax({
+        type: "GET",
+        url: "https://www.bungie.net/Platform/GroupV2/Name/" + name + "/1",
+        headers: {
+            "X-API-Key": API_KEY
+        }
+    }).done(function(data) {
+        if (data.ErrorCode == 1) {
+            _editClanContainer(
+                data.Response.detail.name,
+                data.Response.detail.clanInfo.clanCallsign,
+                data.Response.detail.motto,
+                data.Response.detail.memberCount,
+                data.Response.detail.groupId
+            );
+            _showClanContainer();
+            if (data.Response.detail.memberCount < 10) {
+                $(".request-btn").attr("disabled", true);
+            }
+        }
+        else {
+            _hideClanContainer();
+        }
+    }).fail(function(data) {
+        _hideClanContainer();
+    });
+}
+
+var clanAddRequest = function(el) {
+    var group_id = $(el).attr("data-groupId")
+    $.ajax({
+        type: "GET",
+        url: "/api/clan/add/" + group_id
+    }).done(function(resp) {
+        if (resp.result) alert("신청이 완료되었습니다. 적용에는 시간이 걸리니 조금만 기다려주세요.");
+        else alert("추가 신청 실패: " + resp.message);
+    }).fail(function() {
+        alert("추가 신청 실패.")
+    });
+}
+
+var searchSubmit = function(e) {
+    e.preventDefault();
+    getGroupByName($("#clan-search").val())
+}

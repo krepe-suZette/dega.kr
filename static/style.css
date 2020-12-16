@@ -68,6 +68,14 @@ a:link, a:visited, a:hover {
     color: inherit;
     text-decoration: none;
 }
+button {
+    color: #dddddd;
+    background-color: transparent;
+    border: 2px solid #dddddd;
+    outline: none;
+    box-sizing: border-box;
+    cursor: pointer;
+}
 ul {
     list-style: none;
     margin: 0;
@@ -90,6 +98,9 @@ option {
     background-color: inherit;
     color: inherit;
 }
+input {
+    border-radius: 0;
+}
 /* 클랜 이름 flex CSS */
 .clan-name {
     flex: 0 1 auto;
@@ -102,15 +113,31 @@ option {
     padding-left: 0.25rem;
     flex: 0 0 auto;
 }
+.clan-callsign::before {
+    content: "[";
+}
+.clan-callsign::after {
+    content: "]";
+}
+.clan-motto {
+    color: #9f9f9f;
+    font-style: italic;
+}
+.clan-motto::before, .clan-motto::after {
+    content: '"';
+}
 
 /* /clan, 검색창 */
 
 .clan-search {
-    margin: 1.5rem 0 1rem;
-}
-input {
-    box-sizing: border-box;
+    padding: 1.5rem 0 1rem;
     width: 100%;
+    display: flex;
+    overflow: hidden;
+}
+input[type=search] {
+    box-sizing: border-box;
+    flex: 1 1 auto;
     height: 2.5rem;
     border: 0;
     border-bottom: 2px solid white;
@@ -119,8 +146,9 @@ input {
     transition: 0.5s;
     color: #FFFFFF;
     padding: 0 1em;
+    width: 100%;
 }
-input:focus {
+input[type=search]:focus {
     outline: none;
     border: none;
     border-bottom: 2px solid yellow;
@@ -177,16 +205,8 @@ input[type="search"]:focus::-webkit-search-cancel-button {
 .col.clan-icon {
     flex: 0 0 auto;
 }
-.col.clan-callsign::before {
-    content: "[";
-}
-.col.clan-callsign::after {
-    content: "]";
-}
 
-.col.clan-motto {
-    color: #9f9f9f;
-    font-style: italic;
+.clan-info-row .clan-motto {
     font-size: 1.125rem;
     flex: 0 9 auto;
     overflow: hidden;
@@ -194,9 +214,6 @@ input[type="search"]:focus::-webkit-search-cancel-button {
     white-space: nowrap;
     display: block;
     padding-right: 0.25rem;
-}
-.col.clan-motto::before, .col.clan-motto::after {
-    content: '"';
 }
 
 /* 유저 목록 페이지 */
@@ -235,15 +252,9 @@ input[type="search"]:focus::-webkit-search-cancel-button {
     justify-content: flex-end;
 }
 .nav-btn-wrap button {
-    color: #dddddd;
-    background-color: transparent;
-    border: 2px solid #dddddd;
-    outline: none;
     height: 2.75rem;
     width: 2.75rem;
     margin: 0 4px;
-    box-sizing: border-box;
-    cursor: pointer;
     transition: 0.3s;
 }
 .nav-btn-wrap button:hover {
@@ -425,7 +436,77 @@ section.root * {
         height: 8rem;
     }
 }
-
+/* /request */
+.clan-container {
+    width: 100%;
+    margin: 1.75rem 0;
+    padding: 1.5rem;
+    box-sizing: border-box;
+    border: 0.125rem solid #dddddd;
+    display: flex;
+    flex-direction: column;
+}
+.clan-container > * {
+    margin: 0.5rem 0;
+}
+.clan-container .clan-title {
+    display: flex;
+    font-size: 2rem;
+    font-weight: bold;
+}
+.clan-container .clan-motto {
+    font-size: 1.25rem;
+}
+.request-clan-bar {
+    display: flex;
+    height: 2rem;
+    width: 100%;
+    justify-content: flex-end;
+    align-items: center;
+}
+.request-clan-bar > * {
+    margin: 0 0.25rem;
+}
+.clan-member-count {
+    font-size: 1.25rem;
+}
+.link-btn {
+    font-size: 1.125rem;
+    line-height: 2rem;
+    display: flex;
+    align-items: center;
+    color: #9f9f9f;
+}
+.link-btn a.material-icons {
+    font-size: 1.5rem;
+}
+.request-btn {
+    box-sizing: border-box;
+    height: 2rem;
+    transition: 0.3s;
+}
+.request-btn:hover {
+    border-color: #4a56a8;
+}
+.request-btn:disabled {
+    border-color: #434343;
+    background-color: transparent;
+    color: #43494c;
+}
+.btn.material-icons {
+    box-sizing: border-box;
+    border: 0.125rem solid #FFFFFF;
+    color: #FFFFFF;
+    background-color: transparent;
+    outline: none;
+    transition: 0.3s;
+    width: 2.5rem;
+    height: 2.5rem;
+    flex: 0 0 2.5rem;
+}
+.btn.material-icons:hover {
+    background-color: #434343;
+}
 
 /* 작은화면들 */
 
@@ -451,6 +532,9 @@ section.root * {
     }
     .nav-online .info-online {
         display: none;
+    }
+    .clan-container .clan-title {
+        font-size: 1.5rem;
     }
 }
 

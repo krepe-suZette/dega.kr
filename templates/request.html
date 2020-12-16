@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+
+{% block title %}{{ super() }} / 클랜 등록{% endblock %}
+
+{% block header %}
+<div class="nav-icon"><a href="/"><img src="/static/img/icon-transparent.svg" alt="icon"></a></div>
+<div class="nav-logo hide-small"><a href="/">dcde.ga</a></div>
+<div class="nav-path">
+  <a href="/request">/ 클랜 등록</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<form class="clan-search">
+  <input type="search" id="clan-search" placeholder="클랜 이름을 정확히 입력해주세요." autocomplete="off">
+  <input type="submit" class="btn material-icons" value="search">
+</form>
+<div class="clan-container" style="display: none;">
+  <div class="clan-title">
+    <div class="clan-name"></div>
+    <div class="clan-callsign"></div>
+  </div>
+  <div class="clan-motto"></div>
+  <div class="request-clan-bar">
+    <p class="clan-member-count"></p>
+    <p>&middot;</p>
+    <a href="#" class="link-btn"><span class="material-icons">link</span><span>클랜 페이지</span></a>
+    <p>&middot;</p>
+    <button class="request-btn" onclick="clanAddRequest(this);">등록 신청</button>
+  </div>
+</div>
+<div class="error-msg-box">
+  <h2>클랜을 검색해주세요.</h2>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+  $("form.clan-search").on("submit", searchSubmit);
+</script>
+{% endblock %}
