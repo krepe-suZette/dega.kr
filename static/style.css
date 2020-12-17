@@ -49,15 +49,15 @@ section {
 
 .container {
     margin: 0 auto;
-    max-width: 1280px;
+    max-width: 80rem;
     width: 90%;
 }
-@media only screen and (min-width: 640px) {
+@media only screen and (min-width: 40rem) {
     .container {
         width: 85%;
     }
 }
-@media only screen and (min-width: 960px) {
+@media only screen and (min-width: 60rem) {
     .container {
         width: 70%;
     }
@@ -101,6 +101,9 @@ option {
 input {
     border-radius: 0;
 }
+.material-icons {
+    font-size: 1.5rem;
+}
 /* 클랜 이름 flex CSS */
 .clan-name {
     flex: 0 1 auto;
@@ -141,6 +144,7 @@ input[type=search] {
     height: 2.5rem;
     border: 0;
     border-bottom: 2px solid white;
+    border-radius: 0;
     background: #181a1b;
     line-height: 2.5rem;
     transition: 0.5s;
@@ -191,9 +195,10 @@ input[type="search"]:focus::-webkit-search-cancel-button {
     box-sizing: border-box;
     border: 1px solid #43494c;
     padding: 0.5rem 1rem;
+    line-height: 1.5rem;
     height: 2.5rem;
     display: flex;
-    align-items: baseline;
+    align-items: center;
 }
 .clan-info-row:hover {
     background-color: #43494c;
@@ -222,6 +227,7 @@ input[type="search"]:focus::-webkit-search-cancel-button {
     justify-content: flex-end;
     align-items: center;
     padding: 0.75rem 0.25rem 0.5rem;
+    height: 2.75rem;
 }
 .nav-online {
     box-sizing: border-box;
@@ -250,20 +256,22 @@ input[type="search"]:focus::-webkit-search-cancel-button {
 .nav-btn-wrap {
     display: flex;
     justify-content: flex-end;
+    height: 2.75rem;
 }
 .nav-btn-wrap button {
     height: 2.75rem;
     width: 2.75rem;
-    margin: 0 4px;
+    margin: 0 0.25rem;
     transition: 0.3s;
+    overflow: hidden;
 }
 .nav-btn-wrap button:hover {
     color: white;
-    border: 4px double white;
+    border: 0.25rem double white;
 }
 .nav-btn-wrap button:disabled {
     color: #43494c;
-    border: 2px solid #434343;
+    border: 0.125rem solid #434343;
     cursor: auto;
 }
 
@@ -426,7 +434,7 @@ section.root * {
 .r0-nav a:hover {
     background-color: rgba(255, 255, 255, 0.2);
 }
-@media only screen and (max-width: 400px) {
+@media only screen and (max-width: 25rem) {
     .r0-logo {
         flex-direction: column;
         font-size: 3rem;
@@ -510,17 +518,17 @@ section.root * {
 
 /* 작은화면들 */
 
-@media only screen and (max-width: 1440px){
+@media only screen and (max-width: 90rem){
     .user-wrap {
         width: 33.33%;
     }
 }
-@media only screen and (max-width: 960px) {
+@media only screen and (max-width: 60rem) {
     .user-wrap {
         width: 50%;
     }
 }
-@media only screen and (max-width: 640px) {
+@media only screen and (max-width: 40rem) {
     .hide-small {
         display: none;
     }
@@ -538,7 +546,7 @@ section.root * {
     }
 }
 
-@media only screen and (min-width: 640px) {
+@media only screen and (min-width: 40rem) {
     .nav-info .info-online {
         visibility: hidden;
         order: -1;
