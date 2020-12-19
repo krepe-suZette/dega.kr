@@ -124,6 +124,12 @@ class Parser:
         self.user.update(result)
         await self.commit()
 
+    async def update_all_clan(self, skip_dupe=True):
+        clan_list = self.clan.keys()
+        for group_id in clan_list:
+            await self.get_clan(group_id)
+            await self.get_clan_members(group_id, skip_dupe)
+
 
 async def worker(queue):
     parser = Parser(API_KEY)
@@ -168,6 +174,10 @@ async def worker(queue):
             logger.info(f"[Worker] load start")
             await parser.load()
             logger.info(f"[Worker] load success")
+        elif data.get("type") == "update_all_clan":
+            logger.info(f"[Worker] update_all_clan start")
+            await parser.update_all_clan(data.get("skip_dupe", True))
+            logger.info(f"[Worker] update_all_clan success")
         else:
             logger.warning(f"[Worker] unknown ({data})")
 
