@@ -92,11 +92,20 @@ async def run():
 def run_s():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((_host, _port))
+    short_cmd = {
+        "commit": {"type": "commit"},
+        "load": {"type": "load"},
+        "update_all_clan": {"type": "update_all_clan"},
+        "queue": {"type": "queue"}
+    }
     while True:
         line = input(">>> ")
         if not line:
             break
-        sock.send(line.encode())
+        if line.strip() in short_cmd:
+            sock.send(json.dumps(short_cmd[line.strip()]).encode())
+        else:
+            sock.send(line.encode())
         data = sock.recv(1024)
         print(f"received message: {data.decode()}")
     sock.close()
