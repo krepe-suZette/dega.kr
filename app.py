@@ -27,6 +27,11 @@ def help():
     return render_template("help.html")
 
 
+@app.route("/faq")
+def faq():
+    return render_template("faq.html")
+
+
 @app.route("/clan")
 def clan():
     data.update()
