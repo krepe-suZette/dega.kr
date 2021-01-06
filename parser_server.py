@@ -77,7 +77,7 @@ class Parser:
             # 올바르지 않은 요청
             return
         if skip_dupe:
-            result = [await self.get_user_profile(n["destinyUserInfo"]["membershipId"]) for n in resp["Response"]["results"] if n["destinyUserInfo"]["membershipId"] not in self.user]
+            result = [await self.get_user_profile(n["destinyUserInfo"]["membershipId"]) for n in resp["Response"]["results"] if not self.user.get(n["destinyUserInfo"]["membershipId"], {}).get("isPublic", False)]
         else:
             result = [await self.get_user_profile(n["destinyUserInfo"]["membershipId"]) for n in resp["Response"]["results"]]
         self.user.update(result)
@@ -115,7 +115,7 @@ class Parser:
         soup = bs4.BeautifulSoup(await resp.text(), "html.parser")
         pf_list = soup.select(".profiles-container > *")
         account_info = dict(parse_account_info(n) for n in pf_list)
-        account_info["isPublic"] = True if account_info else False
+        account_info["isPublic"] = True if "Steam" in account_info else False
         logger.info(f"[Parser] get profile {membership_id}")
         return membership_id, account_info
 
@@ -237,4 +237,4 @@ if __name__ == '__main__':
     # ch.setFormatter(fmt)
     # logger.addHandler(ch)
     # asyncio.run(test(), debug=True)
-    asyncio.run(run(), debug=True)
+    asyncio.run(run())
