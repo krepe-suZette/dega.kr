@@ -2,10 +2,18 @@ import asyncio
 import socket
 import json
 import os
+import argparse
 
 _path = "./parser.sock"
 _host = "localhost"
 _port = 50001
+
+SHORT_CMD = {
+    "commit": {"type": "commit"},
+    "load": {"type": "load"},
+    "update_all_clan": {"type": "update_all_clan"},
+    "queue": {"type": "queue"}
+}
 
 
 class Client:
@@ -92,18 +100,12 @@ async def run():
 def run_s():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((_host, _port))
-    short_cmd = {
-        "commit": {"type": "commit"},
-        "load": {"type": "load"},
-        "update_all_clan": {"type": "update_all_clan"},
-        "queue": {"type": "queue"}
-    }
     while True:
         line = input(">>> ")
         if not line:
             break
-        if line.strip() in short_cmd:
-            sock.send(json.dumps(short_cmd[line.strip()]).encode())
+        if line.strip() in SHORT_CMD:
+            sock.send(json.dumps(SHORT_CMD[line.strip()]).encode())
         else:
             sock.send(line.encode())
         data = sock.recv(1024)
@@ -111,6 +113,24 @@ def run_s():
     sock.close()
 
 
+def run_cmd(cmd: str):
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.connect((_host, _port))
+    if cmd.strip() in SHORT_CMD:
+        sock.send(json.dumps(SHORT_CMD[cmd.strip()]).encode())
+    else:
+        sock.send(cmd.encode())
+    data = sock.recv(1024)
+    print(data.decode())
+    sock.close()
+
+
 if __name__ == '__main__':
     # asyncio.run(run(), debug=True)
-    run_s()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-c", "--cmd", type=str)
+    args = parser.parse_args()
+    if args.cmd:
+        run_cmd(args.cmd)
+    else:
+        run_s()
