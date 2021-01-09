@@ -25,7 +25,7 @@ fh.setFormatter(fmt)
 logger.addHandler(fh)
 
 
-def parse_account_info(tag:bs4.Tag):
+def parse_account_info(tag: bs4.Tag):
     name = tag.find("div", attrs={"class": "title"}).text.strip().replace("\n", "")
     platform = tag.find("div", attrs={"class": "subtitle"}).text.strip().replace("\n", "")
     if platform == "Steam":
@@ -109,7 +109,7 @@ class Parser:
         await self.commit()
         return True, ""
 
-    async def get_user_profile(self, membership_id, membership_type=3) -> tuple:
+    async def get_user_profile(self, membership_id: str, membership_type=3) -> tuple:
         # 개인 유저 데이터 (Bungie.net)
         resp = await self.session.get(f"https://www.bungie.net/ko/Profile/{membership_type}/{membership_id}")
         soup = bs4.BeautifulSoup(await resp.text(), "html.parser")
@@ -135,7 +135,7 @@ class Parser:
             await self.get_clan_members(group_id, skip_dupe)
 
 
-async def worker(queue):
+async def worker(queue: asyncio.Queue):
     parser = Parser(API_KEY)
     logger.info("[Worker] Start!")
 
