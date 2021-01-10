@@ -34,15 +34,17 @@ const _cmpGroupIdDESC = function(a, b) {
 };
 
 const sortClanList = function(e) {
-    var cmp = {"nameASC": _cmpNameASC, "nameDESC": _cmpNameDESC, "idASC": _cmpGroupIdASC, "idDESC": _cmpGroupIdDESC};
+    const cmp = {"nameASC": _cmpNameASC, "nameDESC": _cmpNameDESC, "idASC": _cmpGroupIdASC, "idDESC": _cmpGroupIdDESC};
     $(".clan-list > li").sort(cmp[e.value]).appendTo(".clan-list")
 };
 
 
 // ================ /clan/<group_id> ================ //
 
-var getMaxUserCount = function() {
-    ww = $( window ).width();
+const getMaxUserCount = function () {
+    let ww = $(window).width();
+    let c;
+
     if (ww > 1440) c = 4;
     else if (ww > 960) c = 3;
     else if (ww > 640) c = 2;
@@ -95,7 +97,7 @@ const _setUserCount = function(n) {
     if (total_user == n) return;
     else if (total_user < n) {
         // 부족한 경우
-        for(i=total_user; i<n; i++) $(".user-list").append(DOM_USER.clone());
+        for(let i=total_user; i<n; i++) $(".user-list").append(DOM_USER.clone());
     }
     else {
         $(`.user-wrap:gt(${n-1})`).remove();
@@ -122,7 +124,7 @@ const getSteamIDs = function(arr) {
     let r = {};
     let failList = [];
     arr.forEach(el => {
-        let val = localStorage.getItem(el);
+        let val = sessionStorage.getItem(el);
         if (val === null) failList.push(el);
         else r[el] = val;
     });
@@ -132,7 +134,7 @@ const getSteamIDs = function(arr) {
     if (newValues === null) return r;
 
     Object.keys(newValues).forEach(el => {
-        localStorage.setItem(el, newValues[el])
+        sessionStorage.setItem(el, newValues[el])
         r[el] = newValues[el];
     });
     return r;
