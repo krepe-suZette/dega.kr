@@ -1,4 +1,4 @@
-# dcde.ga
+# dega.kr
 
 ## Checklist
 - [x] clone repo
