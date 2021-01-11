@@ -87,13 +87,20 @@ class Parser:
         # 클랜 정보 가져오기
         # 10명 미만인 경우 취소
         resp = await self.session.get(f"https://www.bungie.net/Platform/GroupV2/{group_id}/", headers={"X-API-KEY": "3632dd9656a54c6d90b31777940b2581"})
-        if resp.status != 200:
-            # API 요청 에러
+        try:
+            resp_dict: dict = await resp.json()
+        except aiohttp.ContentTypeError:
             return False, "HTTP Request Error"
-        resp_dict: dict = await resp.json()
+
+        if resp_dict.get("ErrorCode") == 686:
+            # ClanNotFound error
+            # remove existing clan info data
+            self.clan.pop(str(group_id))
+            await self.commit()
+            return False, "The requested Clan was not found."
         if resp_dict.get("ErrorCode") != 1:
-            # API 요청 에러
-            return False, "API Request Error"
+            # 기타 API 요청 에러
+            return False, resp_dict.get("ErrorStatus", "API Request Error")
         elif resp_dict["Response"]["detail"]["memberCount"] < 10:
             # 클랜 등록 조건 미달 (구성원 10명 미만)
             return False, "Clan member count must be 10 or more"
