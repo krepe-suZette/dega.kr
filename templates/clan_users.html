@@ -40,10 +40,13 @@
     $("#prevPage").click(prevPage);
     $("#nextPage").click(nextPage);
     $("#refresh").click(refreshMembers);
+    document.addEventListener("visibilitychange", function () {
+        if (!document.hidden) refreshMembers();
+    }, false);
   });
 
   $(window).resize(function () {
     setPage(CURRENT_PAGE);
-  })
+  });
 </script>
 {% endblock %}
