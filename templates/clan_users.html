@@ -43,6 +43,21 @@
     document.addEventListener("visibilitychange", function () {
         if (!document.hidden) refreshMembers();
     }, false);
+    window.addEventListener("keydown", function (e) {
+      switch (e.code) {
+        case "KeyA":
+        case "ArrowLeft":
+          prevPage()
+          break;
+        case "KeyD":
+        case "ArrowRight":
+          nextPage();
+          break;
+        case "KeyR":
+          refreshMembers();
+          break;
+      }
+    })
   });
 
   $(window).resize(function () {
