@@ -56,14 +56,14 @@ section {
     max-width: 80rem;
     width: 90%;
 }
-@media only screen and (min-width: 40rem) {
+@media only screen and (min-width: 50rem) {
     .container {
         width: 85%;
     }
 }
-@media only screen and (min-width: 60rem) {
+@media only screen and (min-width: 80rem) {
     .container {
-        width: 70%;
+        width: 80%;
     }
 }
 
@@ -138,6 +138,14 @@ button {
 }
 .clan-motto::before, .clan-motto::after {
     content: '"';
+}
+@-webkit-keyframes fadeIn {
+    from { opacity: 0; }
+      to { opacity: 1; }
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+      to { opacity: 1; }
 }
 
 /* /clan, 검색창 */
@@ -297,7 +305,9 @@ input[type="search"]:focus::-webkit-search-cancel-button {
 
 .user-wrap {
     width: 25%;
-    transition: 0.5s;
+    transition: width 0.5s;
+    -webkit-animation: fadeIn 0.3s ease-out;
+    animation: fadeIn 0.3s ease-out;
 }
 .user {
     margin: 0.25rem auto;
@@ -338,6 +348,7 @@ input[type="search"]:focus::-webkit-search-cancel-button {
 
 .hide {
     display: none;
+    opacity: 0;
 }
 
 .online {
