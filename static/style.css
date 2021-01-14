@@ -2,6 +2,8 @@
 body {
     background-color: #222426;
     color: white;
+    font-family: 'Spoqa Han Sans Neo', 'Noto Sans CJK KR Regular', 'sans-serif';
+    letter-spacing: 0.02em;
 }
 header {
     background-color: #4a56a8;
@@ -26,13 +28,15 @@ nav {
 }
 .nav-logo {
     line-height: 3rem;
-    padding-right: 0.25em;
+    padding: 0 0.125em;
     font-size: 1.75rem;
     font-weight: bold;
 }
 .nav-path {
-    padding: 0.5rem 0.25rem 0;
+    padding-top: 0.5rem;
+    padding-right: 0.25rem;
     line-height: 2rem;
+    height: 2rem;
     font-size: 1.25rem;
     flex: 0 9 auto;
     overflow: hidden;
@@ -101,8 +105,14 @@ option {
 input {
     border-radius: 0;
 }
+button {
+    padding: 0;
+}
 .material-icons {
     font-size: 1.5rem;
+    line-height: inherit;
+    width: 1em;
+    overflow-x: hidden;
 }
 /* 클랜 이름 flex CSS */
 .clan-name {
@@ -194,9 +204,9 @@ input[type="search"]:focus::-webkit-search-cancel-button {
 .clan-info-row {
     box-sizing: border-box;
     border: 1px solid #43494c;
-    padding: 0.5rem 1rem;
-    line-height: 1.5rem;
-    height: 2.5rem;
+    padding: 0.25rem 0.5rem;
+    line-height: 1.75rem;
+    height: 2.75rem;
     display: flex;
     align-items: center;
 }
@@ -305,7 +315,7 @@ input[type="search"]:focus::-webkit-search-cancel-button {
     flex: 0 0 auto;
 }
 .user .display-name {
-    padding-left: 1em;
+    padding: 0 0.5em;
     box-sizing: border-box;
     line-height: 2.25rem;
     font-size: 1.1em;
@@ -406,6 +416,10 @@ section.root * {
     font-size: 4rem;
     font-weight: bold;
     padding: 1rem 0;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 .r0-logo img {
     width: 6rem;
