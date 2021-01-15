@@ -84,6 +84,7 @@ class Parser:
         await self.commit()
 
     async def get_clan(self, group_id: int) -> tuple:
+        logger.info(f"[Parser] get_clan {group_id} start")
         # 클랜 정보 가져오기
         # 10명 미만인 경우 취소
         resp = await self.session.get(f"https://www.bungie.net/Platform/GroupV2/{group_id}/", headers={"X-API-KEY": "3632dd9656a54c6d90b31777940b2581"})
@@ -97,12 +98,15 @@ class Parser:
             # remove existing clan info data
             self.clan.pop(str(group_id))
             await self.commit()
+            logger.warning(f"[Parser] get_clan error: The requested Clan was not found.")
             return False, "The requested Clan was not found."
         if resp_dict.get("ErrorCode") != 1:
             # 기타 API 요청 에러
+            logger.warning(f"[Parser] get_clan error: {resp_dict.get('ErrorStatus', 'API Request Error')}")
             return False, resp_dict.get("ErrorStatus", "API Request Error")
         elif resp_dict["Response"]["detail"]["memberCount"] < 10:
             # 클랜 등록 조건 미달 (구성원 10명 미만)
+            logger.info(f"[Parser] get_clan error: Clan member count must be 10 or more")
             return False, "Clan member count must be 10 or more"
         data = {
             "id": resp_dict["Response"]["detail"]["groupId"],
@@ -114,6 +118,7 @@ class Parser:
         }
         self.clan[data["id"]] = data
         await self.commit()
+        logger.info(f"[Parser] get_clan success")
         return True, ""
 
     async def get_user_profile(self, membership_id: str, membership_type=3) -> tuple:
@@ -215,10 +220,11 @@ async def run():
                     raise TypeError
                 if resp.get("type") == "queue":
                     writer.write(f"{task_queue.qsize()}".encode())
+                    logger.info(f"[Server] Received from {peer_name} {resp} -> {task_queue.qsize()}")
                 else:
                     await task_queue.put(resp)
                     writer.write("OK".encode())
-                    # logger.info(f"[Server] Received from {peer_name}|{resp}")
+                    logger.info(f"[Server] Received from {peer_name} {resp}")
             except json.decoder.JSONDecodeError:
                 writer.write("JSON decode error".encode())
                 logger.error(f"[Server] JSONDecodeError {peer_name} {msg}")
