@@ -20,21 +20,20 @@ nav {
     justify-content: flex-start;
     align-items: center;
 }
+nav > * {
+    padding-right: 0.25rem;
+}
 .nav-icon img {
-    padding: 0.25rem 0;
-    margin-left: 0.25rem;
     height: 3rem;
     width: 3rem;
 }
 .nav-logo {
     line-height: 3rem;
-    padding: 0 0.125em;
     font-size: 1.75rem;
     font-weight: bold;
 }
 .nav-path {
     padding-top: 0.5rem;
-    padding-right: 0.25rem;
     line-height: 2rem;
     height: 2rem;
     font-size: 1.25rem;
