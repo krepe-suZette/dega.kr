@@ -27,6 +27,7 @@ nav > * {
 .nav-icon img {
     height: 3rem;
     width: 3rem;
+    vertical-align: middle;
 }
 .nav-logo {
     line-height: 3rem;
@@ -226,7 +227,7 @@ input[type="search"]:focus::-webkit-search-cancel-button {
     border: 1px solid #43494c;
     padding: 0.25rem 0.5rem;
     line-height: 1.75rem;
-    height: 2.75rem;
+    height: 2.5rem;
     display: flex;
     align-items: center;
 }
@@ -580,8 +581,22 @@ section.root * {
     .clan-container .clan-title {
         font-size: 1.5rem;
     }
+    /* mobile optimization */
     article {
         font-size: 1rem;
+    }
+    .clan-list {
+        font-size: 1rem;
+    }
+    .clan-info {
+        margin: 0.25rem 0;
+    }
+    .clan-info-row {
+        line-height: 1.5rem;
+        height: 2.25rem;
+    }
+    .col.clan-icon {
+        font-size: 1.25rem;
     }
 }
 
