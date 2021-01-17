@@ -42,7 +42,7 @@ const _cmpGroupIdDESC = function(a, b) {
 
 const sortClanList = function(e) {
     const cmp = {"nameASC": _cmpNameASC, "nameDESC": _cmpNameDESC, "idASC": _cmpGroupIdASC, "idDESC": _cmpGroupIdDESC};
-    $(".clan-list > li").sort(cmp[e.value]).appendTo(".clan-list")
+    $(".clan-list > .clan-info").sort(cmp[e.value]).appendTo(".clan-list")
 };
 
 
