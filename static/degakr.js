@@ -11,15 +11,22 @@ let clipboard;
 // ================ /clan ================ //
 const filterClanList = function(s) {
     // $(".clan-info").hide();
-    let rows = $( ".clan-info" );
+    let rows = $(".clan-info");
+    let hasResult = 0;
+    let lowerStr = s.toLowerCase();
+    // smartCase
+    let cmp = (lowerStr === s) ? (a => a.toLowerCase().includes(lowerStr)) : (a => a.includes(s));
     rows.each(function() {
-        if (this.innerText.indexOf(s) > -1) {
+        if (cmp(this.textContent.trim().replace(/\n[ ]+/g, "\n").replace(/^[\w_]+\n/, ""))) {
             $(this).show();
+            hasResult = 1;
         }
         else {
             $(this).hide();
         }
     });
+    if (hasResult === 0) $("#no-result").show();
+    else $("#no-result").hide();
 };
 
 const _cmpNameASC = function (a, b) {return a.innerText > b.innerText ? 1 : -1;};
