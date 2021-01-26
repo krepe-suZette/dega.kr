@@ -96,11 +96,11 @@ class Parser:
         if resp_dict.get("ErrorCode") == 686:
             # ClanNotFound error
             # remove existing clan info data
-            self.clan.pop(str(group_id))
+            self.clan.pop(str(group_id), None)
             await self.commit()
             logger.warning(f"[Parser] get_clan error: The requested Clan was not found.")
             return False, "The requested Clan was not found."
-        if resp_dict.get("ErrorCode") != 1:
+        elif resp_dict.get("ErrorCode") != 1:
             # 기타 API 요청 에러
             logger.warning(f"[Parser] get_clan error: {resp_dict.get('ErrorStatus', 'API Request Error')}")
             return False, resp_dict.get("ErrorStatus", "API Request Error")
@@ -161,7 +161,7 @@ async def worker(queue: asyncio.Queue):
             ret, msg = await parser.get_clan(data.get("group_id"))
             if not ret:
                 # 클랜 검색 실패시 로깅 후 종료
-                logger.info(f"[Worker] clan ({data.get('group_id')}) {msg}")
+                logger.warning(f"[Worker] clan ({data.get('group_id')}) {msg}")
                 continue
             # 클랜 구성원 정보 추가 및 저장
             await parser.get_clan_members(data.get("group_id"), data.get("skip_dupe", True))
@@ -214,6 +214,11 @@ async def run():
                 logger.warning(f"[Server] Session close: {peer_name}")
                 break
             msg = data.decode()
+            if task.done():
+                result_msg = "오류가 발생하였습니다. 관리자에게 연락해주세요."
+                logger.error("[Server] Worker loop closed!!!")
+            else:
+                result_msg = "OK"
             try:
                 resp = json.loads(msg)
                 if not isinstance(resp, dict):
@@ -223,7 +228,7 @@ async def run():
                     logger.info(f"[Server] Received from {peer_name} {resp} -> {task_queue.qsize()}")
                 else:
                     await task_queue.put(resp)
-                    writer.write("OK".encode())
+                    writer.write(result_msg.encode())
                     logger.info(f"[Server] Received from {peer_name} {resp}")
             except json.decoder.JSONDecodeError:
                 writer.write("JSON decode error".encode())
