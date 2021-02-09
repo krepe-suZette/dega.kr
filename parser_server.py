@@ -72,9 +72,14 @@ class Parser:
 
     async def get_clan_members(self, group_id: int, skip_dupe=True):
         # 클랜 내 모든 멤버의 계정 정보
-        resp = await self.destiny.api.get_members_of_group(group_id)
+        try:
+            resp = await self.destiny.api.get_members_of_group(group_id)
+        except pydest.PydestException as e:
+            logger.error(f"[Parser] get_clan_members error: {e}")
+            return
         if resp.get("ErrorCode") != 1:
             # 올바르지 않은 요청
+            logger.error(f"[Parser] get_clan_members error: {resp.get('ErrorStatus', 'API Request Error')}")
             return
         if skip_dupe:
             result = [await self.get_user_profile(n["destinyUserInfo"]["membershipId"]) for n in resp["Response"]["results"] if "Steam" not in self.user.get(n["destinyUserInfo"]["membershipId"], {})]
@@ -143,8 +148,9 @@ class Parser:
     async def update_all_clan(self, skip_dupe=True):
         clan_list = self.clan.keys()
         for group_id in clan_list:
-            await self.get_clan(group_id)
-            await self.get_clan_members(group_id, skip_dupe)
+            stat, msg = await self.get_clan(group_id)
+            if stat:
+                await self.get_clan_members(group_id, skip_dupe)
 
 
 async def worker(queue: asyncio.Queue):
