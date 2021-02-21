@@ -1,6 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block title %}{{ super()}} / {{clan_data["name"]}}{% endblock %}
+{% block meta %}<meta name="robots" content="noindex">{% endblock %}
 
 {% block header %}
 <div class="nav-icon"><a href="/"><img src="/static/img/icon-transparent.svg" alt="icon"></a></div>
