@@ -35,7 +35,7 @@ def faq():
 @app.route("/clan")
 def clan():
     data.update()
-    return render_template("clan.html", clan_data=data.clan)
+    return render_template("clan.html", clan_data=data.clan, clans_cnt=len(data.clan), users_cnt=len(data.user))
 
 
 @app.route("/clan/<group_id>")

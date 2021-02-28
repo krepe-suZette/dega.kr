@@ -214,6 +214,9 @@ input[type="search"]:focus::-webkit-search-cancel-button {
 .clan-nav > * {
     margin: 0 0.5rem;
 }
+.desc-txt {
+    color: #9f9f9f;
+}
 
 /* 클랜 목록 */
 

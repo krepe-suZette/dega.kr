@@ -13,18 +13,24 @@
   <input type="search" name="clan_search" id="clan_search" placeholder="클랜 검색하기">
 </div>
 <div class="clan-nav">
-  <div>정렬 방식 :</div>
+  <i class="material-icons">sort</i>
   <select name="clan-sort" id="clan-sort" onchange="sortClanList(this);">
-    <option value="" disabled selected>선택</option>
+    <option value="" disabled selected>정렬 방식 선택</option>
     <option value="nameASC">이름 ↑</option>
     <option value="nameDESC">이름 ↓</option>
     <option value="idASC">창설일 ↑</option>
     <option value="idDESC">창설일 ↓</option>
+    <option value="memberCountASC">클랜 인원 ↑</option>
+    <option value="memberCountDESC">클랜 인원 ↓</option>
   </select>
 </div>
+<p class="desc-txt">
+  현재 <b>{{ clans_cnt }}</b>개의 클랜과 <b>{{ users_cnt }}</b>명의 수호자가 등록되어 있습니다.
+  <a href="/request" class="url">클랜 등록하기</a>
+</p>
 <ul class="clan-list">
   {% for clan_id, clan in clan_data.items() %}
-  <li class="clan-info">
+  <li class="clan-info" data-member-count="{{ clan['memberCount'] }}">
     <a href="/clan/{{ clan_id }}">
       <ul class="clan-info-row">
         <li class="col clan-icon material-icons">outlined_flag</li>
@@ -35,7 +41,7 @@
     </a>
   </li>
   {% endfor %}
-  <li id="no-result" style="display: none;"><span>검색 결과가 없습니다. </span><a href="/request" class="url">클랜 등록</a></li>
+  <li id="no-result" style="display: none;"><span>검색 결과가 없습니다. </span></li>
 </ul>
 {% endblock %}
 
@@ -44,7 +50,11 @@
   $(document).ready(function () {
     $("#clan_search").on('input', function () {
         filterClanList($(this).val());
-    })
+    });
+    let $clan_sort = $("#clan-sort").val();
+    if ($clan_sort) {
+      sortClanList({"value": $clan_sort});
+    }
   });
 </script>
 {% endblock %}

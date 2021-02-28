@@ -39,9 +39,18 @@ const _cmpGroupIdASC = function(a, b) {
 const _cmpGroupIdDESC = function(a, b) {
     return -_cmpGroupIdASC(a, b);
 };
+const _cmpMemberCountASC = function (a, b) { return a.dataset.memberCount - b.dataset.memberCount;};
+const _cmpMemberCountDESC = function (a, b) { return b.dataset.memberCount - a.dataset.memberCount;};
 
 const sortClanList = function(e) {
-    const cmp = {"nameASC": _cmpNameASC, "nameDESC": _cmpNameDESC, "idASC": _cmpGroupIdASC, "idDESC": _cmpGroupIdDESC};
+    const cmp = {
+        "nameASC": _cmpNameASC,
+        "nameDESC": _cmpNameDESC,
+        "idASC": _cmpGroupIdASC,
+        "idDESC": _cmpGroupIdDESC,
+        "memberCountASC": _cmpMemberCountASC,
+        "memberCountDESC": _cmpMemberCountDESC,
+    };
     $(".clan-list > .clan-info").sort(cmp[e.value]).appendTo(".clan-list")
 };
 
