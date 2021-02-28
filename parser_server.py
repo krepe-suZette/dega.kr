@@ -117,6 +117,8 @@ class Parser:
             "id": resp_dict["Response"]["detail"]["groupId"],
             "name": html.unescape(resp_dict["Response"]["detail"]["name"]),
             "icon": "",
+            "memberCount": resp_dict["Response"]["detail"]["memberCount"],
+            "locale": resp_dict["Response"]["detail"]["locale"],
             "callsign": html.unescape(resp_dict["Response"]["detail"]["clanInfo"]["clanCallsign"]),
             "motto": html.unescape(resp_dict["Response"]["detail"]["motto"]),
             "about": html.unescape(resp_dict["Response"]["detail"]["about"])
