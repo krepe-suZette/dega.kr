@@ -88,7 +88,7 @@ class Parser:
         self.user.update(result)
         await self.commit()
 
-    async def get_clan(self, group_id: int) -> tuple:
+    async def get_clan(self, group_id: int, commit=True) -> tuple:
         logger.info(f"[Parser] get_clan {group_id} start")
         # 클랜 정보 가져오기
         # 10명 미만인 경우 취소
@@ -122,7 +122,8 @@ class Parser:
             "about": html.unescape(resp_dict["Response"]["detail"]["about"])
         }
         self.clan[data["id"]] = data
-        await self.commit()
+        if commit:
+            await self.commit()
         logger.info(f"[Parser] get_clan success")
         return True, ""
 
@@ -148,9 +149,10 @@ class Parser:
     async def update_all_clan(self, skip_dupe=True):
         clan_list = self.clan.keys()
         for group_id in clan_list:
-            stat, msg = await self.get_clan(group_id)
+            stat, msg = await self.get_clan(group_id, commit=False)
             if stat:
                 await self.get_clan_members(group_id, skip_dupe)
+        await self.commit()
 
 
 async def worker(queue: asyncio.Queue):
