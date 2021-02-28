@@ -109,8 +109,8 @@ class Parser:
             # 기타 API 요청 에러
             logger.warning(f"[Parser] get_clan error: {resp_dict.get('ErrorStatus', 'API Request Error')}")
             return False, resp_dict.get("ErrorStatus", "API Request Error")
-        elif resp_dict["Response"]["detail"]["memberCount"] < 10:
-            # 클랜 등록 조건 미달 (구성원 10명 미만)
+        elif group_id not in self.clan and resp_dict["Response"]["detail"]["memberCount"] < 10:
+            # 클랜 **신규** 등록 조건 미달 (구성원 10명 미만)
             logger.info(f"[Parser] get_clan error: Clan member count must be 10 or more")
             return False, "Clan member count must be 10 or more"
         data = {
