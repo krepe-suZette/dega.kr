@@ -29,6 +29,15 @@
   </div>
 </div>
 <div class="user-list">
+  {% for _ in range(clan_data.get("memberCount", 0)) %}
+  <div class='user-wrap'>
+    <div class='user'>
+      <div class='emblem'></div>
+      <div class='display-name'></div>
+      <button class='copy material-icons' data-clipboard-text=''>content_copy</button>
+    </div>
+  </div>
+  {% endfor %}
 </div>
 {% endblock %}
 

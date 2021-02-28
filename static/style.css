@@ -317,6 +317,7 @@ input[type="search"]:focus::-webkit-search-cancel-button {
     align-content: flex-start;
     height: calc(100vh - 7.5rem);
     max-height: 69rem;
+    overflow: hidden;
 }
 
 .user-wrap {
@@ -331,6 +332,7 @@ input[type="search"]:focus::-webkit-search-cancel-button {
     display: flex;
     background-color: #43494c;
     width: 96%;
+    transition: 0.3s;
 }
 .user .emblem {
     width: 2rem;
@@ -360,6 +362,12 @@ input[type="search"]:focus::-webkit-search-cancel-button {
     color: white;
     background-color: transparent;
     flex-shrink: 0;
+    transition: opacity 0.2s;
+}
+.loading .copy {
+    color: #9f9f9f;
+    opacity: 0;
+    visibility: hidden;
 }
 
 .hide {
