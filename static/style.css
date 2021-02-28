@@ -121,6 +121,7 @@ button {
     line-height: inherit;
     width: 1em;
     overflow-x: hidden;
+    user-select: none;
 }
 a.url {
     text-decoration: underline;

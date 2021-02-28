@@ -78,9 +78,9 @@ const setPage = function (p) {
 
     if (p > max_page) p = 0;
     $(".user-wrap").each(function (index, element) {
-        if (Math.floor(index / page_count) == p && $(element).hasClass("hide")) {
+        if (Math.floor(index / page_count) === p && $(element).hasClass("hide")) {
             $(element).removeClass("hide");
-        } else if (Math.floor(index / page_count) != p && !$(element).hasClass("hide")) {
+        } else if (Math.floor(index / page_count) !== p && !$(element).hasClass("hide")) {
             $(element).addClass("hide");
         }
     });
@@ -109,13 +109,12 @@ const prevPage = function() {
 }
 
 const _setUserCount = function(n) {
-    var total_user = $(".user").length;
-    if (total_user == n) return;
-    else if (total_user < n) {
+    let total_user = $(".user").length;
+    if (total_user < n) {
         // 부족한 경우
         for(let i=total_user; i<n; i++) $(".user-list").append(DOM_USER.clone());
     }
-    else {
+    else if (total_user > n) {
         $(`.user-wrap:gt(${n-1})`).remove();
     }
 }
@@ -145,7 +144,7 @@ const getSteamIDs = function(arr) {
         else r[el] = val;
     });
 
-    if (failList.length == 0) return r;
+    if (failList.length === 0) return r;
     let newValues = _requestSteamIDs(failList);
     if (newValues === null) return r;
 
@@ -164,7 +163,10 @@ const clipboardInitialize = function() {
 }
 
 const getClanOnlineMembers = function(groupId) {
-    $("#refresh").attr("disabled", true).text("hourglass_bottom");
+    let $refresh = $("#refresh");
+    let $user_list = $(".user-list")
+    $refresh.attr("disabled", true).text("hourglass_bottom");
+    $user_list.addClass("loading");
     GROUP_ID = groupId;
     $.ajax({
         url: "https://www.bungie.net/Platform/GroupV2/" + groupId + "/Members/",
@@ -196,7 +198,7 @@ const getClanOnlineMembers = function(groupId) {
             $(arr_user_list[idx]).removeClass("error");
 
             if (element.isOnline) {
-                var sid = steamId[element.destinyUserInfo.membershipId];
+                let sid = steamId[element.destinyUserInfo.membershipId];
                 if (!sid) {
                     $(arr_user_list[idx]).removeClass("online");
                     $(arr_user_list[idx]).addClass("error");
@@ -211,11 +213,12 @@ const getClanOnlineMembers = function(groupId) {
 
         setPage(0);
         clipboardInitialize();
-        $("#refresh").text("done").attr("disabled", false);
+        $refresh.text("done").attr("disabled", false);
     }).fail(function () {
-        $("#refresh").text("error_outline").attr("disabled", false);
+        $refresh.text("error_outline").attr("disabled", false);
     }).always(function() {
-        setTimeout(() => {$("#refresh").text("refresh")}, 1000);
+        setTimeout(() => {$refresh.text("refresh")}, 1000);
+        $user_list.removeClass("loading");
     });
 }
 
@@ -252,7 +255,7 @@ const getGroupByName = function(name) {
             "X-API-Key": API_KEY
         }
     }).done(function(data) {
-        if (data.ErrorCode == 1) {
+        if (data.ErrorCode === 1) {
             _editClanContainer(
                 data.Response.detail.name,
                 data.Response.detail.clanInfo.clanCallsign,
@@ -280,9 +283,9 @@ const clanAddRequest = function(el) {
         url: "/api/clan/add/" + group_id
     }).done(function(resp) {
         if (resp.result) alert("신청이 완료되었습니다. 적용에는 시간이 걸리니 조금만 기다려주세요.");
-        else alert("추가 신청 실패: " + resp.message);
+        else alert("등록 신청 실패: " + resp.message);
     }).fail(function() {
-        alert("추가 신청 실패.")
+        alert("등록 신청 실패.")
     });
 }
 
