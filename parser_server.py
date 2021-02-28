@@ -231,11 +231,11 @@ async def run():
                     raise TypeError
                 if resp.get("type") == "queue":
                     writer.write(f"{task_queue.qsize()}".encode())
-                    logger.info(f"[Server] Received from {peer_name} {resp} -> {task_queue.qsize()}")
+                    logger.info(f"[Server] Received from {peer_name} {msg} -> {task_queue.qsize()}")
                 else:
                     await task_queue.put(resp)
                     writer.write(result_msg.encode())
-                    logger.info(f"[Server] Received from {peer_name} {resp}")
+                    logger.info(f"[Server] Received from {peer_name} {msg}")
             except json.decoder.JSONDecodeError:
                 writer.write("JSON decode error".encode())
                 logger.error(f"[Server] JSONDecodeError {peer_name} {msg}")
