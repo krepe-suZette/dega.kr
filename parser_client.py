@@ -56,22 +56,29 @@ class Client:
 
 class Data:
     def __init__(self):
-        with open("data/clan.json", encoding="utf-8") as f:
+        with open("data/clan.json", "r", encoding="utf-8") as f:
             self.clan: dict = json.load(f)
-        with open("data/user.json", encoding="utf-8") as f:
+        with open("data/user.json", "r", encoding="utf-8") as f:
             self.user: dict = json.load(f)
+        with open("data/clan_blocklist.json", "r", encoding="utf-8") as f:
+            self.clan_blocklist: dict = json.load(f)
         self.last_edit_clan = os.path.getmtime("data/clan.json")
         self.last_edit_user = os.path.getmtime("data/user.json")
+        self.last_edit_clan_blocklist = os.path.getmtime("data/clan_blocklist.json")
 
     def update(self):
         if self.last_edit_clan < os.path.getmtime("data/clan.json"):
             self.last_edit_clan = os.path.getmtime("data/clan.json")
-            with open("data/clan.json", encoding="utf-8") as f:
+            with open("data/clan.json", "r", encoding="utf-8") as f:
                 self.clan: dict = json.load(f)
         if self.last_edit_user < os.path.getmtime("data/user.json"):
             self.last_edit_user = os.path.getmtime("data/user.json")
-            with open("data/user.json", encoding="utf-8") as f:
+            with open("data/user.json", "r", encoding="utf-8") as f:
                 self.user: dict = json.load(f)
+        if self.last_edit_clan_blocklist < os.path.getmtime("data/clan_blocklist.json"):
+            self.last_edit_clan_blocklist = os.path.getmtime("data/clan_blocklist.json")
+            with open("data/clan_blocklist.json", "r", encoding="utf-8") as f:
+                self.clan_blocklist: dict = json.load(f)
 
 
 async def run():

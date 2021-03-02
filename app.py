@@ -60,6 +60,8 @@ def api_get_steam_id():
 def api_clan_add(group_id: str):
     if not group_id.isnumeric():
         return jsonify({"result": False, "message": "Invalid argument value"})
+    if group_id in data.clan_blocklist:
+        return jsonify({"result": False, "message": data.clan_blocklist.get(group_id)})
     skip_dupe = request.args.get("skip_dupe", "true") == "true"
     msg = p_client.send({"type": "clan", "group_id": group_id, "skip_dupe": skip_dupe})
     return jsonify({"result": msg == "OK", "message": msg})
