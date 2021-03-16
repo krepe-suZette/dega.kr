@@ -158,8 +158,14 @@ const getSteamIDs = function(arr) {
 const clipboardInitialize = function() {
     if (clipboard != null) clipboard.destroy();
     clipboard = new ClipboardJS('.copy');
-    clipboard.on("success", function(e) {console.log("Copy Success")});
-    clipboard.on("error", function(e) {console.log("COPY ERROR")});
+    clipboard.on("success", function(e) {
+        console.log("Copy success");
+        $(e.trigger).addClass("copied");
+        setTimeout(function () { $(e.trigger).removeClass("copied"); }, 2000);
+    });
+    clipboard.on("error", function(e) {
+        console.log("Copy ERROR");
+    });
 }
 
 const getClanOnlineMembers = function(groupId) {

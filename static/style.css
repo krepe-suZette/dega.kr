@@ -165,6 +165,19 @@ a.url:hover {
       to { opacity: 1; }
 }
 
+@-webkit-keyframes popup {
+    0% { opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { opacity: 0; }
+}
+@keyframes popup {
+    0% { opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
 /* /clan, 검색창 */
 
 .clan-search {
@@ -396,6 +409,20 @@ input[type="search"]:focus::-webkit-search-cancel-button {
 }
 .copy:active {
     transform: scale(0.9);
+}
+.copied::before {
+    content: "Copied!!";
+    font-family: 'Spoqa Han Sans Neo', 'Noto Sans CJK KR Regular', 'sans-serif';
+    font-size: 1rem;
+    position: absolute;
+    margin-top: -0.25rem;
+    margin-left: -6.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    background: #181a1b;
+    color: #FFFFFF;
+    opacity: 0;
+    animation: popup 2s;
 }
 
 /* /update-log */
