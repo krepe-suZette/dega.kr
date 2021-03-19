@@ -2,7 +2,7 @@ let PAGE_CAPACITY = 0;
 let MAX_PAGE = 0;
 let CURRENT_PAGE = 0;
 const API_KEY = "3632dd9656a54c6d90b31777940b2581";
-const DOM_USER = $("<div class='user-wrap'><div class='user'><div class='emblem'></div><div class='display-name'></div><button class='copy material-icons' data-clipboard-text=''>content_copy</button></div></div>");
+const DOM_USER = $("<div class='user-wrap'><div class='user'><div class='emblem'></div><div class='display-name'></div><button class='copy material-icons' data-clipboard-text='' data-icon='content_copy'></button></div></div>");
 let GROUP_ID;
 
 let clipboard;
@@ -171,7 +171,7 @@ const clipboardInitialize = function() {
 const getClanOnlineMembers = function(groupId) {
     let $refresh = $("#refresh");
     let $user_list = $(".user-list")
-    $refresh.attr("disabled", true).text("hourglass_bottom");
+    $refresh.attr("disabled", true).data("icon", "hourglass_bottom");
     $user_list.addClass("loading");
     GROUP_ID = groupId;
     $.ajax({
@@ -219,11 +219,11 @@ const getClanOnlineMembers = function(groupId) {
 
         setPage(0);
         clipboardInitialize();
-        $refresh.text("done").attr("disabled", false);
+        $refresh.data("icon", "done").attr("disabled", false);
     }).fail(function () {
-        $refresh.text("error_outline").attr("disabled", false);
+        $refresh.data("icon", "error_outline").attr("disabled", false);
     }).always(function() {
-        setTimeout(() => {$refresh.text("refresh")}, 1000);
+        setTimeout(() => {$refresh.data("icon", "refresh")}, 1000);
         $user_list.removeClass("loading");
     });
 }

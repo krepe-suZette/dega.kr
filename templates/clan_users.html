@@ -10,7 +10,7 @@
   <div class="clan-name">/ {{ clan_data["name"] }}</div>
   <div class="clan-callsign">{{ clan_data["callsign"] }}</div>
 </a></div>
-<div class="nav-path nav-icon"><a href="https://www.bungie.net/ko/ClanV2?groupid={{ clan_data['id'] }}" class="material-icons" target="_blank">link</a></div>
+<div class="nav-path nav-icon"><a href="https://www.bungie.net/ko/ClanV2?groupid={{ clan_data['id'] }}" class="material-icons" target="_blank" data-icon="link"></a></div>
 {% endblock %}
 
 {% block content %}
@@ -23,9 +23,9 @@
     <div class="info-online"></div>
   </div>
   <div class="nav-btn-wrap">
-    <button id="refresh" class="material-icons" disabled>refresh</button>
-    <button id="prevPage" class="material-icons" disabled>arrow_back</button>
-    <button id="nextPage" class="material-icons" disabled>arrow_forward</button>
+    <button id="refresh" class="material-icons" disabled data-icon="refresh"></button>
+    <button id="prevPage" class="material-icons" disabled data-icon="arrow_back"></button>
+    <button id="nextPage" class="material-icons" disabled data-icon="arrow_forward"></button>
   </div>
 </div>
 <div class="user-list">
@@ -34,7 +34,7 @@
     <div class='user'>
       <div class='emblem'></div>
       <div class='display-name'></div>
-      <button class='copy material-icons' data-clipboard-text=''>content_copy</button>
+      <button class='copy material-icons' data-clipboard-text='' data-icon='content_copy'></button>
     </div>
   </div>
   {% endfor %}

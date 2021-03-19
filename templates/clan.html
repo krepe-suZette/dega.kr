@@ -14,7 +14,7 @@
   <input type="search" name="clan_search" id="clan_search" placeholder="클랜 검색하기">
 </div>
 <div class="clan-nav">
-  <i class="material-icons">sort</i>
+  <i class="material-icons" data-icon="sort"></i>
   <select name="clan-sort" id="clan-sort" onchange="sortClanList(this);">
     <option value="" disabled selected>정렬 방식 선택</option>
     <option value="nameASC">이름 ↑</option>
@@ -34,7 +34,7 @@
   <li class="clan-info" data-member-count="{{ clan['memberCount'] }}">
     <a href="/clan/{{ clan_id }}">
       <ul class="clan-info-row">
-        <li class="col clan-icon material-icons">outlined_flag</li>
+        <li class="col clan-icon material-icons" data-icon="outlined_flag"></li>
         <li class="col clan-name">{{ clan["name"] }}</li>
         <li class="col clan-callsign">{{ clan["callsign"] }}</li>
         <li class="col clan-motto">{{ clan["motto"] }}</li>
