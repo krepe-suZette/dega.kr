@@ -56,29 +56,33 @@ class Client:
 
 class Data:
     def __init__(self):
+        self._load_clan()
+        self._load_user()
+        self._load_clan_blocklist()
+
+    def _load_clan(self):
         with open("data/clan.json", "r", encoding="utf-8") as f:
-            self.clan: dict = json.load(f)
+            self.clan_all: dict = json.load(f)
+            self.clan = {k: v for k, v in self.clan_all.items() if v.get("memberCount") > 5}
+        self.last_edit_clan = os.path.getmtime("data/clan.json")
+
+    def _load_user(self):
         with open("data/user.json", "r", encoding="utf-8") as f:
             self.user: dict = json.load(f)
+        self.last_edit_user = os.path.getmtime("data/user.json")
+
+    def _load_clan_blocklist(self):
         with open("data/clan_blocklist.json", "r", encoding="utf-8") as f:
             self.clan_blocklist: dict = json.load(f)
-        self.last_edit_clan = os.path.getmtime("data/clan.json")
-        self.last_edit_user = os.path.getmtime("data/user.json")
         self.last_edit_clan_blocklist = os.path.getmtime("data/clan_blocklist.json")
 
     def update(self):
         if self.last_edit_clan < os.path.getmtime("data/clan.json"):
-            self.last_edit_clan = os.path.getmtime("data/clan.json")
-            with open("data/clan.json", "r", encoding="utf-8") as f:
-                self.clan: dict = json.load(f)
+            self._load_clan()
         if self.last_edit_user < os.path.getmtime("data/user.json"):
-            self.last_edit_user = os.path.getmtime("data/user.json")
-            with open("data/user.json", "r", encoding="utf-8") as f:
-                self.user: dict = json.load(f)
+            self._load_user()
         if self.last_edit_clan_blocklist < os.path.getmtime("data/clan_blocklist.json"):
-            self.last_edit_clan_blocklist = os.path.getmtime("data/clan_blocklist.json")
-            with open("data/clan_blocklist.json", "r", encoding="utf-8") as f:
-                self.clan_blocklist: dict = json.load(f)
+            self._load_clan_blocklist()
 
 
 async def run():

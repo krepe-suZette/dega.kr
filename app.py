@@ -41,8 +41,8 @@ def clan():
 @app.route("/clan/<group_id>")
 def clan_page(group_id: str):
     data.update()
-    if group_id in data.clan:
-        return render_template("clan_users.html", clan_data=data.clan.get(group_id))
+    if group_id in data.clan_all:
+        return render_template("clan_users.html", clan_data=data.clan_all.get(group_id))
     else:
         return render_template("404.html"), 404
 
