@@ -9,7 +9,7 @@ data = Data()
 
 @app.route("/")
 def root():
-    return render_template("root.html")
+    return render_template("root_fool.html")
 
 
 @app.route("/update-log")

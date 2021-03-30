@@ -1,0 +1,39 @@
+.r0-bg-video {
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  max-width: calc(233.33vh);
+  z-index: 0;
+  object-fit: cover;
+}
+.r0-bg {
+  background-color: black;
+}
+.r0-bg .item-wrap {
+  z-index: 1;
+  background-color: rgba(0, 0, 0, 0.6);
+  background-clip: content-box;
+  border-radius: 0.5rem;
+}
+.r0-bg .r0-intro {
+  font-size: 1.5rem;
+  transform: rotate(-5deg) skew(-4deg, 0);
+  text-align: left;
+  margin-top: -0.5rem;
+}
+.r0-intro::before {
+  content: "";
+  padding-left: 1rem;
+}
+
+@media (max-aspect-ratio: 5/3) {
+  .r0-bg-video {
+    height: 60vw;
+    max-height: 100vh;
+    padding-bottom: calc(110vh - 100vw);
+  }
+
+  .item-wrap {
+    padding-top: min(56.25vw, calc(100vh - 100vw));
+  }
+}
