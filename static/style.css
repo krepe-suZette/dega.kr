@@ -470,6 +470,9 @@ section.root * {
     justify-content: center;
     align-items: center;
 }
+.r0  .item-wrap > * {
+    margin: 0.25rem 0;
+}
 .item-wrap {
     display: flex;
     flex-direction: column;
@@ -484,7 +487,6 @@ section.root * {
     align-items: center;
     font-size: 4rem;
     font-weight: bold;
-    padding: 1rem 0;
     -ms-user-select: none;
     -moz-user-select: none;
     -webkit-user-select: none;
@@ -502,19 +504,23 @@ section.root * {
     justify-content: center;
     align-content: flex-start;
     flex-wrap: wrap;
-    margin: 1rem 0;
 }
 .r0-nav a {
     background-color: transparent;
     border: 0.125rem solid #FFFFFF;
     border-radius: 0.25rem;
     color: #FFFFFF;
-    margin: 0.25rem;
+    margin: 0 0.25rem;
     padding: 0.5rem;
     box-sizing: border-box;
 }
 .r0-nav a:hover {
     background-color: rgba(255, 255, 255, 0.2);
+}
+.r0-version {
+    align-self: flex-end;
+    font-size: 0.75rem;
+    padding: 0 0.25rem;
 }
 @media only screen and (max-width: 25rem) {
     .r0-logo {
