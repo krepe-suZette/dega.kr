@@ -5,16 +5,17 @@ from parser_client import Client, Data
 app = Flask("main")
 p_client = Client(("localhost", 50001))
 data = Data()
+__version__ = "0.5.4"
 
 
 @app.route("/")
 def root():
-    return render_template("root_fool.html")
+    return render_template("root_fool.html", version=__version__)
 
 
 @app.route("/update-log")
 def update_log():
-    return render_template("update-log.html")
+    return render_template("update-log.html", version=__version__)
 
 
 @app.route("/request")
