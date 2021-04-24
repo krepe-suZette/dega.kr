@@ -149,7 +149,7 @@ class Parser:
         await self.commit()
 
     async def update_all_clan(self, skip_dupe=True):
-        clan_list = self.clan.keys()
+        clan_list = tuple(self.clan.keys())
         for group_id in clan_list:
             stat, msg = await self.get_clan(group_id, commit=False)
             if stat:
