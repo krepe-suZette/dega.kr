@@ -34,7 +34,7 @@
     <div class='user'>
       <div class='emblem'></div>
       <div class='display-name'></div>
-      <button class='copy material-icons' data-clipboard-text='' data-icon='content_copy'></button>
+      <button class='copy material-icons' data-sid='' data-icon='content_copy'></button>
     </div>
   </div>
   {% endfor %}
@@ -67,6 +67,7 @@
           break;
       }
     })
+    ctrlObserverInit();
   });
 
   $(window).resize(function () {

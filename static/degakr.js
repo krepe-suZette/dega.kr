@@ -2,10 +2,13 @@ let PAGE_CAPACITY = 0;
 let MAX_PAGE = 0;
 let CURRENT_PAGE = 0;
 const API_KEY = "3632dd9656a54c6d90b31777940b2581";
-const DOM_USER = $("<div class='user-wrap'><div class='user'><div class='emblem'></div><div class='display-name'></div><button class='copy material-icons' data-clipboard-text='' data-icon='content_copy'></button></div></div>");
+const DOM_USER = $("<div class='user-wrap'><div class='user'><div class='emblem'></div><div class='display-name'></div><button class='copy material-icons' data-sid='' data-icon='content_copy'></button></div></div>");
 let GROUP_ID;
 
 let clipboard;
+let isCtrlPressed = false;
+let cmd_join = "합류";
+let cmd_invite = "초대";
 
 
 // ================ /clan ================ //
@@ -74,7 +77,7 @@ const setPage = function (p) {
     let total_user = $(".user").length;
     let max_page = Math.ceil(total_user / page_count) - 1;
 
-    if (page_count == PAGE_CAPACITY && p == CURRENT_PAGE) return;
+    if (page_count === PAGE_CAPACITY && p === CURRENT_PAGE) return;
 
     if (p > max_page) p = 0;
     $(".user-wrap").each(function (index, element) {
@@ -155,9 +158,25 @@ const getSteamIDs = function(arr) {
     return r;
 }
 
+const mkCmd = function (s) {
+    if (isCtrlPressed) return "/" + cmd_invite +" " + s;
+    else return "/" + cmd_join + " " + s;
+}
+
+const ctrlObserverInit = function () {
+    document.addEventListener("keydown", function (event) {
+        if (event.ctrlKey) isCtrlPressed = true;
+    });
+    document.addEventListener("keyup", function (event) {
+        if (event.ctrlKey || event.key === "Control") isCtrlPressed = false;
+    });
+}
+
 const clipboardInitialize = function() {
     if (clipboard != null) clipboard.destroy();
-    clipboard = new ClipboardJS('.copy');
+    clipboard = new ClipboardJS('.copy', {
+        text: function(trigger) { return mkCmd(trigger.getAttribute('data-sid')) }
+    });
     clipboard.on("success", function(e) {
         console.log("Copy success");
         $(e.trigger).addClass("copied");
@@ -211,7 +230,7 @@ const getClanOnlineMembers = function(groupId) {
                 }
                 else {
                     $(arr_user_list[idx]).addClass("online");
-                    $(arr_user_list[idx]).children(".copy").attr("data-clipboard-text", "/합류 " + sid);
+                    $(arr_user_list[idx]).children(".copy").attr("data-sid", sid);
                 }
             }
             else $(arr_user_list[idx]).removeClass("online");
