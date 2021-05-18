@@ -5,8 +5,8 @@ from parser_client import Client, Data
 app = Flask("main")
 p_client = Client(("localhost", 50001))
 data = Data()
-last_update = "2021-04-25"
-__version__ = "0.5.6"
+last_update = "2021-05-19"
+__version__ = "0.5.7"
 
 
 @app.route("/")
