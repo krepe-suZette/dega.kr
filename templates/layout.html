@@ -48,7 +48,12 @@
     <nav class="container">
       {% block header %}
       <div class="nav-icon"><a href="/"><img src="/static/img/icon-transparent.svg" alt="icon"></a></div>
-      <div class="nav-logo"><a href="/">dega.kr</a></div>
+      <div class="nav-logo hide-small"><a href="/">dega.kr</a></div>
+      <div class="nav-right">
+        <div class="nav-path nav-setting">
+          <a href="/setting" class="material-icons" data-icon="settings"></a>
+        </div>
+      </div>
       {% endblock %}
     </nav>
   </header>

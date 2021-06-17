@@ -201,7 +201,6 @@ const clipboardInitialize = function() {
 }
 
 const directJoinInitialize = function () {
-    console.log("direct join init");
     $(".copy").click( function () {
         console.log("Click!");
         location.href = "steam://rungame/1085660/" + this.getAttribute("data-sid");
