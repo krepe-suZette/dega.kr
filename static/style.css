@@ -605,6 +605,16 @@ section.root * {
     background-color: #434343;
 }
 
+/* /setting */
+.radio-box {
+    display: flex;
+    flex-direction: column;
+    padding-left: 1rem;
+}
+.radio-box > * {
+    margin-bottom: 0.5rem;
+}
+
 /* 작은화면들 */
 
 @media only screen and (max-width: 90rem){

@@ -2,13 +2,26 @@ let PAGE_CAPACITY = 0;
 let MAX_PAGE = 0;
 let CURRENT_PAGE = 0;
 const API_KEY = "3632dd9656a54c6d90b31777940b2581";
-const DOM_USER = $("<div class='user-wrap'><div class='user'><div class='emblem'></div><div class='display-name'></div><button class='copy material-icons' data-sid='' data-icon='content_copy'></button></div></div>");
+const DOM_USER_COPY = $("<div class='user-wrap'><div class='user'><div class='emblem'></div><div class='display-name'></div><button class='copy material-icons' data-sid='' data-icon='content_copy'></button></div></div>");
+const DOM_USER_DIRECT = $("<div class='user-wrap'><div class='user'><div class='emblem'></div><div class='display-name'></div><button class='copy material-icons' data-sid='' data-icon='login'></button></div></div>");
+let DOM_USER = DOM_USER_COPY;
 let GROUP_ID;
 
 let clipboard;
 let isCtrlPressed = false;
 let cmd_join = "합류";
 let cmd_invite = "초대";
+let mode = "copy";
+
+const loadLocalStorageJSON = function (key) {
+    let item = localStorage.getItem(key);
+    if (item === null) return {};
+    else return JSON.parse(localStorage.getItem(key));
+}
+
+const saveLocalStorageJSON = function (key, item) {
+    localStorage.setItem(key, JSON.stringify(item))
+}
 
 
 // ================ /clan ================ //
@@ -187,11 +200,23 @@ const clipboardInitialize = function() {
     });
 }
 
+const directJoinInitialize = function () {
+    console.log("direct join init");
+    $(".copy").click( function () {
+        console.log("Click!");
+        location.href = "steam://rungame/1085660/" + this.getAttribute("data-sid");
+    });
+}
+
 const getClanOnlineMembers = function(groupId) {
     let $refresh = $("#refresh");
-    let $user_list = $(".user-list")
+    let $user_list = $(".user-list");
+    let $icon = $(".copy");
     $refresh.attr("disabled", true).data("icon", "hourglass_bottom");
     $user_list.addClass("loading");
+    if (mode === "direct") $icon.attr("data-icon", "login");
+    else $icon.attr("data-icon", "content_copy");
+
     GROUP_ID = groupId;
     $.ajax({
         url: "https://www.bungie.net/Platform/GroupV2/" + groupId + "/Members/",
@@ -237,7 +262,9 @@ const getClanOnlineMembers = function(groupId) {
         });
 
         setPage(0);
-        clipboardInitialize();
+        if (mode === "direct") directJoinInitialize();
+        else clipboardInitialize();
+
         $refresh.data("icon", "done").attr("disabled", false);
     }).fail(function () {
         $refresh.data("icon", "error_outline").attr("disabled", false);
@@ -318,3 +345,63 @@ const searchSubmit = function(e) {
     e.preventDefault();
     getGroupByName($("#clan-search").val())
 }
+
+// ================ /setting ================ //
+// mode select
+const getMode = function () {
+    // windows 인 경우에는 기본값이 direct, 아닌 경우 copy
+    let _mode = localStorage.getItem("mode");
+    if (_mode) return _mode;
+    else if (window.navigator.userAgent.toLowerCase().indexOf("Windows") > -1) {
+        console.log("it is windows");
+        localStorage.setItem("mode", "direct");
+        return "direct";
+    }
+    else {
+        localStorage.setItem("mode", "copy");
+        return "copy";
+    }
+}
+
+const setMode = function (m) {
+    console.log("setmode: " + m)
+    if (m === "direct") {
+        mode = m;
+        localStorage.setItem("mode", m);
+    }
+    else if (m === "copy") {
+        mode = m;
+        localStorage.setItem("mode", m);
+    }
+    else {
+        console.log("ERROR: Invalid mode input");
+        mode = getMode();
+    }
+}
+
+// copy cmd lang setting
+const getCommandPrefix = function() {
+    // localStorage 값이 있으면 불러오고, 없으면 기본값 (합류/초대) 사용
+    // 해서 global 변수인 cmd_join, cmd_invite 에 저장
+    // "setting": {"cmd_invite": "invite", "cmd_join": "join"}
+    let setting = loadLocalStorageJSON("setting");
+    cmd_invite = setting.cmd_invite ? setting.cmd_invite : "초대";
+    cmd_join = setting.cmd_join ? setting.cmd_join : "합류";
+}
+
+const setCommandPrefix = function (cmd_join, cmd_invite) {
+    let setting = loadLocalStorageJSON("setting");
+    setting.cmd_join = cmd_join;
+    setting.cmd_invite = cmd_invite;
+    saveLocalStorageJSON("setting", setting);
+}
+
+const setCommandPrefixByLang = function (lang) {
+    if (lang === "ko") setCommandPrefix("합류", "초대");
+    else setCommandPrefix("join", "invite");
+}
+
+// ================ initializing ================ //
+// getCommandPrefix();
+mode = getMode();
+DOM_USER = mode === "direct" ? DOM_USER_DIRECT : DOM_USER_COPY;

@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+
+{% block title %}{{ super() }} / 설정{% endblock %}
+
+{% block header %}
+<div class="nav-icon"><a href="/"><img src="/static/img/icon-transparent.svg" alt="icon"></a></div>
+<div class="nav-logo hide-small"><a href="/">dega.kr</a></div>
+<div class="nav-path">
+  <a href="/request">/ 설정</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<article>
+  <h2><i class="material-icons" data-icon="settings"></i> 모드 설정</h2>
+  <div class="radio-box">
+    <label><input type="radio" name="mode" value="direct" id="mode_direct" onchange="setMode('direct');"> 바로 합류</label>
+    <label><input type="radio" name="mode" value="copy" id="mode_copy" onchange="setMode('copy');"> 복사</label>
+  </div>
+
+  <h2><i class="material-icons" data-icon="language"></i> <del>명령어 복사 언어 설정</del> (WIP)</h2>
+  <div class="radio-box">
+    <label><input type="radio" name="lang" value="ko"> <b>한국어</b> (합류/초대)</label>
+    <label><input type="radio" name="lang" value="en"> <b>영어</b> (join/invite)</label>
+  </div>
+
+
+</article>
+{% endblock %}
+
+{% block script %}
+<script>
+  $(document).ready(function () {
+    let m = getMode();
+    if (m === "direct") $("#mode_direct").prop("checked", true);
+    else if (m === "copy") $("#mode_copy").prop("checked", true);
+  })
+</script>
+{% endblock %}
