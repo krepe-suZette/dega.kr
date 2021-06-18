@@ -5,8 +5,8 @@ from parser_client import Client, Data
 app = Flask("main")
 p_client = Client(("localhost", 50001))
 data = Data()
-last_update = "2021-05-19"
-__version__ = "0.5.7"
+last_update = "2021-06-18"
+__version__ = "1.0.0-b1"
 
 
 @app.route("/")
@@ -47,6 +47,11 @@ def clan_page(group_id: str):
         return render_template("clan_users.html", clan_data=data.clan_all.get(group_id))
     else:
         return render_template("404.html"), 404
+
+
+@app.route("/setting")
+def setting():
+    return render_template("setting.html")
 
 
 # ==== API SECTION ====
