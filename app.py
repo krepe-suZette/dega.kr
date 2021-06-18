@@ -3,7 +3,7 @@ from flask import Flask, render_template, jsonify, request
 from parser_client import Client, Data
 
 app = Flask("main")
-p_client = Client(("localhost", 50001))
+p_client = Client()
 data = Data()
 last_update = "2021-06-18"
 __version__ = "1.0.0-b1"
