@@ -18,15 +18,16 @@ SHORT_CMD = {
 
 class Client:
     # 동기 방식의 Socket 통신 client 입니다. parser_server.py 실행 후 실행해주세요.
-    def __init__(self, address):
-        self.address = address
-        if isinstance(address, str):
+    def __init__(self):
+        if os.name == "posix":
             self.sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-        elif isinstance(address, tuple):
+            self.address = (_host, _port)
+        else:
             self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.address = _path
 
         try:
-            self.sock.connect(address)
+            self.sock.connect(self.address)
         except ConnectionRefusedError as e:
             print(e)
 
@@ -88,8 +89,10 @@ class Data:
 async def run():
     reader: asyncio.StreamReader
     writer: asyncio.StreamWriter
-    # reader, writer = await asyncio.open_unix_connection(_path)
-    reader, writer = await asyncio.open_connection(_host, _port)
+    if os.name == "posix":
+        reader, writer = await asyncio.open_unix_connection(_path)
+    else:
+        reader, writer = await asyncio.open_connection(_host, _port)
 
     print("Connected")
 
@@ -109,8 +112,12 @@ async def run():
 
 
 def run_s():
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.connect((_host, _port))
+    if os.name == "posix":
+        sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+        sock.connect(_path)
+    else:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.connect((_host, _port))
     while True:
         line = input(">>> ")
         if not line:

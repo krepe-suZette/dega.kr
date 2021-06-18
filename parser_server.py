@@ -3,6 +3,7 @@ import json
 import re
 import logging
 import html
+import os
 
 import aiohttp
 import aiofile
@@ -249,8 +250,10 @@ async def run():
             finally:
                 await writer.drain()
 
-    # server = await asyncio.start_unix_server(handler, _path)
-    server = await asyncio.start_server(handler, host=_host, port=_port)
+    if os.name == "posix":
+        server = await asyncio.start_unix_server(handler, _path)
+    else:
+        server = await asyncio.start_server(handler, host=_host, port=_port)
     logger.info("[Server] Start!")
     async with server:
         await server.serve_forever()
@@ -268,5 +271,5 @@ if __name__ == '__main__':
     # ch.setLevel(logging.INFO)
     # ch.setFormatter(fmt)
     # logger.addHandler(ch)
-    # asyncio.run(test(), debug=True)
+    # asyncio.run(run(), debug=True)
     asyncio.run(run())
