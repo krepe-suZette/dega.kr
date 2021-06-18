@@ -33,7 +33,7 @@
   <li class="clan-info" data-member-count="{{ clan['memberCount'] }}">
     <a href="/clan/{{ clan_id }}">
       <ul class="clan-info-row">
-        <li class="col clan-icon material-icons" data-icon="outlined_flag"></li>
+        <li class="col clan-icon material-icons" data-icon="outlined_flag" onclick="toggleBookmark(this); return false;"></li>
         <li class="col clan-name">{{ clan["name"] }}</li>
         <li class="col clan-callsign">{{ clan["callsign"] }}</li>
         <li class="col clan-motto">{{ clan["motto"] }}</li>
@@ -48,6 +48,9 @@
 {% block script %}
 <script>
   $(document).ready(function () {
+    // 북마크
+    loadBookmark();
+    // 정렬
     $("#clan_search").on('input', function () {
         filterClanList($(this).val());
     });

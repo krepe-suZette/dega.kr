@@ -67,8 +67,32 @@ const sortClanList = function(e) {
         "memberCountASC": _cmpMemberCountASC,
         "memberCountDESC": _cmpMemberCountDESC,
     };
-    $(".clan-list > .clan-info").sort(cmp[e.value]).appendTo(".clan-list")
+    $(".clan-list > .clan-info").sort(cmp[e.value]).appendTo(".clan-list");
 };
+
+const toggleBookmark = function (el) {
+    let $el = $(el.parentElement.parentElement.parentElement);
+    let ret = $el.toggleClass("bookmark").hasClass("bookmark");
+    let group_id = el.parentElement.parentElement.getAttribute("href").match(/\/clan\/([0-9]+)/)[1];
+    if (!group_id) {
+        console.log("ERROR: cannot save bookmark status change")
+        return;
+    }
+    // 북마크 목록 (localStorage) 추가 제거 기능
+    let data = loadLocalStorageJSON("bookmark");
+    if (ret) data[group_id] = "";
+    else delete data[group_id];
+    saveLocalStorageJSON("bookmark", data);
+}
+
+const loadBookmark = function () {
+    let data = loadLocalStorageJSON("bookmark");
+    let $clan_list = $(".clan-info");
+    $clan_list.each((i, el) => {
+        let gid = el.firstElementChild.href.match(/\/clan\/([0-9]+)/)[1];
+        if (gid in data) $(el).addClass("bookmark");
+    });
+}
 
 
 // ================ /clan/<group_id> ================ //

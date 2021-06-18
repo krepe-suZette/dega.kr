@@ -250,9 +250,17 @@ input[type="search"]:focus::-webkit-search-cancel-button {
     font-size: 1.25rem;
     box-sizing: border-box;
     padding-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
 }
 .clan-info {
-    margin: 0.5rem 0;
+    margin-bottom: 0.5rem;
+}
+.clan-info.bookmark {
+    order: -1;
+}
+.clan-info.bookmark .clan-icon {
+    color: #ffd84b;
 }
 .clan-info-row {
     box-sizing: border-box;
