@@ -9,6 +9,7 @@ let GROUP_ID;
 
 let clipboard;
 let isCtrlPressed = false;
+let cmd_lang = "ko";
 let cmd_join = "합류";
 let cmd_invite = "초대";
 let mode = "copy";
@@ -405,26 +406,70 @@ const setMode = function (m) {
 // copy cmd lang setting
 const getCommandPrefix = function() {
     // localStorage 값이 있으면 불러오고, 없으면 기본값 (합류/초대) 사용
-    // 해서 global 변수인 cmd_join, cmd_invite 에 저장
-    // "setting": {"cmd_invite": "invite", "cmd_join": "join"}
+    // "setting": {"cmd_invite": "invite", "cmd_join": "join", "cmd_lang": "en"}
     let setting = loadLocalStorageJSON("setting");
-    cmd_invite = setting.cmd_invite ? setting.cmd_invite : "초대";
-    cmd_join = setting.cmd_join ? setting.cmd_join : "합류";
+    if (Object.keys(setting).length === 0) setCommandPrefixByLang("ko");
+    else {
+        cmd_lang = setting.cmd_lang !== undefined ? setting.cmd_lang : "ko";
+        cmd_invite = setting.cmd_invite ? setting.cmd_invite : "초대";
+        cmd_join = setting.cmd_join ? setting.cmd_join : "합류";
+    }
 }
 
-const setCommandPrefix = function (cmd_join, cmd_invite) {
+const setCommandPrefix = function (join, invite, lang) {
     let setting = loadLocalStorageJSON("setting");
-    setting.cmd_join = cmd_join;
-    setting.cmd_invite = cmd_invite;
+    setting.cmd_join = join;
+    setting.cmd_invite = invite;
+    setting.cmd_lang = lang;
+    cmd_join = join;
+    cmd_invite = invite;
+    cmd_lang = lang;
     saveLocalStorageJSON("setting", setting);
 }
 
 const setCommandPrefixByLang = function (lang) {
-    if (lang === "ko") setCommandPrefix("합류", "초대");
-    else setCommandPrefix("join", "invite");
+    if (lang === "ko") setCommandPrefix("합류", "초대", "ko");
+    else if (lang === "en") setCommandPrefix("join", "invite", "en");
+    else setCommandPrefix("합류", "초대", "");
+}
+
+const initCommandPrefix = function () {
+    getCommandPrefix();
+    if (cmd_lang.length > 0) {
+        $("#cmd_join").val(cmd_join).attr("readonly", true);
+        $("#cmd_invite").val(cmd_invite).attr("readonly", true);
+        if (cmd_lang === "ko") $("input[name=lang][value=ko]").attr("checked", true);
+        else if (cmd_lang === "en") $("input[name=lang][value=en]").attr("checked", true);
+    }
+    else {
+        console.log("another")
+        $("#cmd_join").val(cmd_join).removeAttr("readonly");
+        $("#cmd_invite").val(cmd_invite).removeAttr("readonly");
+        $("input[name=lang][value='']").attr("checked", true);
+    }
+}
+
+const radioSetCmdPrefix = function (el) {
+    setCommandPrefixByLang(el.value);
+    $("#cmd_join").val(cmd_join).attr("readonly", true);
+    $("#cmd_invite").val(cmd_invite).attr("readonly", true);
+}
+
+const textSetCmdPrefix = function () {
+    cmd_join = $("#cmd_join").val();
+    cmd_invite = $("#cmd_invite").val();
+    cmd_lang = "";
+    setCommandPrefix(cmd_join, cmd_invite, cmd_lang);
+}
+
+const enableCmdBox = function () {
+    $("#cmd_join").removeAttr("readonly");
+    $("#cmd_invite").removeAttr("readonly");
+    cmd_lang = "";
+    setCommandPrefix(cmd_join, cmd_invite, cmd_lang);
 }
 
 // ================ initializing ================ //
-// getCommandPrefix();
+getCommandPrefix();
 mode = getMode();
 DOM_USER = mode === "direct" ? DOM_USER_DIRECT : DOM_USER_COPY;

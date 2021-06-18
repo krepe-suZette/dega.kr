@@ -6,7 +6,7 @@
 <div class="nav-icon"><a href="/"><img src="/static/img/icon-transparent.svg" alt="icon"></a></div>
 <div class="nav-logo hide-small"><a href="/">dega.kr</a></div>
 <div class="nav-path">
-  <a href="/request">/ 설정</a>
+  <a href="/setting">/ 설정</a>
 </div>
 <div class="nav-right">
   <div class="nav-path nav-setting">
@@ -23,10 +23,19 @@
     <label><input type="radio" name="mode" value="copy" id="mode_copy" onchange="setMode('copy');"> 복사</label>
   </div>
 
-  <h2><i class="material-icons" data-icon="language"></i> <del>명령어 복사 언어 설정</del> (WIP)</h2>
+  <h2><i class="material-icons" data-icon="language"></i> 명령어 복사 언어 설정</h2>
   <div class="radio-box">
-    <label><input type="radio" name="lang" value="ko"> <b>한국어</b> (합류/초대)</label>
-    <label><input type="radio" name="lang" value="en"> <b>영어</b> (join/invite)</label>
+    <div class="command-box">
+      <label for="cmd_join" class="cmd-label">합류 명령어</label>
+      <span class="cmd-text">/</span><input type="text" class="cmd-input" id="cmd_join" value="" placeholder="합류" onchange="textSetCmdPrefix()"><span class="cmd-text">76561190000000000</span>
+    </div>
+    <div class="command-box">
+      <label for="cmd_invite" class="cmd-label">초대 명령어</label>
+      <span class="cmd-text">/</span><input type="text" class="cmd-input" id="cmd_invite" value="" placeholder="초대" onchange="textSetCmdPrefix()"><span class="cmd-text">76561190000000000</span>
+    </div>
+    <label><input type="radio" name="lang" value="ko" onchange="radioSetCmdPrefix(this);"> <b>한국어</b> (합류/초대)</label>
+    <label><input type="radio" name="lang" value="en" onchange="radioSetCmdPrefix(this);"> <b>영어</b> (join/invite)</label>
+    <label><input type="radio" name="lang" value="" onchange="enableCmdBox();"> 직접 입력</label>
   </div>
 
 
@@ -39,6 +48,8 @@
     let m = getMode();
     if (m === "direct") $("#mode_direct").prop("checked", true);
     else if (m === "copy") $("#mode_copy").prop("checked", true);
+
+    initCommandPrefix();
   })
 </script>
 {% endblock %}
