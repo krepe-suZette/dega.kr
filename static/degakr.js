@@ -351,7 +351,7 @@ const getMode = function () {
     // windows 인 경우에는 기본값이 direct, 아닌 경우 copy
     let _mode = localStorage.getItem("mode");
     if (_mode) return _mode;
-    else if (window.navigator.userAgent.toLowerCase().indexOf("Windows") > -1) {
+    else if (window.navigator.userAgent.toLowerCase().indexOf("windows") > -1) {
         console.log("it is windows");
         localStorage.setItem("mode", "direct");
         return "direct";
