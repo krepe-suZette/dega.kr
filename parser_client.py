@@ -21,10 +21,10 @@ class Client:
     def __init__(self):
         if os.name == "posix":
             self.sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-            self.address = (_host, _port)
+            self.address = _path
         else:
             self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self.address = _path
+            self.address = (_host, _port)
 
         try:
             self.sock.connect(self.address)
