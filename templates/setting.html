@@ -3,16 +3,8 @@
 {% block title %}{{ super() }} / 설정{% endblock %}
 
 {% block header %}
-<div class="nav-icon"><a href="/"><img src="/static/img/icon-transparent.svg" alt="icon"></a></div>
-<div class="nav-logo hide-small"><a href="/">dega.kr</a></div>
-<div class="nav-path">
-  <a href="/setting">/ 설정</a>
-</div>
-<div class="nav-right">
-  <div class="nav-path nav-setting">
-    <a href="/setting" class="material-icons" data-icon="settings"></a>
-  </div>
-</div>
+{{ super() }}
+<a href="/setting" class="nav-path">/ 설정</a>
 {% endblock %}
 
 {% block content %}
