@@ -27,11 +27,11 @@
   <div class="radio-box">
     <div class="command-box">
       <label for="cmd_join" class="cmd-label">합류 명령어</label>
-      <span class="cmd-text">/</span><input type="text" class="cmd-input" id="cmd_join" value="" placeholder="합류" onchange="textSetCmdPrefix()"><span class="cmd-text">76561190000000000</span>
+      <div class="cmd-line"><span class="cmd-text">/</span><input type="text" class="cmd-input" id="cmd_join" value="" placeholder="합류" onchange="textSetCmdPrefix()"><span class="cmd-text ellipsis">76561190000000000</span></div>
     </div>
     <div class="command-box">
       <label for="cmd_invite" class="cmd-label">초대 명령어</label>
-      <span class="cmd-text">/</span><input type="text" class="cmd-input" id="cmd_invite" value="" placeholder="초대" onchange="textSetCmdPrefix()"><span class="cmd-text">76561190000000000</span>
+      <div class="cmd-line"><span class="cmd-text">/</span><input type="text" class="cmd-input" id="cmd_invite" value="" placeholder="초대" onchange="textSetCmdPrefix()"><span class="cmd-text ellipsis">76561190000000000</span></div>
     </div>
     <label><input type="radio" name="lang" value="ko" onchange="radioSetCmdPrefix(this);"> <b>한국어</b> (합류/초대)</label>
     <label><input type="radio" name="lang" value="en" onchange="radioSetCmdPrefix(this);"> <b>영어</b> (join/invite)</label>

@@ -632,9 +632,10 @@ section.root * {
     margin-bottom: 0.5rem;
 }
 .command-box {
-    /*border: 1px solid #9f9f9f;*/
-    /*border-radius: 0.125rem;*/
     padding: 0.25rem;
+}
+.cmd-line {
+    display: flex;
 }
 .cmd-input {
     background-color: #FFFFFF20;
@@ -662,6 +663,13 @@ section.root * {
 }
 .cmd-text {
     color: #9f9f9f;
+    line-height: 1.75rem;
+}
+.cmd-text.ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex-shrink: 1;
 }
 
 /* 작은화면들 */
