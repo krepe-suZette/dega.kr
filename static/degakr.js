@@ -314,8 +314,6 @@ const resetEmblem = function ($el) {
 }
 
 const applyMemberEmblem = async function ($el, data) {
-    console.log("emblem func start: " + data.destinyUserInfo.LastSeenDisplayName);
-
     let m_id = data.destinyUserInfo.membershipId;
     let m_type = data.destinyUserInfo.membershipType;
 
@@ -359,6 +357,8 @@ const getRecentProfile = function (data) {
 }
 
 const refreshMembers = async function() {
+    if (lastUpdate - Date.now() < 5000) return;
+    lastUpdate = Date.now();
     await updateMembers(GROUP_ID);
 }
 
@@ -437,7 +437,6 @@ const getMode = function () {
     let _mode = localStorage.getItem("mode");
     if (_mode) return _mode;
     else if (window.navigator.userAgent.toLowerCase().indexOf("windows") > -1) {
-        console.log("it is windows");
         localStorage.setItem("mode", "direct");
         return "direct";
     }
@@ -502,7 +501,6 @@ const initCommandPrefix = function () {
         else if (cmd_lang === "en") $("input[name=lang][value=en]").attr("checked", true);
     }
     else {
-        console.log("another")
         $("#cmd_join").val(cmd_join).removeAttr("readonly");
         $("#cmd_invite").val(cmd_invite).removeAttr("readonly");
         $("input[name=lang][value='']").attr("checked", true);
