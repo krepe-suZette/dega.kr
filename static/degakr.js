@@ -13,6 +13,7 @@ let cmd_lang = "ko";
 let cmd_join = "합류";
 let cmd_invite = "초대";
 let mode = "copy";
+let my_steam_id;
 let lastUpdate;
 
 const loadLocalStorageJSON = function (key) {
@@ -244,13 +245,14 @@ const updateMembers = async function(groupId) {
                 // 온라인 + SteamID 정보 존재
                 if (arr_steam_id[membership_id] !== undefined) {
                     $el.addClass("online").removeClass("error").children(".copy").attr("data-sid", arr_steam_id[membership_id]);
+                    if (my_steam_id === arr_steam_id[membership_id]) $el.addClass("me");
                     applyMemberEmblem($el, arr_members[idx]);
                 }
                 // 온라인 + SteamID 정보 없음
-                else $el.addClass("error").removeClass("online").children(".copy").attr("data-sid", "");
+                else $el.addClass("error").removeClass("online me").children(".copy").attr("data-sid", "");
             }
             // 오프라인
-            else $el.removeClass("error online").children(".copy").attr("data-sid", "");
+            else $el.removeClass("error online me").children(".copy").attr("data-sid", "");
         });
 
         // 페이지 위치, 복사-합류 버튼 초기화
@@ -528,7 +530,23 @@ const enableCmdBox = function () {
     setCommandPrefix(cmd_join, cmd_invite, cmd_lang);
 }
 
+const getMySteamID = function() {
+    let setting = loadLocalStorageJSON("setting");
+    if (setting.hasOwnProperty("my_steam_id")) {
+        my_steam_id = setting.my_steam_id;
+        return my_steam_id;
+    }
+}
+
+const setMySteamID = function (sid) {
+    let setting = loadLocalStorageJSON("setting");
+    setting["my_steam_id"] = sid;
+    my_steam_id = sid;
+    saveLocalStorageJSON("setting", setting);
+}
+
 // ================ initializing ================ //
 getCommandPrefix();
+getMySteamID();
 mode = getMode();
 DOM_USER = mode === "direct" ? DOM_USER_DIRECT : DOM_USER_COPY;

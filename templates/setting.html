@@ -30,6 +30,14 @@
     <label><input type="radio" name="lang" value="" onchange="enableCmdBox();"> 직접 입력</label>
   </div>
 
+  <h2><i class="material-icons" data-icon="person_add"></i> 내 정보 등록</h2>
+  <p>아래에 자신의 SteamID64(합류코드)를 적으면 클랜원 목록에서 내가 강조되어 표시됩니다.</p>
+  <div class="command-box">
+    <label for="my_steamid" class="cmd-label">SteamID (합류코드)</label>
+    <div class="cmd-line"><input type="text" class="cmd-input" id="my_steamid" value="" placeholder="765611..." onchange="setMySteamID(this.value)"></div>
+  </div>
+
+
   <h2><i class="material-icons" data-icon="arrow_back"></i> <a onclick="window.history.back();" class="url">돌아가기</a></h2>
 
 
@@ -44,6 +52,7 @@
     else if (m === "copy") $("#mode_copy").prop("checked", true);
 
     initCommandPrefix();
+    $("#my_steamid").val(getMySteamID())
   })
 </script>
 {% endblock %}
