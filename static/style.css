@@ -352,7 +352,7 @@ input[type="search"]:focus::-webkit-search-cancel-button {
     flex-direction: column;
     flex-wrap: wrap;
     align-content: flex-start;
-    height: calc(100vh - 7.5rem);
+    height: calc(100vh - 8.5rem);
     max-height: 69rem;
     overflow: hidden;
 }
@@ -364,25 +364,31 @@ input[type="search"]:focus::-webkit-search-cancel-button {
     animation: fadeIn 0.3s ease-out;
 }
 .user {
-    margin: 0.25rem auto;
-    height: 2.25rem;
+    margin: 0 auto 0.25rem;
+    height: 2.5rem;
     display: flex;
-    background-color: #43494c;
+    background-color: #1B1E20;
+    color: #595B5C;
     width: 96%;
     transition: 0.3s;
 }
 .user .emblem {
-    width: 2rem;
-    height: 2rem;
-    margin: 0.125rem;
-    line-height: 2.25rem;
-    background-color: rgba(0, 0, 0, 0.4);
+    width: 2.5rem;
+    height: 2.5rem;
+    line-height: 2.5rem;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100%;
+    background-color: rgba(0%, 0%, 0%, 0.2);
     flex: 0 0 auto;
+}
+.user.error .emblem {
+    background-image: linear-gradient(45deg, #232729 50%, #2B2E31 50%);
 }
 .user .display-name {
     padding: 0 0.5em;
     box-sizing: border-box;
-    line-height: 2.25rem;
+    line-height: 2.5rem;
     font-size: 1.1em;
     flex-grow: 1;
     overflow: hidden;
@@ -413,10 +419,12 @@ input[type="search"]:focus::-webkit-search-cancel-button {
 }
 
 .online {
+    color: white;
     background-color: rgb(48, 55, 100);
 }
 .error {
-    background-color: #303335;
+    background-color: #313639;
+    color: #9f9f9f;
 }
 
 .online .copy {

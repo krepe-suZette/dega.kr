@@ -237,11 +237,13 @@ const updateMembers = async function(groupId) {
             let membership_id = arr_members[idx].destinyUserInfo.membershipId;
             let display_name = arr_members[idx].destinyUserInfo.LastSeenDisplayName;
             $el.children(".display-name").text(display_name).attr("title", display_name);
+            resetEmblem($el);
 
             if (arr_members[idx].isOnline) {
                 // 온라인 + SteamID 정보 존재
                 if (arr_steam_id[membership_id] !== undefined) {
                     $el.addClass("online").removeClass("error").children(".copy").attr("data-sid", arr_steam_id[membership_id]);
+                    applyMemberEmblem($el, arr_members[idx]);
                 }
                 // 온라인 + SteamID 정보 없음
                 else $el.addClass("error").removeClass("online").children(".copy").attr("data-sid", "");
@@ -304,6 +306,56 @@ const requestAllMembersSteamID = async function (arr) {
     } catch {
         return {};
     }
+}
+
+
+const resetEmblem = function ($el) {
+    $el.children(".emblem").css("background-image", "");
+}
+
+const applyMemberEmblem = async function ($el, data) {
+    console.log("emblem func start: " + data.destinyUserInfo.LastSeenDisplayName);
+
+    let m_id = data.destinyUserInfo.membershipId;
+    let m_type = data.destinyUserInfo.membershipType;
+
+    // 유저 프로필 정보 불러오기
+    let profile = await requestProfile(m_type, m_id);
+    if (profile === null) return;
+
+    // 최근 접속 캐릭터 찾은 후, 문양 이미지 주소 저장
+    let recentChar = getRecentProfile(profile);
+    let path = "https://www.bungie.net" + recentChar.emblemPath;
+    // let color = recentChar.emblemColor;
+
+    // 변경 적용
+    $el.children(".emblem").css("background-image", `url(${path})`);
+    // $el.css("background-color", `rgb(${color})`);
+}
+
+const requestProfile = async function (m_type, m_id) {
+    try {
+        let resp = await $.ajax({
+            url: "https://www.bungie.net/Platform/Destiny2/" + m_type + "/Profile/" + m_id + "/?components=200",
+            headers: { "X-API-Key": API_KEY }
+        });
+        if (resp.Response.characters.privacy !== 1) return null;
+        else return resp.Response.characters.data;
+    } catch {
+        return null;
+    }
+}
+
+const getRecentProfile = function (data) {
+    let lastPlayedCharID = undefined;
+    let lastPlayed = "1970-01-01T00:00:00Z"
+    for (const dataKey in data) {
+        if (data[dataKey].dateLastPlayed > lastPlayed) {
+            lastPlayed = data[dataKey].dateLastPlayed;
+            lastPlayedCharID = dataKey;
+        }
+    }
+    return data[lastPlayedCharID];
 }
 
 const refreshMembers = async function() {
