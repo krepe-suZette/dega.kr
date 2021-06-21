@@ -3,6 +3,7 @@
 <head>
   {% include "tracker.html" %}
   {% set title_s %}{% block title %}dega.kr (β){% endblock %}{% endset %}
+  {% set version = "1.0.0-b4" %}
   <meta charset="UTF-8">
   <!-- Favicon / icon -->
   <link rel="apple-touch-icon" sizes="180x180" href="/static/icon/apple-touch-icon.png">
@@ -37,7 +38,7 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons&display=block" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spoqa-han-sans/3.1.0/css/SpoqaHanSans-kr.min.css" integrity="sha512-haleeL7F13G/OtxXT5mZbGVcwUG/d7j1hWMSyBBX7654Az/Ps1Bw+ASsxsn4zbMjGszL75aoEdYXGyOjakONYg==" crossorigin="anonymous" />
   <link rel="stylesheet" href="/static/normalize.min.css">
-  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="/static/style.css?v={{version}}">
   <!-- only for April fool's day -->
 <!--  <link rel="stylesheet" href="/static/fool.css">-->
   <title>{{ title_s }}</title>
@@ -65,7 +66,7 @@
   </main>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
-  <script src="/static/degakr.js"></script>
+  <script src="/static/degakr.js?v={{ version }}"></script>
   {% block script %}{% endblock %}
 </body>
 </html>
