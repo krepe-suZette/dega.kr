@@ -44,7 +44,7 @@
 <script>
   $(document).ready(function () {
     const groupId = "{{clan_data['id']}}";
-    getClanOnlineMembers(groupId);
+    initMembers(groupId);
     $("#prevPage").click(prevPage);
     $("#nextPage").click(nextPage);
     $("#refresh").click(refreshMembers);

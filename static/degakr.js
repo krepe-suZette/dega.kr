@@ -106,7 +106,7 @@ const getMaxUserCount = function () {
     else if (ww > 960) c = 3;
     else if (ww > 640) c = 2;
     else c = 1;
-    return parseInt($(".user-list").height() / 44) * c;
+    return Math.floor($(".user-list").height() / 44) * c;
 };
 
 
@@ -149,51 +149,12 @@ const prevPage = function() {
     setPage(CURRENT_PAGE - 1);
 }
 
-const _setUserCount = function(n) {
+const adjustUserElementCount = function(n) {
     let total_user = $(".user").length;
     if (total_user < n) {
-        // 부족한 경우
         for(let i=total_user; i<n; i++) $(".user-list").append(DOM_USER.clone());
     }
-    else if (total_user > n) {
-        $(`.user-wrap:gt(${n-1})`).remove();
-    }
-}
-
-const _requestSteamIDs = function(arr) {
-    let ret;
-    $.ajax({
-        type: "GET",
-        data: {id: arr},
-        url: "/api/getSteamID",
-        async: false,
-        traditional: true,
-        success: function(data) {
-            ret = data;
-        }
-    })
-    return ret;
-}
-
-const getSteamIDs = function(arr) {
-    // arr: [membershipId, ...]
-    let r = {};
-    let failList = [];
-    arr.forEach(el => {
-        let val = sessionStorage.getItem(el);
-        if (val === null) failList.push(el);
-        else r[el] = val;
-    });
-
-    if (failList.length === 0) return r;
-    let newValues = _requestSteamIDs(failList);
-    if (newValues === null) return r;
-
-    Object.keys(newValues).forEach(el => {
-        sessionStorage.setItem(el, newValues[el])
-        r[el] = newValues[el];
-    });
-    return r;
+    else if (total_user > n) $(`.user-wrap:gt(${n - 1})`).remove();
 }
 
 const mkCmd = function (s) {
@@ -232,74 +193,121 @@ const directJoinInitialize = function () {
     });
 }
 
-const getClanOnlineMembers = function(groupId) {
-    let $refresh = $("#refresh");
-    let $user_list = $(".user-list");
-    let $icon = $(".copy");
-    $refresh.attr("disabled", true).data("icon", "hourglass_bottom");
-    $user_list.addClass("loading");
-    if (mode === "direct") $icon.attr("data-icon", "login");
-    else $icon.attr("data-icon", "content_copy");
-
+const initMembers = async function(groupId) {
+    // 상수값 설정
     GROUP_ID = groupId;
-    $.ajax({
-        url: "https://www.bungie.net/Platform/GroupV2/" + groupId + "/Members/",
-        headers: {
-            "X-API-Key": API_KEY
-        }
-    }).done(function(resp) {
-        // 클랜 멤버 목록 전체 reload
-        let arr_members = resp.Response.results.slice();
-        let arr_online = arr_members.filter(m => m.isOnline);
-        _setUserCount(arr_members.length);
-        let arr_user_list = $(".user");
+    // 현재 모드 따라 아이콘 모양 바꾸기
+    let $copy_icon = $(".copy");
+    if (mode === "direct") $copy_icon.attr("data-icon", "login");
+    else $copy_icon.attr("data-icon", "content_copy");
 
-        // 00명 온라인 문구 수정
-        $(".info-online").text(`${arr_online.length} / ${arr_members.length} 온라인`);
-        
-        // 온라인 멤버의 스팀ID 값을 불러오기
-        let steamId = getSteamIDs(arr_online.map(el => el.destinyUserInfo.membershipId));
+    // 데이터 업데이트 수행
+    await updateMembers(groupId);
+}
+
+const updateMembers = async function(groupId) {
+    // 업데이트 시작
+    updateMembersStart();
+
+    try {
+        // Bungie.net API Members 요청
+        let resp_members = await $.ajax({
+            url: "https://www.bungie.net/Platform/GroupV2/" + groupId + "/Members/",
+            headers: { "X-API-Key": API_KEY }
+        });
+        // 결과값 배열 복사
+        let arr_members = resp_members.Response.results.slice();
+        // .user 요소 개수 맞추기
+        adjustUserElementCount(arr_members.length);
+        let $user_el = Array.from(document.getElementsByClassName("user")).map((el) => {return $(el)});
+
+        // SteamID 값 불러오기
+        let arr_online_id = arr_members.filter(el => el.isOnline).map(el => el.destinyUserInfo.membershipId);
+        let arr_steam_id = await getAllMembersSteamID(arr_online_id);
+
         // 클랜 멤버 목록 정렬
-        arr_members.sort(function(a, b) {
+        arr_members.sort((a, b) => {
             if (a.isOnline !== b.isOnline) return a.isOnline ? -1 : 1;
-            else if ((a.destinyUserInfo.membershipId in steamId) !== (b.destinyUserInfo.membershipId in steamId)) return (a.destinyUserInfo.membershipId in steamId) ? -1 : 1;
+            else if ((a.destinyUserInfo.membershipId in arr_steam_id) !== (b.destinyUserInfo.membershipId in arr_steam_id)) return (a.destinyUserInfo.membershipId in arr_steam_id) ? -1 : 1;
             else return a.destinyUserInfo.LastSeenDisplayName < b.destinyUserInfo.LastSeenDisplayName ? -1 : a.destinyUserInfo.LastSeenDisplayName > b.destinyUserInfo.LastSeenDisplayName ? 1: 0;
         });
 
-        // 클랜 멤버를 실제 화면에 반영
-        arr_members.forEach(function(element, idx) {
-            $(arr_user_list[idx]).find(".display-name").html(element.destinyUserInfo.LastSeenDisplayName).attr("title", element.destinyUserInfo.LastSeenDisplayName);
-            $(arr_user_list[idx]).removeClass("error");
+        // 화면에 적용
+        $user_el.forEach(($el, idx) => {
+            let membership_id = arr_members[idx].destinyUserInfo.membershipId;
+            let display_name = arr_members[idx].destinyUserInfo.LastSeenDisplayName;
+            $el.children(".display-name").text(display_name).attr("title", display_name);
 
-            if (element.isOnline) {
-                let sid = steamId[element.destinyUserInfo.membershipId];
-                if (!sid) {
-                    $(arr_user_list[idx]).removeClass("online");
-                    $(arr_user_list[idx]).addClass("error");
+            if (arr_members[idx].isOnline) {
+                // 온라인 + SteamID 정보 존재
+                if (arr_steam_id[membership_id] !== undefined) {
+                    $el.addClass("online").removeClass("error").children(".copy").attr("data-sid", arr_steam_id[membership_id]);
                 }
-                else {
-                    $(arr_user_list[idx]).addClass("online");
-                    $(arr_user_list[idx]).children(".copy").attr("data-sid", sid);
-                }
+                // 온라인 + SteamID 정보 없음
+                else $el.addClass("error").removeClass("online").children(".copy").attr("data-sid", "");
             }
-            else $(arr_user_list[idx]).removeClass("online");
+            // 오프라인
+            else $el.removeClass("error online").children(".copy").attr("data-sid", "");
         });
 
+        // 페이지 위치, 복사-합류 버튼 초기화
         setPage(0);
         if (mode === "direct") directJoinInitialize();
         else clipboardInitialize();
-
-        $refresh.data("icon", "done").attr("disabled", false);
-    }).fail(function () {
-        $refresh.data("icon", "error_outline").attr("disabled", false);
-    }).always(function() {
-        setTimeout(() => {$refresh.data("icon", "refresh")}, 1000);
-        $user_list.removeClass("loading");
-    });
+        // 완료 메시지
+        $(".info-online").text(`${arr_online_id.length} / ${arr_members.length} 온라인`);
+        $("#refresh").attr("data-icon", "done").attr("disabled", false);
+    } catch (e) {
+        console.log("error");
+    } finally {
+        // 업데이트 끝. 원상 복귀
+        updateMembersEnd();
+    }
 }
 
-const refreshMembers = function() {
-    getClanOnlineMembers(GROUP_ID);
+const updateMembersStart = function () {
+    $("#refresh").attr("disabled", true).data("icon", "hourglass_bottom");
+    $(".user-list").addClass("loading");
+}
+
+const updateMembersEnd = function (isSuccess = true) {
+    setTimeout(() => {$("#refresh").attr("data-icon", "refresh")}, 1000);
+    $(".user-list").removeClass("loading");
+}
+
+const getAllMembersSteamID = async function (arr) {
+    let r = {};
+    let failList = [];
+    arr.forEach(el => {
+        let val = sessionStorage.getItem(el);
+        if (val === null) failList.push(el);
+        else r[el] = val;
+    });
+    if (failList.length === 0) return r;
+
+    let newValues = await requestAllMembersSteamID(failList);
+    Object.keys(newValues).forEach(el => {
+        sessionStorage.setItem(el, newValues[el]);
+        r[el] = newValues[el];
+    });
+    return r;
+}
+
+const requestAllMembersSteamID = async function (arr) {
+    try {
+        return await $.ajax({
+            type: "GET",
+            data: {id: arr},
+            url: "/api/getSteamID",
+            traditional: true
+        });
+    } catch {
+        return {};
+    }
+}
+
+const refreshMembers = async function() {
+    await updateMembers(GROUP_ID);
 }
 
 // ================ /request ================ //
