@@ -13,6 +13,7 @@ let cmd_lang = "ko";
 let cmd_join = "합류";
 let cmd_invite = "초대";
 let mode = "copy";
+let lastUpdate;
 
 const loadLocalStorageJSON = function (key) {
     let item = localStorage.getItem(key);
@@ -268,6 +269,7 @@ const updateMembers = async function(groupId) {
 }
 
 const updateMembersStart = function () {
+    lastUpdate = Date.now();
     $("#refresh").attr("disabled", true).data("icon", "hourglass_bottom");
     $(".user-list").addClass("loading");
 }
@@ -357,8 +359,7 @@ const getRecentProfile = function (data) {
 }
 
 const refreshMembers = async function() {
-    if (lastUpdate - Date.now() < 5000) return;
-    lastUpdate = Date.now();
+    if (Date.now() - lastUpdate < 5000) return;
     await updateMembers(GROUP_ID);
 }
 
