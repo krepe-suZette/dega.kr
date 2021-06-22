@@ -66,6 +66,7 @@ section {
 article {
     font-weight: 300;
     font-size: 1.125rem;
+    padding-top: 2rem;
 }
 
 .container {
@@ -125,6 +126,17 @@ input {
 button {
     padding: 0;
 }
+code {
+    border: 1px solid #ffd84b;
+    border-radius: 0.25rem;
+    background-color: #4d4216;
+    font-size: 0.9em;
+    padding: 0.2em 0.3em;
+    margin: 0 0.1em;
+}
+hr {
+    margin-top: 3rem;
+}
 .material-icons {
     font-size: 1.5rem;
     line-height: inherit;
@@ -134,6 +146,13 @@ button {
 }
 .material-icons::after {
     content: attr(data-icon);
+}
+.with-icon {
+    line-height: 2rem;
+}
+.with-icon .material-icons {
+    vertical-align: middle;
+    padding-right: 0.25em;
 }
 a.url {
     text-decoration: underline;
@@ -482,7 +501,7 @@ section.root {
 section.root * {
     text-align: center;
 }
-.desc-img {
+.media {
     box-sizing: border-box;
     border: 0.25rem solid #dddddd;
     border-radius: 0.5rem;
@@ -490,7 +509,7 @@ section.root * {
     margin: 2rem 0 1rem;
     display: block;
     object-fit: contain;
-    max-width: 100%;
+    max-width: 45rem;
 }
 .r0 {
     height: calc(100vh - 3.5rem);

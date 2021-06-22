@@ -9,45 +9,106 @@
 
 {% block content %}
 <article>
-  <h2 id="s1_h1">기본 이용 방법 </h2>
-  <img src="/static/img/help_1.png" alt="클랜 목록 페이지" class="desc-img">
-  <p>클랜 목록 페이지에서 내 클랜을 찾아줍니다. 내 클랜이 목록에 없다면 <a href="#s1_h2" class="url">클랜 추가 신청</a>을 해주세요.</p>
-  <img src="/static/img/help_2.png" alt="클랜 페이지" class="desc-img">
-  <p>클랜 페이지로 들어가면 약간의 로딩 후 온라인 멤버 목록을 볼 수 있습니다. </p>
-  <ol>
-    <li>클립보드로 복사<br />누르면 "/합류 &lt;합류코드&gt;"가 클립보드로 복사됩니다. 게임 내 채팅창에서 Ctrl + v를 통해 붙여넣을 수 있습니다.</li>
-    <li>새로고침<br />현재 온라인 멤버 목록으로 새로고침합니다. API상의 문제로 실시간 반영이 되지 않을 수 있습니다.</li>
-    <li>이전/다음 페이지<br />이전 페이지 또는 다음 페이지로 이동합니다.</li>
-    <li>클랜 정보 바로가기<br />새 창에서 Bungie.net의 해당 클랜 소개 페이지를 엽니다.</li>
+  <h3>Table of Contents</h3>
+  <ol class="toc">
+    <li class="toc-item"><a href="#s1"><b>합류 코드</b>가 무엇인가요?</a></li>
+    <li class="toc-item"><a href="#s2">기본 이용 방법</a></li>
+    <li class="toc-item"><a href="#s3">클랜 추가 신청</a></li>
+    <li class="toc-item"><a href="#s4">스팀 오버레이 웹 브라우저 활용</a></li>
+    <li class="toc-item"><a href="#s5">설정</a></li>
+    <li class="toc-item"><a href="#s6">주의사항</a></li>
   </ol>
 
-  <hr>
+  <hr />
 
-  <h2 id="s1_h2">클랜 추가 신청</h2>
-  <img src="/static/img/help_5.png" alt="클랜 등록 신청 페이지" class="desc-img">
-  <p>
-    자신의 클랜 이름을 <b>정확히</b> 입력해 클랜을 검색해주세요. 올바르게 클랜 이름을 입력했다면 클랜 정보가 나오게 됩니다. 오른쪽 아래의 "등록 신청" 버튼을 눌러주세요. <br>
-    성공적으로 등록 신청이 이루어진 경우 일정 시간 이후 자동으로 반영됩니다. 일반적으로 최소 (클랜원 수 * 2.5초)의 시간이 필요합니다.
+  <h2 id="s1"><b>합류 코드</b>가 무엇인가요?</h2>
+  <p>데스티니 가디언즈에서 다른 수호자의 화력팀에 합류하기 위하여 사용되는 17자리의 숫자입니다.
+    스팀에서 유저 식별을 위해 사용하는 <code>steamID64</code>와 동일하며, 자신의 스팀 ID는 스팀 프로필의 기본 주소를 확인하거나
+    게임 채팅창에 <code>/아이디</code>를 입력하면 알 수 있습니다.</p>
+  <p>게임 채팅창에 <code>/합류 &lt;합류코드&gt;</code>를 입력하면 해당 수호자의 화력팀에 합류를 시도하게 되고,
+    <code>/초대 &lt;합류코드&gt;</code>를 입력하면 해당 수호자에게 자신이 속한 화력팀의 초대 메시지가 전송됩니다.</p>
+
+  <hr />
+  
+  <h2 id="s2">기본 이용 방법</h2>
+  <p><b>dega.kr</b>은 데스티니 가디언즈의 플랫폼 이전으로 인해 생겨난 클랜 수호자 명단 표시 오류로 인한 불편함에서 시작되었습니다.
+    친구 추가를 하지 않더라도 상대의 화력팀 설정이 공개되어있다면 바로 합류할 수 있도록 대체 클랜 수호자 명단을 만드는 것을 목표로 하였습니다.</p>
+  <img src="/static/img/help_1.png" alt="클랜 목록 페이지" class="media">
+  <p><a href="/clan" class="url">클랜 목록</a> 페이지로 이동한 다음 자신의 클랜을 찾습니다.
+    만약 내가 속해있는 클랜이 목록에 없다면 <a href="#s3" class="url">클랜 추가 신청</a>을 해주세요.<br />
+    <span class="with-icon"><i class="material-icons" data-icon="outlined_flag"></i>깃발을 클릭하면 해당 클랜을 목록의 최상단에 고정할 수 있습니다.</span>
   </p>
-  <img src="/static/img/help_6.png" alt="신청 버튼이 비활성화된 클랜 등록 신청 페이지" class="desc-img">
-  <p>클랜 등록 신청 조건을 충족하지 못하는 경우 등록이 불가능합니다. 위 사진의 경우 클랜의 인원수가 너무 적기 떄문에 등록이 불가능합니다. (10명 이하)</p>
+  <img src="/static/img/help_2.png" alt="클랜 페이지" class="media">
+  <p>클랜 페이지로 들어가면 현재 게임에 접속중인 수호자 명단을 볼 수 있습니다. 각 버튼들의 역할은 아래와 같습니다.</p>
+  <ul>
+    <li class="with-icon"><i class="material-icons" data-icon="login"></i><span>: 해당 수호자에게 바로 합류를 시도합니다. 브라우저에서 실행하는 경우 알림이 뜰 수 있습니다.</span></li>
+    <li class="with-icon"><i class="material-icons" data-icon="content_copy"></i><span>: <code>/합류 &lt;합류코드&gt;</code> 명령어가 클립보드로 복사됩니다. <code>Ctrl</code> 버튼을 누른 상태로 버튼을 누르면 <code>/초대</code> 명령어가 대신 복사됩니다.</span></li>
+    <li class="with-icon"><i class="material-icons" data-icon="refresh"></i><span>접속중인 수호자 목록을 새로고침합니다. 키보드 <code>R</code>을 눌러도 사용할 수 있습니다.</span></li>
+    <li class="with-icon"><i class="material-icons" data-icon="arrow_back"></i><i class="material-icons" data-icon="arrow_forward"></i>
+      <span>이전 페이지 또는 다음 페이지로 이동합니다. 키보드 <code>A</code>와 <code>D</code>, 왼쪽 방향키와 오른쪽 방향키도 사용이 가능합니다.</span></li>
+    <li class="with-icon"><i class="material-icons" data-icon="link"></i><span>새 창에서 Bungie.net의 해당 클랜 소개 페이지를 엽니다.</span></li>
+    <li class="with-icon"><i class="material-icons" data-icon="settings"></i><span>설정 페이지로 이동합니다.</span></li>
+  </ul>
 
   <hr>
 
-  <h2 id="s1_h3">스팀 오버레이 웹 브라우저에서 사용하기</h2>
-  <img src="/static/img/2.png" alt="스팀 오버레이" class="desc-img">
-  <p><b>dega.kr</b>을 스팀 오버레이 웹 브라우저와 함께 사용하면 더욱 간편하게 서비스를 이용할 수 있습니다.</p>
-  <img src="/static/img/help_3.png" alt="스팀 오버레이" class="desc-img">
+  <h2 id="s3">클랜 추가 신청</h2>
+  <img src="/static/img/help_5.png" alt="클랜 등록 신청 페이지" class="media">
+  <p>
+    자신의 클랜 이름을 <b>정확히</b> 입력해 검색해주세요. 이름을 올바르게 입력했다면 클랜의 정보가 출력됩니다. 오른쪽 아래의 "등록 신청" 버튼을 눌러주세요.<br>
+    성공적으로 등록 신청이 이루어진 경우 일정 시간 이후 자동으로 클랜 목록에 반영됩니다. 일반적으로 최소 (클랜원 수 * 2.5초)의 시간이 필요합니다.
+  </p>
+  <img src="/static/img/help_6.png" alt="신청 버튼이 비활성화된 클랜 등록 신청 페이지" class="media">
+  <p>클랜 등록 신청 조건을 충족하지 못하는 경우 등록이 불가능합니다. 현재 클랜 등록이 불가능한 경우는 아래와 같습니다.</p>
+  <ul style="list-style: disc; padding-inline-start: 30px;">
+    <li>클랜 구성원이 10명 이하일 때</li>
+    <li>클랜 관리자의 요청이 있었을 때</li>
+  </ul>
+
+  <hr>
+
+  <h2 id="s4">스팀 오버레이 웹 브라우저 활용</h2>
+  <img src="/static/img/steam-overlay.png" alt="스팀 오버레이" class="media">
+  <p>자신의 <b>dega.kr</b> 클랜 페이지를 스팀 오버레이 웹 브라우저의 홈 페이지로 설정하면 더욱 완벽하게 서비스를 이용할 수 있습니다.</p>
+  <img src="/static/img/help_3.png" alt="스팀 오버레이" class="media">
   <p>게임 화면에서 스팀 오버레이 단축키(기본값: Shift+Tab)을 사용하면 위와 같은 화면이 나옵니다.</p>
   <ol>
     <li>웹 브라우저<br>실행시 설정한 홈페이지가 오버레이 안에서 열립니다.</li>
     <li>설정<br>웹 브라우저를 비롯한 설정이 가능합니다.</li>
   </ol>
-  <img src="/static/img/help_4.png" alt="스팀 오버레이 설정" class="desc-img">
-  <p><a href="steam://settings/browser" class="url">설정 > 웹 브라우저</a>를 눌러주세요. 웹 브라우저 홈페이지(3)를 자신이 속한 클랜 페이지 주소로 변경하면 더 편하게 이용이 가능합니다.</p>
+  <img src="/static/img/help_4.png" alt="스팀 오버레이 설정" class="media">
+  <p><a href="steam://settings/browser" class="url">설정 > 웹 브라우저</a>를 눌러주세요. 웹 브라우저 홈페이지(3)를 자신이 속한 클랜 페이지 주소로 하게 되면 (1) 웹 브라우저를 눌렀을 때 바로 클랜원 목록이 뜨게 됩니다.</p>
   <hr>
 
-  <h2 id="s1_h4">주의사항</h2>
+  <h2 id="s5">설정</h2>
+  <img src="/static/img/help_7.png" alt="설정 페이지" class="media">
+  <p><b>dega.kr</b>의 설정들이 모여있는 페이지입니다. 설정 값은 기기에 저장됩니다.</p>
+  <ul style="list-style: disc; padding-inline-start: 30px;">
+    <li>
+      <span class="with-icon"><i class="material-icons" data-icon="settings"></i><span> 모드 설정</span><br></span>
+      <span>바로 합류 버튼을 띄울지, 복사 버튼을 띄울지 선택합니다. 기본값은 Windows 환경에서만 <code>바로 합류</code>, 나머지 환경에서는 <code>복사</code> 입니다.</span>
+    </li>
+    <li>
+      <span class="with-icon"><i class="material-icons" data-icon="language"></i><span> 명령어 복사 언어 설정</span><br></span>
+      <span>복사 모드일때 명령어의 언어를 선택합니다. 한국어 클라이언트를 사용하시지 않는다면 영어를 선택하시면 됩니다. 기본값은 <code>한국어</code>입니다.</span>
+    </li>
+    <li>
+      <span class="with-icon"><i class="material-icons" data-icon="person_add"></i><span> 내 정보 등록</span><br></span>
+      <span>기재한 합류코드와 일치하는 사람이 클랜원 목록에 나올 경우 밑줄이 생깁니다. 자신의 합류코드를 적어두시는 것을 권장합니다.</span>
+    </li>
+    <li>
+      <span class="with-icon"><i class="material-icons" data-icon="update"></i><span> 창 활성화시 업데이트</span><br></span>
+      <span>브라우저의 탭/창/오버레이 등을 최소화했다가 다시 표시했을 때 자동으로 새로고침을 시도할지에 대한 설정입니다. 기본값은 <code>참</code>입니다.</span>
+    </li>
+    <li>
+      <span class="with-icon"><i class="material-icons" data-icon="arrow_back"></i><span> 돌아가기</span><br></span>
+      <span>이전 페이지로 돌아갑니다. 브라우저의 뒤로 가기 버튼과 동일한 역할입니다.</span>
+    </li>
+  </ul>
+
+  <hr>
+
+  <h2 id="s6">주의사항</h2>
   <p>Bungie.net 설정의 "계정 & 연결" 탭에서 "공개 프로필에 표시" 설정을 활성화하지 않은 경우 온라인이더라도 합류 코드 복사가 불가능 할 수 있습니다. 설정을 다시 해준 후 관리자에게 요청해주세요.</p>
   <p>이미 등록된 자신의 정보를 공개하고 싶지 않다면 디스코드 Krepe#4364 또는 트위터 <a href="https://twitter.com/krepe_suZette" class="url">@krepe_suZette</a>로 연락해주세요.</p>
   <p>본 사이트는 Chrome 또는 Chromium 기반 브라우저에 최적화되어 있습니다.</p>
