@@ -15,6 +15,7 @@ let cmd_invite = "초대";
 let mode = "copy";
 let my_steam_id;
 let lastUpdate;
+let active_window_update;
 
 const loadLocalStorageJSON = function (key) {
     let item = localStorage.getItem(key);
@@ -570,6 +571,23 @@ const setMySteamID = function (sid) {
     saveLocalStorageJSON("setting", setting);
 }
 
+const getAutoUpdateSetting = function () {
+    let setting = loadLocalStorageJSON("setting");
+    if (setting.hasOwnProperty("active_window_update")) {
+        active_window_update = setting.active_window_update;
+        return active_window_update;
+    } else {
+        setAutoUpdateSetting(true);
+        return active_window_update;
+    }
+}
+
+const setAutoUpdateSetting = function (value=true) {
+    let setting = loadLocalStorageJSON("setting");
+    setting["active_window_update"] = value;
+    active_window_update = value;
+    saveLocalStorageJSON("setting", setting);
+}
 // ================ initializing ================ //
 getCommandPrefix();
 getMySteamID();

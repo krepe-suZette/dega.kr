@@ -37,6 +37,14 @@
     <div class="cmd-line"><input type="text" class="cmd-input" id="my_steamid" value="" placeholder="765611..." onchange="setMySteamID(this.value)"></div>
   </div>
 
+  <h2><i class="material-icons" data-icon="update"></i> 창 활성화시 업데이트</h2>
+  <div class="radio-box">
+    <label for="active_window_update">
+      <input type="checkbox" id="active_window_update"> 창이 다시 활성화됐을 때 자동으로 업데이트를 시도
+    </label>
+
+  </div>
+
 
   <h2><i class="material-icons" data-icon="arrow_back"></i> <a onclick="window.history.back();" class="url">돌아가기</a></h2>
 
@@ -53,6 +61,8 @@
 
     initCommandPrefix();
     $("#my_steamid").val(getMySteamID())
+    document.getElementById("active_window_update").checked = getAutoUpdateSetting();
+    document.getElementById("active_window_update").onchange = function () { setAutoUpdateSetting(this.checked) };
   })
 </script>
 {% endblock %}

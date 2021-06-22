@@ -48,9 +48,11 @@
     $("#prevPage").click(prevPage);
     $("#nextPage").click(nextPage);
     $("#refresh").click(refreshMembers);
-    document.addEventListener("visibilitychange", function () {
+    if (getAutoUpdateSetting()) {
+      document.addEventListener("visibilitychange", function () {
         if (!document.hidden) refreshMembers();
-    }, false);
+      }, false);
+    }
     window.addEventListener("keydown", function (e) {
       switch (e.code) {
         case "KeyA":
