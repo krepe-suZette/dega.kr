@@ -29,7 +29,6 @@ const saveLocalStorageJSON = function (key, item) {
 
 // ================ /clan ================ //
 const filterClanList = function(s) {
-    // $(".clan-info").hide();
     let rows = $(".clan-info");
     let hasResult = 0;
     let lowerStr = s.toLowerCase();
@@ -272,7 +271,7 @@ const updateMembers = async function(groupId) {
 
 const updateMembersStart = function () {
     lastUpdate = Date.now();
-    $("#refresh").attr("disabled", true).data("icon", "hourglass_bottom");
+    $("#refresh").attr("disabled", true).attr("data-icon", "hourglass_bottom");
     $(".user-list").addClass("loading");
 }
 
@@ -342,7 +341,6 @@ const applyMemberEmblem = async function ($el, data) {
 
     // 변경 적용 (배경색은 초기화)
     img.src = path;
-    // $el.children(".emblem").css("background-image", `url(${path})`);
     $el.children(".emblem").append(img);
 }
 
@@ -493,7 +491,6 @@ const setMode = function (m) {
     }
 }
 
-// copy cmd lang setting
 const getCommandPrefix = function() {
     // localStorage 값이 있으면 불러오고, 없으면 기본값 (합류/초대) 사용
     // "setting": {"cmd_invite": "invite", "cmd_join": "join", "cmd_lang": "en"}
