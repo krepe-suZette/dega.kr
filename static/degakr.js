@@ -246,6 +246,7 @@ const updateMembers = async function(groupId) {
                 if (arr_steam_id[membership_id] !== undefined) {
                     $el.addClass("online").removeClass("error").children(".copy").attr("data-sid", arr_steam_id[membership_id]);
                     if (my_steam_id === arr_steam_id[membership_id]) $el.addClass("me");
+                    else $el.removeClass("me");
                     setTimeout(() => applyMemberEmblem($el, arr_members[idx]), idx * 30);
                 }
                 // 온라인 + SteamID 정보 없음
