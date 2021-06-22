@@ -246,7 +246,7 @@ const updateMembers = async function(groupId) {
                 if (arr_steam_id[membership_id] !== undefined) {
                     $el.addClass("online").removeClass("error").children(".copy").attr("data-sid", arr_steam_id[membership_id]);
                     if (my_steam_id === arr_steam_id[membership_id]) $el.addClass("me");
-                    applyMemberEmblem($el, arr_members[idx]);
+                    setTimeout(() => applyMemberEmblem($el, arr_members[idx]), idx * 30);
                 }
                 // 온라인 + SteamID 정보 없음
                 else $el.addClass("error").removeClass("online me").children(".copy").attr("data-sid", "");
@@ -314,7 +314,8 @@ const requestAllMembersSteamID = async function (arr) {
 
 
 const resetEmblem = function ($el) {
-    $el.children(".emblem").css("background-image", "");
+    $el.css("background-color", "");
+    $el.children(".emblem").empty();
 }
 
 const applyMemberEmblem = async function ($el, data) {
@@ -328,11 +329,21 @@ const applyMemberEmblem = async function ($el, data) {
     // 최근 접속 캐릭터 찾은 후, 문양 이미지 주소 저장
     let recentChar = getRecentProfile(profile);
     let path = "https://www.bungie.net" + recentChar.emblemPath;
-    // let color = recentChar.emblemColor;
+    let img = new Image();
+    img.crossOrigin = "anonymous";
+    img.draggable = false;
+    img.onload = () => {
+        let color = getEdgeAvgColor(img);
+        $el.css("background-color", `rgb(${color[0]}, ${color[1]}, ${color[2]})`);
+    }
+    img.onerror = () => {
+        img.src = "";
+    }
 
-    // 변경 적용
-    $el.children(".emblem").css("background-image", `url(${path})`);
-    // $el.css("background-color", `rgb(${color})`);
+    // 변경 적용 (배경색은 초기화)
+    img.src = path;
+    // $el.children(".emblem").css("background-image", `url(${path})`);
+    $el.children(".emblem").append(img);
 }
 
 const requestProfile = async function (m_type, m_id) {
@@ -363,6 +374,23 @@ const getRecentProfile = function (data) {
 const refreshMembers = async function() {
     if (Date.now() - lastUpdate < 5000) return;
     await updateMembers(GROUP_ID);
+}
+
+const getEdgeAvgColor = function(img) {
+    let canvas = document.createElement("canvas");
+    let context = canvas.getContext("2d");
+    canvas.width = img.naturalWidth;
+    canvas.height = img.naturalHeight;
+    context.drawImage(img, 0, 0, 96, 96);
+    let data = context.getImageData(92, 0, 4, 96).data;
+    let r, g, b;
+    r = g = b = 0;
+    for (let i = 0; i < 1536; i+=4) {
+        r += data[i];
+        g += data[i+1];
+        b += data[i+2];
+    }
+    return [r, g, b].map(value => { return Math.floor(value / 523 + 16) });
 }
 
 // ================ /request ================ //
