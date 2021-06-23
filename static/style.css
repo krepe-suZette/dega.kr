@@ -509,6 +509,7 @@ section.root * {
     margin: 2rem 0 1rem;
     display: block;
     object-fit: contain;
+    width: 100%;
     max-width: 45rem;
 }
 .r0 {
