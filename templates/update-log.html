@@ -13,52 +13,95 @@
   <strong>Current version: v{{ version }}</strong>
 
   <h3>patch log</h3>
-  <h4>v1.0.0-b5 (2021-06-23)</h4>
+  <h4>v1.0.0 (2021-06-23)</h4>
   <ul>
-    <li>문양 배경색 추가</li>
-    <li>문양 로딩에 순차적 지연 추가</li>
-    <li>창 재활성화시 업데이트 설정 추가 (기본값은 켜짐)</li>
-    <li><a href="/help" class="url">도움말</a> 등 여러 페이지의 문서 재작성, 이미지 교체</li>
-    <li>정식 버전 출시 준비</li>
-  </ul>
-  <h4>v1.0.0-b4 (2021-06-22)</h4>
-  <ul>
-    <li>클랜 유저 목록 페이지 대규모 개선<ul>
-      <li>게임 내 디자인에 가깝게 CSS 수정</li>
-      <li>문양 아이콘 표시 추가</li>
-      <li>자기 자신 강조 기능 추가: <a href="/setting" class="url">설정</a> 페이지에서 설정 가능</li>
-    </ul></li>
-    <li>자바스크립트 코드 리팩터링</li>
-  </ul>
-  <h4>v1.0.0-b3 (2021-06-20)</h4>
-  <ul>
-    <li><a href="https://beta.dega.kr/" class="url">beta 홈페이지</a>에 beta(β) 문자 추가</li>
-    <li><a href="/setting" class="url">설정</a> 페이지 명령어 미리보기의 모바일 레이아웃 오류 수정</li>
-    <li>일부 소개 문구 변경 시작</li>
-    <li><a href="/update-log" class="url">업데이트 기록</a>에서 각 버전의 출시 날짜 표기</li>
-  </ul>
-  <h4>v1.0.0-b2 (2021-06-19)</h4>
-  <ul>
+    <li>Steam browser protocol을 활용한 <b>바로 합류</b> 기능 추가</li>
+    <li>클랜 유저 목록 페이지 대규모 개선
+      <ul>
+        <li>게임 내 디자인에 가깝게 CSS 수정</li>
+        <li>문양 아이콘 표시 추가</li>
+        <li>문양 배경색 추가</li>
+        <li>문양 로딩에 순차적 지연 추가</li>
+      </ul>
+    </li>
+    <li><a href="/setting" class="url">설정</a> 페이지 추가
+      <ul>
+        <li>상단 헤더에 <a href="/setting" class="url">설정</a> 아이콘 추가</li>
+        <li>바로 합류 / 복사 중 하나 선택 가능</li>
+        <li>명령어 복사 언어 설정 추가 (한국어/영어/기타)</li>
+        <li>자기 자신 강조 기능 추가</li>
+        <li>창 재활성화시 업데이트 설정 추가 (기본값은 켜짐)</li>
+      </ul>
+    </li>
     <li>클랜 즐겨찾기 기능 추가
       <ul>
-        <li>클랜 이름 왼쪽의 <i class="material-icons" data-icon="outlined_flag"></i> 깃발을 클릭하여 원하는 클랜을 상단에 고정할 수 있습니다.</li>
+        <li class="with-icon">클랜 이름 왼쪽의 <i class="material-icons" data-icon="outlined_flag"></i>깃발을 클릭하여 원하는 클랜을 상단에 고정할
+          수 있습니다.
+        </li>
         <li>즐겨찾기로 설정된 클랜들의 아이콘은 노란색으로 표시됩니다.</li>
-      </ul></li>
-    <li>명령어 복사 언어 설정 추가
-      <ul>
-        <li>영어, 일본어 등 외국어 클라이언트를 이용하는 사용자들을 위한 기능입니다.</li>
-        <li><a href="/setting" class="url">설정</a> 페이지에서 한글(합류/초대), 영어 (join/invite), 자유 설정이 가능합니다.</li>
-        <li>기본값은 한글(합류/초대)입니다.</li>
-      </ul></li>
-  </ul>
-  <h4>v1.0.0-b1 (2021-06-18)</h4>
-  <ul>
-    <li>정식 버전 직전의 업데이트 목록입니다.</li>
-    <li><b>바로 합류</b> 기능 추가. Windows PC 환경의 경우 기본적으로 활성화됩니다.</li>
-    <li><a href="/setting" class="url">설정</a> 페이지에서 필요에 따라 기존 복사 방식으로 돌아갈 수 있습니다.</li>
-    <li>상단 헤더에 <a href="/setting" class="url">설정</a> 아이콘 추가</li>
+      </ul>
+    </li>
+    <li><a href="/help" class="url">도움말</a> 등 여러 페이지의 문서 재작성, 이미지 교체</li>
+    <li><a href="/update-log" class="url">업데이트 기록</a>에서 각 버전의 출시 날짜 표기</li>
+    <li>자바스크립트 코드 리팩터링</li>
     <li>내부 템플릿 구조 최적화</li>
+    <li>beta(β) 문자 제거</li>
   </ul>
+  <h4>v1.0.0-beta (2021-06-18 ~ 2021-06-23)</h4>
+  <details>
+    <summary style="color: #9f9f9f">펼치기</summary>
+    <h4>v1.0.0-b5 (2021-06-23)</h4>
+    <ul>
+      <li>문양 배경색 추가</li>
+      <li>문양 로딩에 순차적 지연 추가</li>
+      <li>창 재활성화시 업데이트 설정 추가 (기본값은 켜짐)</li>
+      <li><a href="/help" class="url">도움말</a> 등 여러 페이지의 문서 재작성, 이미지 교체</li>
+      <li>정식 버전 출시 준비</li>
+    </ul>
+    <h4>v1.0.0-b4 (2021-06-22)</h4>
+    <ul>
+      <li>클랜 유저 목록 페이지 대규모 개선
+        <ul>
+          <li>게임 내 디자인에 가깝게 CSS 수정</li>
+          <li>문양 아이콘 표시 추가</li>
+          <li>자기 자신 강조 기능 추가: <a href="/setting" class="url">설정</a> 페이지에서 설정 가능</li>
+        </ul>
+      </li>
+      <li>자바스크립트 코드 리팩터링</li>
+    </ul>
+    <h4>v1.0.0-b3 (2021-06-20)</h4>
+    <ul>
+      <li><a href="https://beta.dega.kr/" class="url">beta 홈페이지</a>에 beta(β) 문자 추가</li>
+      <li><a href="/setting" class="url">설정</a> 페이지 명령어 미리보기의 모바일 레이아웃 오류 수정</li>
+      <li>일부 소개 문구 변경 시작</li>
+      <li><a href="/update-log" class="url">업데이트 기록</a>에서 각 버전의 출시 날짜 표기</li>
+    </ul>
+    <h4>v1.0.0-b2 (2021-06-19)</h4>
+    <ul>
+      <li>클랜 즐겨찾기 기능 추가
+        <ul>
+          <li>클랜 이름 왼쪽의 <i class="material-icons" data-icon="outlined_flag"></i> 깃발을 클릭하여 원하는 클랜을 상단에 고정할 수 있습니다.</li>
+          <li>즐겨찾기로 설정된 클랜들의 아이콘은 노란색으로 표시됩니다.</li>
+        </ul>
+      </li>
+      <li>명령어 복사 언어 설정 추가
+        <ul>
+          <li>영어, 일본어 등 외국어 클라이언트를 이용하는 사용자들을 위한 기능입니다.</li>
+          <li><a href="/setting" class="url">설정</a> 페이지에서 한글(합류/초대), 영어 (join/invite), 자유 설정이 가능합니다.</li>
+          <li>기본값은 한글(합류/초대)입니다.</li>
+        </ul>
+      </li>
+    </ul>
+    <h4>v1.0.0-b1 (2021-06-18)</h4>
+    <ul>
+      <li>정식 버전 직전의 업데이트 목록입니다.</li>
+      <li><b>바로 합류</b> 기능 추가. Windows PC 환경의 경우 기본적으로 활성화됩니다.</li>
+      <li><a href="/setting" class="url">설정</a> 페이지에서 필요에 따라 기존 복사 방식으로 돌아갈 수 있습니다.</li>
+      <li>상단 헤더에 <a href="/setting" class="url">설정</a> 아이콘 추가</li>
+      <li>내부 템플릿 구조 최적화</li>
+    </ul>
+  </details>
+
   <h4>v0.5.7 (2021-05-19)</h4>
   <ul>
     <li>복사 버튼 클릭시 컨트롤 버튼을 누르고 있으면 <b>/합류</b> 대신 <b>/초대</b> 가 복사되도록 수정</li>
@@ -132,7 +175,9 @@
   </ul>
   <h4>v0.4.3 (2021-01-17)</h4>
   <ul>
-    <li>클랜 검색에 <a href="https://vim.fandom.com/wiki/Searching#Case_sensitivity" class="url">smartcase</a> 적용 (대문자 사용시에만 대소문자를 구별해 검색)</li>
+    <li>클랜 검색에 <a href="https://vim.fandom.com/wiki/Searching#Case_sensitivity" class="url">smartcase</a> 적용 (대문자 사용시에만
+      대소문자를 구별해 검색)
+    </li>
     <li>클랜 목록에 내가 찾는 클랜이 없는 경우 클랜 등록 페이지 링크가 보이게 수정</li>
     <li>모바일 환경에서의 가독성 개선</li>
   </ul>
