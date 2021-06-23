@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   {% include "tracker.html" %}
-  {% set title_s %}{% block title %}dega.kr (β){% endblock %}{% endset %}
+  {% set title_s %}{% block title %}dega.kr{% endblock %}{% endset %}
   {% set version = "1.0.0-b5" %}
   <meta charset="UTF-8">
   <!-- Favicon / icon -->
@@ -19,16 +19,16 @@
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta name="description" content="데스티니 가디언즈 클랜원에게 바로 합류하기">
-  <meta name="keywords" content="데스티니,데스티니 가디언즈,데스티니 2,Destiny 2,합류코드,데스티니 합류">
+  <meta name="keywords" content="데스티니,데스티니 가디언즈,데스티니 2,Destiny 2,합류코드,데스티니 합류,데스티니 클랜">
   {% block meta %}{% endblock %}
   <!-- opengraph -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="{{ title_s }}">
+  <meta property="og:title" content="{{ title_s }}">ㅅ
   <meta property="og:url" content="https://dega.kr{{ request.path }}">
   <meta property="og:image" content="https://dega.kr/static/img/background.png">
   <meta property="og:description" content="데스티니 가디언즈 클랜원에게 바로 합류하기">
   <meta property="og:locale" content="ko_KR">
-  <meta property="og:site_name" content="dega.kr (β)">
+  <meta property="og:site_name" content="dega.kr">
   <!-- twitter cards -->
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="{{ title_s }}">
@@ -49,7 +49,7 @@
     <nav class="container">
       {% block header %}
       <div class="nav-icon"><a href="/"><img src="/static/img/icon-transparent.svg" alt="icon"></a></div>
-      <div class="nav-logo hide-small"><a href="/">dega.kr (β)</a></div>
+      <div class="nav-logo hide-small"><a href="/">dega.kr</a></div>
       <div class="nav-right">
         <div class="nav-path nav-setting">
           <a href="/setting" class="material-icons" data-icon="settings"></a>
