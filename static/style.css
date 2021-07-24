@@ -12,6 +12,7 @@ header {
 }
 main {
     min-height: calc(100vh - 3.5rem);
+    transition: filter 100ms;
 }
 
 nav {
@@ -162,6 +163,62 @@ a.url:hover {
     background: #dddddd;
     color: #181a1b;
 }
+.red {
+    color: #e75641;
+}
+/* modal */
+.modal-bg {
+    position: fixed;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.modal-box-wrap {
+    /*  container  */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.modal-box {
+    background-color: #222426;
+    border: 0.125rem solid white;
+    width: 90%;
+    padding: 0.5rem;
+    max-height: 75vh;
+    overflow: auto;
+}
+.modal-box > * {
+    padding: 0.5rem;
+}
+.modal-box-title {
+    margin: 0;
+    font-size: 2rem;
+}
+.modal-box-text {
+    margin: 0;
+    font-size: 1.15rem;
+}
+.modal-box-btn-wrap {
+    height: 3rem;
+}
+.modal-box-btn {
+    padding: 0.5rem;
+    font-size: 1.25rem;
+    font-weight: bold;
+    display: block;
+    width: 100%;
+}
+.blur {
+    filter: blur(0.5rem);
+}
+
 /* 클랜 이름 flex CSS */
 .clan-name {
     flex: 0 1 auto;

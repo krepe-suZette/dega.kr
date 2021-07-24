@@ -589,6 +589,46 @@ const setAutoUpdateSetting = function (value=true) {
     active_window_update = value;
     saveLocalStorageJSON("setting", setting);
 }
+// ================ modal ================ //
+const generateModal = function (title, text, btn) {
+    let modal_bg = document.createElement("div");
+    let modal_wrap = document.createElement("div")
+    let modal  = document.createElement("div")
+    modal_bg.classList.add("modal-bg");
+    modal_wrap.classList.add("modal-box-wrap", "container")
+    modal.classList.add("modal-box")
+
+    let modal_title = document.createElement("h2")
+    modal_title.classList.add("modal-box-title")
+    modal_title.innerHTML = title;
+    let modal_text = document.createElement("p")
+    modal_text.classList.add("modal-box-text")
+    modal_text.innerHTML = text
+    let modal_btn = document.createElement("button")
+    modal_btn.classList.add("modal-box-btn");
+    modal_btn.innerText = btn
+    modal_btn.addEventListener("click", (e) => closeModal(e, modal_bg));
+    let modal_btn_wrap = document.createElement("div")
+    modal_btn_wrap.classList.add("modal-box-btn-wrap")
+    modal_btn_wrap.appendChild(modal_btn);
+    modal.append(modal_title, modal_text, modal_btn_wrap);
+
+    modal_wrap.appendChild(modal)
+    modal_bg.appendChild(modal_wrap);
+    modal_bg.addEventListener("click", (e) => closeModal(e, modal_bg))
+    document.querySelector("body").appendChild(modal_bg);
+    document.querySelector("main").classList.add("blur")
+}
+
+const closeModal = function (ev, el) {
+    // el == div.modal_bg
+    if (ev.target === ev.currentTarget && el.classList.contains("modal-bg")) {
+        el.remove();
+        document.querySelector("main").classList.remove("blur")
+    }
+}
+
+
 // ================ initializing ================ //
 getCommandPrefix();
 getMySteamID();
