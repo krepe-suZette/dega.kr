@@ -6,17 +6,17 @@ app = Flask("main")
 p_client = Client()
 data = Data()
 last_update = "2021-06-23"
-__version__ = "1.0.0"
+__version__ = "1.0.2"
 
 
 @app.route("/")
 def root():
-    return render_template("root.html", version=__version__, last_update=last_update)
+    return render_template("root.html", last_update=last_update)
 
 
 @app.route("/update-log")
 def update_log():
-    return render_template("update-log.html", version=__version__)
+    return render_template("update-log.html")
 
 
 @app.route("/request")
