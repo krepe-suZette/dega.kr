@@ -25,24 +25,24 @@ class Client:
         else:
             self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.address = (_host, _port)
-
-        try:
-            self.sock.connect(self.address)
-        except ConnectionRefusedError as e:
-            print(e)
+        self.connect()
 
     def __del__(self):
         self.sock.close()
 
-    def reconnect(self):
-        self.__init__(self.address)
+    def connect(self):
         try:
-            self.sock.connect((_host, _port))
+            self.sock.connect(self.address)
             return True
-        except (ConnectionResetError, ConnectionRefusedError, OSError):
+        except (ConnectionResetError, ConnectionRefusedError, OSError) as e:
+            print(e)
             return False
 
+    def reconnect(self):
+        return self.connect()
+
     def send(self, msg: dict):
+        msg["_pid"] = os.getpid()
         try:
             self.sock.send(json.dumps(msg).encode())
         except (ConnectionResetError, ConnectionRefusedError, OSError):
@@ -112,35 +112,35 @@ async def run():
 
 
 def run_s():
-    if os.name == "posix":
-        sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-        sock.connect(_path)
-    else:
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.connect((_host, _port))
+    client = Client()
     while True:
         line = input(">>> ")
         if not line:
             break
         if line.strip() in SHORT_CMD:
-            sock.send(json.dumps(SHORT_CMD[line.strip()]).encode())
+            data = client.send(SHORT_CMD[line.strip()])
         else:
-            sock.send(line.encode())
-        data = sock.recv(1024)
-        print(f"received message: {data.decode()}")
-    sock.close()
+            try:
+                msg_dict = json.loads(line)
+            except json.JSONDecodeError:
+                print("cannot decode input to json")
+                continue
+            data = client.send(msg_dict)
+        print(f"received message: {data}")
 
 
 def run_cmd(cmd: str):
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.connect((_host, _port))
+    client = Client()
     if cmd.strip() in SHORT_CMD:
-        sock.send(json.dumps(SHORT_CMD[cmd.strip()]).encode())
+        data = client.send(SHORT_CMD[cmd.strip()])
     else:
-        sock.send(cmd.encode())
-    data = sock.recv(1024)
-    print(data.decode())
-    sock.close()
+        try:
+            msg_dict = json.loads(cmd)
+        except json.JSONDecodeError:
+            print("cannot decode input to json")
+            return
+        data = client.send(msg_dict)
+    print(data)
 
 
 if __name__ == '__main__':
