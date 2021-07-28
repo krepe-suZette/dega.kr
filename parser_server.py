@@ -214,7 +214,11 @@ async def run():
     task = asyncio.create_task(worker(task_queue))
 
     async def handler(reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
-        peer_name = writer.get_extra_info('peername', _path)
+        peer_name = writer.get_extra_info("peername")
+        if peer_name:
+            peer_intro = f"from {peer_name[0]}:{peer_name[1]}"
+        else:
+            peer_intro = f"via {_path}"
         while True:
             try:
                 data = await reader.read(1024)
@@ -236,17 +240,17 @@ async def run():
                     raise TypeError
                 if resp.get("type") == "queue":
                     writer.write(f"{task_queue.qsize()}".encode())
-                    logger.info(f"[Server] Received from {peer_name} {msg} -> {task_queue.qsize()}")
+                    logger.info(f"[Server] Received {peer_intro} {msg} -> {task_queue.qsize()}")
                 else:
                     await task_queue.put(resp)
                     writer.write(result_msg.encode())
-                    logger.info(f"[Server] Received from {peer_name} {msg}")
+                    logger.info(f"[Server] Received {peer_intro} {msg}")
             except json.decoder.JSONDecodeError:
                 writer.write("JSON decode error".encode())
-                logger.error(f"[Server] JSONDecodeError {peer_name} {msg}")
+                logger.error(f"[Server] JSONDecodeError {peer_intro} {msg}")
             except TypeError:
                 writer.write("TypeError".encode())
-                logger.error(f"[Server] TypeError {peer_name} {msg}")
+                logger.error(f"[Server] TypeError {peer_intro} {msg}")
             finally:
                 await writer.drain()
 
