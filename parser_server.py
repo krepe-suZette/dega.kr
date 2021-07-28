@@ -214,7 +214,7 @@ async def run():
     task = asyncio.create_task(worker(task_queue))
 
     async def handler(reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
-        peer_name = writer.get_extra_info('peername', writer.get_extra_info('sockname'))
+        peer_name = writer.get_extra_info('peername', _path)
         while True:
             try:
                 data = await reader.read(1024)
