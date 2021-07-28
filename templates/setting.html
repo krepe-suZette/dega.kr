@@ -11,7 +11,7 @@
 <article>
   <h2><i class="material-icons" data-icon="settings"></i> 모드 설정</h2>
   <div class="radio-box">
-    <label><input type="radio" name="mode" value="direct" id="mode_direct" onchange="setMode('direct'); directModeModal();"> 바로 합류 <b class="red"><span class="material-icons" data-icon="warning" style="font-size: 1em; vertical-align: bottom;"></span> 경고!!</b></label>
+    <label><input type="radio" name="mode" value="direct" id="mode_direct" onchange="setMode('direct');"> 바로 합류</label>
     <label><input type="radio" name="mode" value="copy" id="mode_copy" onchange="setMode('copy');"> 복사</label>
   </div>
 
@@ -64,13 +64,5 @@
     document.getElementById("active_window_update").checked = getAutoUpdateSetting();
     document.getElementById("active_window_update").onchange = function () { setAutoUpdateSetting(this.checked) };
   })
-
-  function directModeModal() {
-    generateModal(
-      "<span class=\"material-icons\" data-icon=\"warning\"></span> 경고!",
-      "<b>바로 합류</b> 기능이 사용하는 방식을 오&middot;남용하여 이용 금지 및 제한 조치를 받은 사례가 존재합니다. <b class='red'>절대</b> 합의되지 않은 수호자의 화력팀에 합류하기 위한 용도로 <b>dega.kr</b>을 사용하지 마세요. 해당 기능을 사용해 생기는 문제에 대하여 <b>dega.kr</b>은 어떠한 책임도 지지 않습니다.<br>" +
-      "만약 무고하게 이용 금지 또는 제한 조치를 받은 경우 Bungie.net에서 <a href='https://help.bungie.net/hc/ko/articles/360049024492' class='url'>이의 제기</a>를 할 수 있습니다.",
-      "확인");
-  }
 </script>
 {% endblock %}
