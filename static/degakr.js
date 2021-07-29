@@ -189,9 +189,11 @@ const clipboardInitialize = function() {
 }
 
 const directJoinInitialize = function () {
-    $(".copy").click( function () {
-        console.log("Click!");
-        location.href = "steam://rungame/1085660/" + this.getAttribute("data-sid");
+    Array.prototype.forEach.call(document.getElementsByClassName("copy"), (el) => {
+       el.onclick = function() {
+            console.log("Click!");
+            location.href = "steam://rungame/1085660/" + this.getAttribute("data-sid");
+        }
     });
 }
 
