@@ -634,5 +634,6 @@ const closeModal = function (ev, el) {
 // ================ initializing ================ //
 getCommandPrefix();
 getMySteamID();
-mode = getMode();
+// mode = getMode();
+mode = "copy";
 DOM_USER = mode === "direct" ? DOM_USER_DIRECT : DOM_USER_COPY;
