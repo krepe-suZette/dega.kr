@@ -2,8 +2,8 @@ let PAGE_CAPACITY = 0;
 let MAX_PAGE = 0;
 let CURRENT_PAGE = 0;
 const API_KEY = "3632dd9656a54c6d90b31777940b2581";
-const DOM_USER_COPY = $("<div class='user-wrap'><div class='user'><div class='emblem'></div><div class='display-name'></div><button class='copy material-icons' data-sid='' data-icon='content_copy'></button></div></div>");
-const DOM_USER_DIRECT = $("<div class='user-wrap'><div class='user'><div class='emblem'></div><div class='display-name'></div><button class='copy material-icons' data-sid='' data-icon='login'></button></div></div>");
+const DOM_USER_COPY = $("<div class='user-wrap'><div class='user'><div class='emblem'></div><div class='platform'><img draggable='false' src=''></div><div class='display-name'></div><button class='copy material-icons' data-bungie-name='' data-icon='content_copy'></button></div></div>");
+const DOM_USER_DIRECT = $("<div class='user-wrap'><div class='user'><div class='emblem'></div><div class='platform'><img draggable='false' src=''></div><div class='display-name'></div><button class='copy material-icons' data-bungie-name='' data-icon='login'></button></div></div>");
 let DOM_USER = DOM_USER_COPY;
 let GROUP_ID;
 
@@ -13,7 +13,7 @@ let cmd_lang = "ko";
 let cmd_join = "합류";
 let cmd_invite = "초대";
 let mode = "copy";
-let my_steam_id;
+let my_bungie_name;
 let lastUpdate;
 let active_window_update;
 
@@ -176,7 +176,7 @@ const ctrlObserverInit = function () {
 const clipboardInitialize = function() {
     if (clipboard != null) clipboard.destroy();
     clipboard = new ClipboardJS('.copy', {
-        text: function(trigger) { return mkCmd(trigger.getAttribute('data-sid')) }
+        text: function(trigger) { return mkCmd(trigger.getAttribute('data-bungie-name')) }
     });
     clipboard.on("success", function(e) {
         console.log("Copy success");
@@ -192,7 +192,7 @@ const directJoinInitialize = function () {
     Array.prototype.forEach.call(document.getElementsByClassName("copy"), (el) => {
        el.onclick = function() {
             console.log("Click!");
-            location.href = "steam://rungame/1085660/" + this.getAttribute("data-sid");
+            location.href = "steam://rungame/1085660/" + this.getAttribute("data-bungie-name");
         }
     });
 }
@@ -221,41 +221,46 @@ const updateMembers = async function(groupId) {
         });
         // 결과값 배열 복사
         let arr_members = resp_members.Response.results.slice();
+        let online_members = arr_members.filter(el => el.isOnline).length;
         // .user 요소 개수 맞추기
         adjustUserElementCount(arr_members.length);
-        let $user_el = Array.from(document.getElementsByClassName("user")).map((el) => {return $(el)});
-
-        // SteamID 값 불러오기
-        let arr_online_id = arr_members.filter(el => el.isOnline).map(el => el.destinyUserInfo.membershipId);
-        let arr_steam_id = await getAllMembersSteamID(arr_online_id);
+        let user_el = Array.from(document.getElementsByClassName("user"));
 
         // 클랜 멤버 목록 정렬
         arr_members.sort((a, b) => {
             if (a.isOnline !== b.isOnline) return a.isOnline ? -1 : 1;
-            else if ((a.destinyUserInfo.membershipId in arr_steam_id) !== (b.destinyUserInfo.membershipId in arr_steam_id)) return (a.destinyUserInfo.membershipId in arr_steam_id) ? -1 : 1;
             else return a.destinyUserInfo.LastSeenDisplayName < b.destinyUserInfo.LastSeenDisplayName ? -1 : a.destinyUserInfo.LastSeenDisplayName > b.destinyUserInfo.LastSeenDisplayName ? 1: 0;
         });
 
         // 화면에 적용
-        $user_el.forEach(($el, idx) => {
-            let membership_id = arr_members[idx].destinyUserInfo.membershipId;
+        user_el.forEach((el, idx) => {
+            // el.children[0]: .emblem
+            // el.children[1]: .platform
+            // el.children[2]: .display-name
+            // el.children[3]: button.copy
             let display_name = arr_members[idx].destinyUserInfo.LastSeenDisplayName;
-            $el.children(".display-name").text(display_name).attr("title", display_name);
-            resetEmblem($el);
+            let bungie_name = arr_members[idx].destinyUserInfo.bungieGlobalDisplayName + "#" + arr_members[idx].destinyUserInfo.bungieGlobalDisplayNameCode;
+            let platform_icon = "https://www.bungie.net" + arr_members[idx].destinyUserInfo.iconPath;
+            el.children[2].textContent = display_name;
+            el.children[2].setAttribute("title", display_name);
+            resetEmblem(el);
 
             if (arr_members[idx].isOnline) {
-                // 온라인 + SteamID 정보 존재
-                if (arr_steam_id[membership_id] !== undefined) {
-                    $el.addClass("online").removeClass("error").children(".copy").attr("data-sid", arr_steam_id[membership_id]);
-                    if (my_steam_id === arr_steam_id[membership_id]) $el.addClass("me");
-                    else $el.removeClass("me");
-                    setTimeout(() => applyMemberEmblem($el, arr_members[idx]), idx * 30);
-                }
-                // 온라인 + SteamID 정보 없음
-                else $el.addClass("error").removeClass("online me").children(".copy").attr("data-sid", "");
+                // 온라인 + 번지 이름 정보 존재
+                el.classList.add("online");
+                el.classList.remove("error");
+                el.children[1].children[0].setAttribute("src", platform_icon);
+                el.children[3].dataset.bungieName = bungie_name;
+                if (my_bungie_name === bungie_name) el.classList.add("me");
+                else el.classList.remove("me");
+                setTimeout(() => applyMemberEmblem(el, arr_members[idx]), idx * 30);
             }
             // 오프라인
-            else $el.removeClass("error online me").children(".copy").attr("data-sid", "");
+            else {
+                el.classList.remove("error", "online", "me");
+                el.children[1].children[0].setAttribute("src", "");
+                el.children[3].dataset.bungieName = "";
+            }
         });
 
         // 페이지 위치, 복사-합류 버튼 초기화
@@ -263,10 +268,13 @@ const updateMembers = async function(groupId) {
         if (mode === "direct") directJoinInitialize();
         else clipboardInitialize();
         // 완료 메시지
-        $(".info-online").text(`${arr_online_id.length} / ${arr_members.length} 온라인`);
-        $("#refresh").attr("data-icon", "done").attr("disabled", false);
+        document.getElementsByClassName("info-online")[0].textContent = `${online_members} / ${arr_members.length} 온라인`;
+        let refresh_button = document.getElementById("refresh");
+        refresh_button.dataset.icon = "done";
+        refresh_button.removeAttribute("disabled");
     } catch (e) {
-        console.log("error");
+        console.log(e)
+        generateModal("이런!", "업데이트 도중 오류가 발생하였습니다!<br>" + e, "닫기", true);
     } finally {
         // 업데이트 끝. 원상 복귀
         updateMembersEnd();
@@ -275,13 +283,15 @@ const updateMembers = async function(groupId) {
 
 const updateMembersStart = function () {
     lastUpdate = Date.now();
-    $("#refresh").attr("disabled", true).attr("data-icon", "hourglass_bottom");
-    $(".user-list").addClass("loading");
+    let refresh_button = document.getElementById("refresh");
+    refresh_button.setAttribute("disabled", "");
+    refresh_button.dataset.icon = "hourglass_bottom";
+    document.getElementsByClassName("user-list")[0].classList.add("loading");
 }
 
 const updateMembersEnd = function (isSuccess = true) {
-    setTimeout(() => {$("#refresh").attr("data-icon", "refresh")}, 1000);
-    $(".user-list").removeClass("loading");
+    setTimeout(() => { document.getElementById("refresh").dataset.icon = "refresh"; }, 1000);
+    document.getElementsByClassName("user-list")[0].classList.remove("loading");
 }
 
 const getAllMembersSteamID = async function (arr) {
@@ -316,12 +326,12 @@ const requestAllMembersSteamID = async function (arr) {
 }
 
 
-const resetEmblem = function ($el) {
-    $el.css("background-color", "");
-    $el.children(".emblem").empty();
+const resetEmblem = function (el) {
+    el.style.backgroundColor = "";
+    if (el.children[0].lastElementChild) el.children[0].lastElementChild.remove();
 }
 
-const applyMemberEmblem = async function ($el, data) {
+const applyMemberEmblem = async function (el, data) {
     let m_id = data.destinyUserInfo.membershipId;
     let m_type = data.destinyUserInfo.membershipType;
 
@@ -337,7 +347,7 @@ const applyMemberEmblem = async function ($el, data) {
     img.draggable = false;
     img.onload = () => {
         let color = getEdgeAvgColor(img);
-        $el.css("background-color", `rgb(${color[0]}, ${color[1]}, ${color[2]})`);
+        el.style.backgroundColor = `rgb(${color[0]}, ${color[1]}, ${color[2]})`
     }
     img.onerror = () => {
         img.src = "";
@@ -345,7 +355,7 @@ const applyMemberEmblem = async function ($el, data) {
 
     // 변경 적용 (배경색은 초기화)
     img.src = path;
-    $el.children(".emblem").append(img);
+    el.children[0].append(img)
 }
 
 const requestProfile = async function (m_type, m_id) {
@@ -559,18 +569,18 @@ const enableCmdBox = function () {
     setCommandPrefix(cmd_join, cmd_invite, cmd_lang);
 }
 
-const getMySteamID = function() {
+const getMyBungieName = function() {
     let setting = loadLocalStorageJSON("setting");
-    if (setting.hasOwnProperty("my_steam_id")) {
-        my_steam_id = setting.my_steam_id;
-        return my_steam_id;
+    if (setting.hasOwnProperty("my_bungie_name")) {
+        my_bungie_name = setting.my_bungie_name;
+        return my_bungie_name;
     }
 }
 
-const setMySteamID = function (sid) {
+const setMyBungieName = function (b_name) {
     let setting = loadLocalStorageJSON("setting");
-    setting["my_steam_id"] = sid;
-    my_steam_id = sid;
+    setting["my_bungie_name"] = b_name;
+    my_bungie_name = b_name;
     saveLocalStorageJSON("setting", setting);
 }
 
@@ -592,7 +602,9 @@ const setAutoUpdateSetting = function (value=true) {
     saveLocalStorageJSON("setting", setting);
 }
 // ================ modal ================ //
-const generateModal = function (title, text, btn) {
+const generateModal = function (title, text, btn, no_duplicate) {
+    if (no_duplicate && document.querySelector(".modal-bg")) return;
+
     let modal_bg = document.createElement("div");
     let modal_wrap = document.createElement("div")
     let modal  = document.createElement("div")
@@ -633,7 +645,7 @@ const closeModal = function (ev, el) {
 
 // ================ initializing ================ //
 getCommandPrefix();
-getMySteamID();
+getMyBungieName();
 // mode = getMode();
 mode = "copy";
 DOM_USER = mode === "direct" ? DOM_USER_DIRECT : DOM_USER_COPY;

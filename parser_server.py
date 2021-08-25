@@ -71,23 +71,25 @@ class Parser:
         async with aiofile.async_open("data/user.json", "w", encoding="utf-8") as f:
             await f.write(json.dumps(self.user, ensure_ascii=False, indent=2))
 
-    async def get_clan_members(self, group_id: int, skip_dupe=True):
+    async def get_clan_members(self, group_id: int, skip_dupe=True) -> None:
         # 클랜 내 모든 멤버의 계정 정보
-        try:
-            resp = await self.destiny.api.get_members_of_group(group_id)
-        except pydest.PydestException as e:
-            logger.error(f"[Parser] get_clan_members error: {e}")
-            return
-        if resp.get("ErrorCode") != 1:
-            # 올바르지 않은 요청
-            logger.error(f"[Parser] get_clan_members error: {resp.get('ErrorStatus', 'API Request Error')}")
-            return
-        if skip_dupe:
-            result = [await self.get_user_profile(n["destinyUserInfo"]["membershipId"]) for n in resp["Response"]["results"] if "Steam" not in self.user.get(n["destinyUserInfo"]["membershipId"], {})]
-        else:
-            result = [await self.get_user_profile(n["destinyUserInfo"]["membershipId"]) for n in resp["Response"]["results"]]
-        self.user.update(result)
-        await self.commit()
+        # 번지 이름 도입으로 인한 기능 비활성화
+        # try:
+        #     resp = await self.destiny.api.get_members_of_group(group_id)
+        # except pydest.PydestException as e:
+        #     logger.error(f"[Parser] get_clan_members error: {e}")
+        #     return
+        # if resp.get("ErrorCode") != 1:
+        #     # 올바르지 않은 요청
+        #     logger.error(f"[Parser] get_clan_members error: {resp.get('ErrorStatus', 'API Request Error')}")
+        #     return
+        # if skip_dupe:
+        #     result = [await self.get_user_profile(n["destinyUserInfo"]["membershipId"]) for n in resp["Response"]["results"] if "Steam" not in self.user.get(n["destinyUserInfo"]["membershipId"], {})]
+        # else:
+        #     result = [await self.get_user_profile(n["destinyUserInfo"]["membershipId"]) for n in resp["Response"]["results"]]
+        # self.user.update(result)
+        # await self.commit()
+        pass
 
     async def get_clan(self, group_id: int, commit=True) -> tuple:
         logger.info(f"[Parser] get_clan {group_id} start")

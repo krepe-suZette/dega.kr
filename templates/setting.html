@@ -9,35 +9,35 @@
 
 {% block content %}
 <article>
-  <h2><i class="material-icons" data-icon="settings"></i> 모드 설정</h2>
+  <h2 class="with-icon"><i class="material-icons" data-icon="settings"></i>모드 설정</h2>
   <div class="radio-box">
-    <label><input type="radio" name="mode" value="direct" id="mode_direct" onchange="setMode('direct');" disabled> <del>바로 합류</del> <b class="red"><span class="material-icons" data-icon="warning" style="font-size: 1em; vertical-align: bottom;"></span> 스팀 브라우저 프로토콜 차단으로 인한 비활성화</b></label>
+    <label><input type="radio" name="mode" value="direct" id="mode_direct" onchange="setMode('direct');" disabled> <del>바로 합류</del> <b class="red with-icon"><span class="material-icons" data-icon="warning"></span> 스팀 브라우저 프로토콜 차단으로 인한 비활성화</b></label>
     <label><input type="radio" name="mode" value="copy" id="mode_copy" onchange="setMode('copy');"> 복사</label>
   </div>
 
-  <h2><i class="material-icons" data-icon="language"></i> 명령어 복사 언어 설정</h2>
+  <h2 class="with-icon"><i class="material-icons" data-icon="language"></i>명령어 복사 언어 설정</h2>
   <div class="radio-box">
     <div class="command-box">
       <label for="cmd_join" class="cmd-label">합류 명령어</label>
-      <div class="cmd-line"><span class="cmd-text">/</span><input type="text" class="cmd-input" id="cmd_join" value="" placeholder="합류" onchange="textSetCmdPrefix()"><span class="cmd-text ellipsis">76561190000000000</span></div>
+      <div class="cmd-line"><span class="cmd-text">/</span><input type="text" class="cmd-input" id="cmd_join" value="" placeholder="합류" onchange="textSetCmdPrefix()"><span class="cmd-text ellipsis">Guardian#1234</span></div>
     </div>
     <div class="command-box">
       <label for="cmd_invite" class="cmd-label">초대 명령어</label>
-      <div class="cmd-line"><span class="cmd-text">/</span><input type="text" class="cmd-input" id="cmd_invite" value="" placeholder="초대" onchange="textSetCmdPrefix()"><span class="cmd-text ellipsis">76561190000000000</span></div>
+      <div class="cmd-line"><span class="cmd-text">/</span><input type="text" class="cmd-input" id="cmd_invite" value="" placeholder="초대" onchange="textSetCmdPrefix()"><span class="cmd-text ellipsis">Guardian#1234</span></div>
     </div>
     <label><input type="radio" name="lang" value="ko" onchange="radioSetCmdPrefix(this);"> <b>한국어</b> (합류/초대)</label>
     <label><input type="radio" name="lang" value="en" onchange="radioSetCmdPrefix(this);"> <b>영어</b> (join/invite)</label>
     <label><input type="radio" name="lang" value="" onchange="enableCmdBox();"> 직접 입력</label>
   </div>
 
-  <h2><i class="material-icons" data-icon="person_add"></i> 내 정보 등록</h2>
-  <p>아래에 자신의 SteamID64(합류코드)를 적으면 클랜원 목록에서 내가 강조되어 표시됩니다.</p>
+  <h2 class="with-icon"><i class="material-icons" data-icon="person_add"></i>내 정보 등록</h2>
+  <p>아래에 자신의 번지 이름을 적으면 클랜원 목록에서 내가 강조되어 표시됩니다.</p>
   <div class="command-box">
-    <label for="my_steamid" class="cmd-label">SteamID (합류코드)</label>
-    <div class="cmd-line"><input type="text" class="cmd-input" id="my_steamid" value="" placeholder="765611..." onchange="setMySteamID(this.value)"></div>
+    <label for="my_bungie_name" class="cmd-label">번지 이름</label>
+    <div class="cmd-line"><input type="text" class="cmd-input" id="my_bungie_name" value="" placeholder="Guardian#1234" onchange="setMyBungieName(this.value)"></div>
   </div>
 
-  <h2><i class="material-icons" data-icon="update"></i> 창 활성화시 업데이트</h2>
+  <h2 class="with-icon"><i class="material-icons" data-icon="update"></i>창 활성화시 업데이트</h2>
   <div class="radio-box">
     <label for="active_window_update">
       <input type="checkbox" id="active_window_update"> 창이 다시 활성화됐을 때 자동으로 업데이트를 시도
@@ -46,7 +46,7 @@
   </div>
 
 
-  <h2><i class="material-icons" data-icon="arrow_back"></i> <a onclick="window.history.back();" class="url">돌아가기</a></h2>
+  <h2 class="with-icon"><i class="material-icons" data-icon="arrow_back"></i><a onclick="window.history.back();" class="url">돌아가기</a></h2>
 
 
 </article>
@@ -60,7 +60,7 @@
     else if (m === "copy") $("#mode_copy").prop("checked", true);
 
     initCommandPrefix();
-    $("#my_steamid").val(getMySteamID())
+    $("#my_bungie_name").val(getMyBungieName())
     document.getElementById("active_window_update").checked = getAutoUpdateSetting();
     document.getElementById("active_window_update").onchange = function () { setAutoUpdateSetting(this.checked) };
   })
