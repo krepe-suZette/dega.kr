@@ -268,7 +268,7 @@ const updateMembers = async function(groupId) {
         if (mode === "direct") directJoinInitialize();
         else clipboardInitialize();
         // 완료 메시지
-        document.getElementsByClassName("info-online")[0].textContent = `${online_members} / ${arr_members.length} 온라인`;
+        Array.prototype.forEach.call(document.getElementsByClassName("info-online"), (el) => { el.textContent = `${online_members} / ${arr_members.length} 온라인`;});
         let refresh_button = document.getElementById("refresh");
         refresh_button.dataset.icon = "done";
         refresh_button.removeAttribute("disabled");
