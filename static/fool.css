@@ -11,9 +11,12 @@
 }
 .r0-bg .item-wrap {
   z-index: 1;
-  background-color: rgba(0, 0, 0, 0.6);
-  background-clip: content-box;
+  background-color: rgba(17, 25, 40, 0.75);
+  background-clip: padding-box;
+  backdrop-filter: blur(1rem) saturate(180%);
+  -webkit-backdrop-filter: blur(1rem) saturate(180%);
   border-radius: 0.5rem;
+  padding: 0 1rem;
 }
 .r0-bg .r0-intro {
   font-size: 1.5rem;
