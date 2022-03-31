@@ -5,13 +5,13 @@ from parser_client import Client, Data
 app = Flask("main")
 p_client = Client()
 data = Data()
-last_update = "2022-02-03"
-__version__ = "1.1.1"
+last_update = "2022-04-01"
+__version__ = "1.1.2"
 
 
 @app.route("/")
 def root():
-    return render_template("root.html", last_update=last_update)
+    return render_template("root_fool.html", last_update=last_update)
 
 
 @app.route("/update-log")
