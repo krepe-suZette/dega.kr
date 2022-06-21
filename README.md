@@ -1,5 +1,9 @@
 # dega.kr
 
+![img](static/img/help_2.png)
+
+데스티니 화력팀 합류 도우미
+
 ## Checklist
 - [x] clone repo
 - [x] virtual env setting / requirements install
@@ -8,7 +12,6 @@
   - [x] write server conf file at `sites-available`
   - [x] generate symlink
   - [x] set log directory
-  - [x] redirect (`dcde.ga`/`www.dcde.ga`/`www.dega.kr` -> `dega.kr`)
 - [x] systemd setting
   - [x] web server
   - [x] parser server
@@ -20,6 +23,6 @@
 
 ## TODO list
 - [x] Change font (-> Spoqa Han Sans?)
-- [ ] Remake `/help`, `/faq` page
-- [ ] Case-insensitive clan search
-- [ ] enable ssl (using certbot / wildcard cert. / auto-renew)
+- [x] Remake `/help`, `/faq` page
+- [x] Case-insensitive clan search
+- [x] enable ssl (using certbot / wildcard cert. / auto-renew)
