@@ -2,8 +2,8 @@ let PAGE_CAPACITY = 0;
 let MAX_PAGE = 0;
 let CURRENT_PAGE = 0;
 const API_KEY = "3632dd9656a54c6d90b31777940b2581";
-const DOM_USER_COPY = $("<div class='user-wrap'><div class='user'><div class='emblem'></div><div class='platform'><img draggable='false' src=''></div><div class='display-name'></div><button class='copy material-icons' data-bungie-name='' data-icon='content_copy'></button></div></div>");
-const DOM_USER_DIRECT = $("<div class='user-wrap'><div class='user'><div class='emblem'></div><div class='platform'><img draggable='false' src=''></div><div class='display-name'></div><button class='copy material-icons' data-bungie-name='' data-icon='login'></button></div></div>");
+const DOM_USER_COPY = "<div class='user-wrap'><div class='user'><div class='emblem'></div><div class='platform'><img draggable='false' src=''></div><div class='display-name'></div><button class='copy material-icons' data-bungie-name='' data-icon='content_copy'></button></div></div>";
+const DOM_USER_DIRECT = "<div class='user-wrap'><div class='user'><div class='emblem'></div><div class='platform'><img draggable='false' src=''></div><div class='display-name'></div><button class='copy material-icons' data-bungie-name='' data-icon='login'></button></div></div>";
 let DOM_USER = DOM_USER_COPY;
 let GROUP_ID;
 
@@ -27,7 +27,6 @@ const saveLocalStorageJSON = function (key, item) {
     localStorage.setItem(key, JSON.stringify(item))
 }
 
-
 const requestBungieAPI = async function (endpoint) {
     let resp = await fetch("https://www.bungie.net/Platform" + endpoint, {
         headers: {"X-API-Key": API_KEY}
@@ -42,24 +41,33 @@ const requestBungieAPI = async function (endpoint) {
     }
 }
 
+
+const selectElements = function (selector) {
+    return Array.from(document.querySelectorAll(selector));
+}
+
+const selectElement = function (selector) {
+    return document.querySelector(selector)
+}
+
 // ================ /clan ================ //
 const filterClanList = function(s) {
-    let rows = $(".clan-info");
+    let rows = selectElements(".clan-info");
     let hasResult = 0;
     let lowerStr = s.toLowerCase();
     // smartCase
     let cmp = (lowerStr === s) ? (a => a.toLowerCase().includes(lowerStr)) : (a => a.includes(s));
-    rows.each(function() {
-        if (cmp(this.textContent.trim().replace(/\n[ ]+/g, "\n").replace(/^[\w_]+\n/, ""))) {
-            $(this).show();
+    rows.forEach((el) => {
+        if (cmp(el.textContent.trim().replace(/\n[ ]+/g, "\n").replace(/^[\w_]+\n/, ""))) {
+            el.style.display = "";
             hasResult = 1;
         }
         else {
-            $(this).hide();
+            el.style.display = "none";
         }
     });
-    if (hasResult === 0) $("#no-result").show();
-    else $("#no-result").hide();
+    if (hasResult === 0) document.getElementById("no-result").style.display = "";
+    else document.getElementById("no-result").style.display = "none";
 };
 
 const _cmpNameASC = function (a, b) {return a.innerText > b.innerText ? 1 : -1;};
@@ -84,12 +92,12 @@ const sortClanList = function(e) {
         "memberCountASC": _cmpMemberCountASC,
         "memberCountDESC": _cmpMemberCountDESC,
     };
-    $(".clan-list > .clan-info").sort(cmp[e.value]).appendTo(".clan-list");
+    let el_clan_list = selectElement(".clan-list");
+    selectElements(".clan-list > .clan-info").sort(cmp[e.value]).forEach(el => el_clan_list.appendChild(el));
 };
 
 const toggleBookmark = function (el) {
-    let $el = $(el.parentElement.parentElement.parentElement);
-    let ret = $el.toggleClass("bookmark").hasClass("bookmark");
+    el.classList.toggle("bookmark");
     let group_id = el.parentElement.parentElement.getAttribute("href").match(/\/clan\/([0-9]+)/)[1];
     if (!group_id) {
         console.log("ERROR: cannot save bookmark status change")
@@ -97,17 +105,17 @@ const toggleBookmark = function (el) {
     }
     // 북마크 목록 (localStorage) 추가 제거 기능
     let data = loadLocalStorageJSON("bookmark");
-    if (ret) data[group_id] = "";
+    if (el.classList.contains("bookmark")) data[group_id] = "";
     else delete data[group_id];
     saveLocalStorageJSON("bookmark", data);
 }
 
 const loadBookmark = function () {
     let data = loadLocalStorageJSON("bookmark");
-    let $clan_list = $(".clan-info");
-    $clan_list.each((i, el) => {
+    let clan_list = selectElements(".clan-info");
+    clan_list.forEach((el) => {
         let gid = el.firstElementChild.href.match(/\/clan\/([0-9]+)/)[1];
-        if (gid in data) $(el).addClass("bookmark");
+        if (gid in data) el.classList.add("bookmark");
     });
 }
 
@@ -115,30 +123,30 @@ const loadBookmark = function () {
 // ================ /clan/<group_id> ================ //
 
 const getMaxUserCount = function () {
-    let ww = $(window).width();
+    let ww = window.innerWidth;
     let c;
 
     if (ww > 1440) c = 4;
     else if (ww > 960) c = 3;
     else if (ww > 640) c = 2;
     else c = 1;
-    return Math.floor($(".user-list").height() / 44) * c;
+    return Math.floor(selectElement(".user-list").clientHeight / 44) * c;
 };
 
 
 const setPage = function (p) {
     let page_count = getMaxUserCount();
-    let total_user = $(".user").length;
+    let total_user = selectElements(".user").length;
     let max_page = Math.ceil(total_user / page_count) - 1;
 
     if (page_count === PAGE_CAPACITY && p === CURRENT_PAGE) return;
 
     if (p > max_page) p = 0;
-    $(".user-wrap").each(function (index, element) {
-        if (Math.floor(index / page_count) === p && $(element).hasClass("hide")) {
-            $(element).removeClass("hide");
-        } else if (Math.floor(index / page_count) !== p && !$(element).hasClass("hide")) {
-            $(element).addClass("hide");
+    selectElements(".user-wrap").forEach((el, i) => {
+        if (Math.floor(i / page_count) === p && el.classList.contains("hide")) {
+            el.classList.remove("hide");
+        } else if (Math.floor(i / page_count) !== p && !el.classList.contains("hide")) {
+            el.classList.add("hide");
         }
     });
     PAGE_CAPACITY = page_count;
@@ -146,13 +154,10 @@ const setPage = function (p) {
     CURRENT_PAGE = p;
 
     // console.log(CURRENT_PAGE + " / " + MAX_PAGE);
-    $(".info-page").text(`${CURRENT_PAGE + 1} / ${MAX_PAGE + 1} 페이지`);
+    selectElement(".info-page").textContent = `${CURRENT_PAGE + 1} / ${MAX_PAGE + 1} 페이지`;
 
-    if (CURRENT_PAGE === 0) $("#prevPage").attr("disabled", true);
-    else $("#prevPage").attr("disabled", false);
-
-    if (CURRENT_PAGE === MAX_PAGE) $("#nextPage").attr("disabled", true);
-    else $("#nextPage").attr("disabled", false);
+    document.getElementById("prevPage").disabled = CURRENT_PAGE === 0;
+    document.getElementById("nextPage").disabled = CURRENT_PAGE === MAX_PAGE;
 };
 
 const nextPage = function() {
@@ -166,11 +171,12 @@ const prevPage = function() {
 }
 
 const adjustUserElementCount = function(n) {
-    let total_user = $(".user").length;
+    let total_user = selectElements(".user").length;
+    let el_user_list = selectElement(".user-list")
     if (total_user < n) {
-        for(let i=total_user; i<n; i++) $(".user-list").append(DOM_USER.clone());
+        for(let i=total_user; i<n; i++) el_user_list.append(DOM_USER);
     }
-    else if (total_user > n) $(`.user-wrap:gt(${n - 1})`).remove();
+    else if (total_user > n) selectElements(`.user-wrap:nth-last-child(-n+${total_user - n})`).forEach(el => el.remove());
 }
 
 const mkCmd = function (s) {
@@ -194,16 +200,16 @@ const clipboardInitialize = function() {
     });
     clipboard.on("success", function(e) {
         console.log("Copy success");
-        $(e.trigger).addClass("copied");
-        setTimeout(function () { $(e.trigger).removeClass("copied"); }, 2000);
+        e.trigger.classList.add("copied");
+        setTimeout(function () { e.trigger.classList.remove("copied"); }, 2000);
     });
-    clipboard.on("error", function(e) {
+    clipboard.on("error", function() {
         console.log("Copy ERROR");
     });
 }
 
 const directJoinInitialize = function () {
-    Array.prototype.forEach.call(document.getElementsByClassName("copy"), (el) => {
+    selectElements("copy").forEach((el) => {
        el.onclick = function() {
             console.log("Click!");
             location.href = "steam://rungame/1085660/" + this.getAttribute("data-bungie-name");
@@ -215,9 +221,9 @@ const initMembers = async function(groupId) {
     // 상수값 설정
     GROUP_ID = groupId;
     // 현재 모드 따라 아이콘 모양 바꾸기
-    let $copy_icon = $(".copy");
-    if (mode === "direct") $copy_icon.attr("data-icon", "login");
-    else $copy_icon.attr("data-icon", "content_copy");
+    let copy_icon = selectElements(".copy");
+    if (mode === "direct") copy_icon.forEach(el => el.setAttribute("data-icon", "login"));
+    else copy_icon.forEach(el => el.setAttribute("data-icon", "content_copy"));
 
     // 데이터 업데이트 수행
     await updateMembers(groupId);
@@ -279,12 +285,13 @@ const updateMembers = async function(groupId) {
         if (mode === "direct") directJoinInitialize();
         else clipboardInitialize();
         // 완료 메시지
-        Array.prototype.forEach.call(document.getElementsByClassName("info-online"), (el) => { el.textContent = `${online_members} / ${arr_members.length} 온라인`;});
+        selectElements(".info-online").forEach((el) => { el.textContent = `${online_members} / ${arr_members.length} 온라인`;});
         let refresh_button = document.getElementById("refresh");
         refresh_button.dataset.icon = "done";
-        refresh_button.removeAttribute("disabled");
+        refresh_button.disabled = false;
     } catch (e) {
         console.log(e)
+        selectElements(".info-online").forEach((el) => { el.textContent = "오류 발생!";});
         generateModal("이런!", "업데이트 도중 오류가 발생하였습니다!<br>" + e, "닫기", true);
     } finally {
         // 업데이트 끝. 원상 복귀
@@ -295,14 +302,14 @@ const updateMembers = async function(groupId) {
 const updateMembersStart = function () {
     lastUpdate = Date.now();
     let refresh_button = document.getElementById("refresh");
-    refresh_button.setAttribute("disabled", "");
+    refresh_button.disabled = true;
     refresh_button.dataset.icon = "hourglass_bottom";
-    document.getElementsByClassName("user-list")[0].classList.add("loading");
+    selectElements(".user-list")[0].classList.add("loading");
 }
 
 const updateMembersEnd = function (isSuccess = true) {
     setTimeout(() => { document.getElementById("refresh").dataset.icon = "refresh"; }, 1000);
-    document.getElementsByClassName("user-list")[0].classList.remove("loading");
+    selectElement(".user-list").classList.remove("loading");
 }
 
 const resetEmblem = function (el) {
@@ -383,26 +390,27 @@ const getEdgeAvgColor = function(img) {
 
 // ================ /request ================ //
 const _showClanContainer = function() {
-    $(".clan-container").show()
-    $(".error-msg-box").hide()
+    selectElement(".clan-container").style.display = "";
+    selectElement(".error-msg-box").style.display = "none";
 }
 const _hideClanContainer = function() {
-    $(".clan-container").hide()
-    $(".error-msg-box").show().find("h2").text("검색 결과가 없습니다.")
+    selectElement(".clan-container").style.display = "none";
+    selectElement(".error-msg-box").style.display = "";
+    selectElement(".error-msg-box h2").textContent = "검색 결과가 없습니다.";
 }
 
 const _editClanContainer = function(name, callsign, motto, count, group_id) {
-    $(".clan-name").html(name);
-    $(".clan-callsign").text(callsign);
-    $(".clan-motto").text(motto);
-    $(".clan-member-count").text(count + "명")
-    $(".link-btn").attr("href", "https://www.bungie.net/ko/ClanV2?groupid=" + group_id)
-    $(".request-btn").attr("data-groupId", group_id)
+    selectElement(".clan-name").textContent = name;
+    selectElement(".clan-callsign").textContent = callsign;
+    selectElement(".clan-motto").textContent = motto;
+    selectElement(".clan-member-count").textContent = count + "명";
+    selectElement(".link-btn").href = "https://www.bungie.net/ko/ClanV2?groupid=" + group_id;
+    selectElement(".request-btn").dataset.groupId = group_id;
 }
 
 const getGroupByName = function(name) {
     _hideClanContainer();
-    $(".error-msg-box h2").text("검색중...")
+    selectElement(".error-msg-box h2").textContent = "검색중..."
     requestBungieAPI("/GroupV2/Name/" + name + "/1")
     .then(data => {
         _editClanContainer(
@@ -414,16 +422,16 @@ const getGroupByName = function(name) {
         );
         _showClanContainer();
         if (data.Response.detail.memberCount < 10) {
-            $(".request-btn").attr("disabled", true);
+            selectElement(".request-btn").document.getElementById("nextPage");
         }
     })
-    .catch((data) => {
+    .catch(() => {
         _hideClanContainer();
     });
 }
 
 const clanAddRequest = function(el) {
-    let group_id = $(el).attr("data-groupId");
+    let group_id = el.getAttribute("data-groupId");
     fetch("/api/clan/add" + group_id)
     .then(resp => resp.json())
     .then(data => {
@@ -435,7 +443,7 @@ const clanAddRequest = function(el) {
 
 const searchSubmit = function(e) {
     e.preventDefault();
-    getGroupByName($("#clan-search").val())
+    getGroupByName(document.getElementById("clan-search").value);
 }
 
 // ================ /setting ================ //
@@ -501,35 +509,45 @@ const setCommandPrefixByLang = function (lang) {
 
 const initCommandPrefix = function () {
     getCommandPrefix();
+    let el_cmd_join = document.getElementById("cmd_join");
+    let el_cmd_invite = document.getElementById("cmd_invite");
     if (cmd_lang.length > 0) {
-        $("#cmd_join").val(cmd_join).attr("readonly", true);
-        $("#cmd_invite").val(cmd_invite).attr("readonly", true);
-        if (cmd_lang === "ko") $("input[name=lang][value=ko]").attr("checked", true);
-        else if (cmd_lang === "en") $("input[name=lang][value=en]").attr("checked", true);
+        el_cmd_join.value = cmd_join;
+        el_cmd_join.setAttribute("readonly", "readonly");
+        el_cmd_invite.value = cmd_invite;
+        el_cmd_invite.setAttribute("readonly", "readonly");
+        if (cmd_lang === "ko") selectElement("input[name=lang][value=ko]").checked = true;
+        else if (cmd_lang === "en") selectElement("input[name=lang][value=en]").checked = true;
     }
     else {
-        $("#cmd_join").val(cmd_join).removeAttr("readonly");
-        $("#cmd_invite").val(cmd_invite).removeAttr("readonly");
-        $("input[name=lang][value='']").attr("checked", true);
+        el_cmd_join.value = cmd_join;
+        el_cmd_join.removeAttribute("readonly");
+        el_cmd_invite.value = cmd_invite;
+        el_cmd_invite.removeAttribute("readonly");
+        selectElement("input[name=lang][value='']").checked = true;
     }
 }
 
 const radioSetCmdPrefix = function (el) {
     setCommandPrefixByLang(el.value);
-    $("#cmd_join").val(cmd_join).attr("readonly", true);
-    $("#cmd_invite").val(cmd_invite).attr("readonly", true);
+    let el_cmd_join = document.getElementById("cmd_join");
+    let el_cmd_invite = document.getElementById("cmd_invite");
+    el_cmd_join.value = cmd_join;
+    el_cmd_join.setAttribute("readonly", "readonly");
+    el_cmd_invite.value = cmd_invite;
+    el_cmd_invite.setAttribute("readonly", "readonly");
 }
 
 const textSetCmdPrefix = function () {
-    cmd_join = $("#cmd_join").val();
-    cmd_invite = $("#cmd_invite").val();
+    cmd_join = document.getElementById("cmd_join").value;
+    cmd_invite = document.getElementById("cmd_invite").value;
     cmd_lang = "";
     setCommandPrefix(cmd_join, cmd_invite, cmd_lang);
 }
 
 const enableCmdBox = function () {
-    $("#cmd_join").removeAttr("readonly");
-    $("#cmd_invite").removeAttr("readonly");
+    document.getElementById("cmd_join").removeAttribute("readonly");
+    document.getElementById("cmd_invite").removeAttribute("readonly");
     cmd_lang = "";
     setCommandPrefix(cmd_join, cmd_invite, cmd_lang);
 }
@@ -568,7 +586,7 @@ const setAutoUpdateSetting = function (value=true) {
 }
 // ================ modal ================ //
 const generateModal = function (title, text, btn, no_duplicate) {
-    if (no_duplicate && document.querySelector(".modal-bg")) return;
+    if (no_duplicate && selectElement(".modal-bg")) return;
 
     let modal_bg = document.createElement("div");
     let modal_wrap = document.createElement("div")
@@ -595,15 +613,15 @@ const generateModal = function (title, text, btn, no_duplicate) {
     modal_wrap.appendChild(modal)
     modal_bg.appendChild(modal_wrap);
     modal_bg.addEventListener("click", (e) => closeModal(e, modal_bg))
-    document.querySelector("body").appendChild(modal_bg);
-    document.querySelector("main").classList.add("blur")
+    selectElement("body").appendChild(modal_bg);
+    selectElement("main").classList.add("blur")
 }
 
 const closeModal = function (ev, el) {
     // el == div.modal_bg
     if (ev.target === ev.currentTarget && el.classList.contains("modal-bg")) {
         el.remove();
-        document.querySelector("main").classList.remove("blur")
+        selectElement("main").classList.remove("blur")
     }
 }
 

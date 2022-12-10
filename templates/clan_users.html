@@ -19,7 +19,7 @@
   </div>
   <div class="nav-info">
     <div class="info-page"></div>
-    <div class="info-online"></div>
+    <div class="info-online">로드중...</div>
   </div>
   <div class="nav-btn-wrap">
     <button id="refresh" class="material-icons" disabled data-icon="refresh"></button>
@@ -43,12 +43,12 @@
 
 {% block script %}
 <script>
-  $(document).ready(function () {
+  document.addEventListener("DOMContentLoaded", () => {
     const groupId = "{{clan_data['id']}}";
     initMembers(groupId);
-    $("#prevPage").click(prevPage);
-    $("#nextPage").click(nextPage);
-    $("#refresh").click(refreshMembers);
+    document.getElementById("prevPage").addEventListener("click", prevPage);
+    document.getElementById("nextPage").addEventListener("click", nextPage);
+    document.getElementById("refresh").addEventListener("click", refreshMembers);
     if (getAutoUpdateSetting()) {
       document.addEventListener("visibilitychange", function () {
         if (!document.hidden) refreshMembers();
@@ -72,7 +72,7 @@
     ctrlObserverInit();
   });
 
-  $(window).resize(function () {
+  window.addEventListener("resize", () => {
     setPage(CURRENT_PAGE);
   });
 </script>

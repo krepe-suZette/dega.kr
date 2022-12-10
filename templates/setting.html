@@ -54,13 +54,13 @@
 
 {% block script %}
 <script>
-  $(document).ready(function () {
+  document.addEventListener("DOMContentLoaded", () => {
     let m = getMode();
-    if (m === "direct") $("#mode_direct").prop("checked", true);
-    else if (m === "copy") $("#mode_copy").prop("checked", true);
+    if (m === "direct") document.getElementById("mode_direct").checked = true;
+    else if (m === "copy") document.getElementById("mode_copy").checked = true;
 
     initCommandPrefix();
-    $("#my_bungie_name").val(getMyBungieName())
+    document.getElementById("my_bungie_name").value = getMyBungieName()
     document.getElementById("active_window_update").checked = getAutoUpdateSetting();
     document.getElementById("active_window_update").onchange = function () { setAutoUpdateSetting(this.checked) };
   })

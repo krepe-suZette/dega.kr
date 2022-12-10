@@ -47,17 +47,18 @@
 
 {% block script %}
 <script>
-  $(document).ready(function () {
+  window.onload = function () {
     // 북마크
     loadBookmark();
     // 정렬
-    $("#clan_search").on('input', function () {
-        filterClanList($(this).val());
+    let el_clan_search = document.getElementById("clan_search");
+    el_clan_search.addEventListener('input', () => {
+        filterClanList(el_clan_search.value);
     });
-    let $clan_sort = $("#clan-sort").val();
-    if ($clan_sort) {
-      sortClanList({"value": $clan_sort});
+    let clan_sort = document.getElementById("clan-sort").value;
+    if (clan_sort) {
+      sortClanList({"value": clan_sort});
     }
-  });
+  };
 </script>
 {% endblock %}
