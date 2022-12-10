@@ -305,38 +305,6 @@ const updateMembersEnd = function (isSuccess = true) {
     document.getElementsByClassName("user-list")[0].classList.remove("loading");
 }
 
-const getAllMembersSteamID = async function (arr) {
-    let r = {};
-    let failList = [];
-    arr.forEach(el => {
-        let val = sessionStorage.getItem(el);
-        if (val === null) failList.push(el);
-        else r[el] = val;
-    });
-    if (failList.length === 0) return r;
-
-    let newValues = await requestAllMembersSteamID(failList);
-    Object.keys(newValues).forEach(el => {
-        sessionStorage.setItem(el, newValues[el]);
-        r[el] = newValues[el];
-    });
-    return r;
-}
-
-const requestAllMembersSteamID = async function (arr) {
-    try {
-        return await $.ajax({
-            type: "GET",
-            data: {id: arr},
-            url: "/api/getSteamID",
-            traditional: true
-        });
-    } catch {
-        return {};
-    }
-}
-
-
 const resetEmblem = function (el) {
     el.style.backgroundColor = "";
     if (el.children[0].lastElementChild) el.children[0].lastElementChild.remove();
