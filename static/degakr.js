@@ -28,6 +28,20 @@ const saveLocalStorageJSON = function (key, item) {
 }
 
 
+const requestBungieAPI = async function (endpoint) {
+    let resp = await fetch("https://www.bungie.net/Platform" + endpoint, {
+        headers: {"X-API-Key": API_KEY}
+    });
+    if (resp.status === 200) {
+        return resp.json();
+    }
+    else {
+        let resp_json = await resp.json();
+        console.log(resp_json);
+        throw new Error(resp_json.ErrorStatus + ": " + resp_json.Message);
+    }
+}
+
 // ================ /clan ================ //
 const filterClanList = function(s) {
     let rows = $(".clan-info");
@@ -215,10 +229,7 @@ const updateMembers = async function(groupId) {
 
     try {
         // Bungie.net API Members 요청
-        let resp_members = await $.ajax({
-            url: "https://www.bungie.net/Platform/GroupV2/" + groupId + "/Members/",
-            headers: { "X-API-Key": API_KEY }
-        });
+        let resp_members = await requestBungieAPI("/GroupV2/" + groupId + "/Members/")
         // 결과값 배열 복사
         let arr_members = resp_members.Response.results.slice();
         let online_members = arr_members.filter(el => el.isOnline).length;
@@ -360,10 +371,7 @@ const applyMemberEmblem = async function (el, data) {
 
 const requestProfile = async function (m_type, m_id) {
     try {
-        let resp = await $.ajax({
-            url: "https://www.bungie.net/Platform/Destiny2/" + m_type + "/Profile/" + m_id + "/?components=200",
-            headers: { "X-API-Key": API_KEY }
-        });
+        let resp = await requestBungieAPI("/Destiny2/" + m_type + "/Profile/" + m_id + "/?components=200");
         if (resp.Response.characters.privacy !== 1) return null;
         else return resp.Response.characters.data;
     } catch {
@@ -427,45 +435,34 @@ const _editClanContainer = function(name, callsign, motto, count, group_id) {
 const getGroupByName = function(name) {
     _hideClanContainer();
     $(".error-msg-box h2").text("검색중...")
-    $.ajax({
-        type: "GET",
-        url: "https://www.bungie.net/Platform/GroupV2/Name/" + name + "/1",
-        headers: {
-            "X-API-Key": API_KEY
+    requestBungieAPI("/GroupV2/Name/" + name + "/1")
+    .then(data => {
+        _editClanContainer(
+            data.Response.detail.name,
+            data.Response.detail.clanInfo.clanCallsign,
+            data.Response.detail.motto,
+            data.Response.detail.memberCount,
+            data.Response.detail.groupId
+        );
+        _showClanContainer();
+        if (data.Response.detail.memberCount < 10) {
+            $(".request-btn").attr("disabled", true);
         }
-    }).done(function(data) {
-        if (data.ErrorCode === 1) {
-            _editClanContainer(
-                data.Response.detail.name,
-                data.Response.detail.clanInfo.clanCallsign,
-                data.Response.detail.motto,
-                data.Response.detail.memberCount,
-                data.Response.detail.groupId
-            );
-            _showClanContainer();
-            if (data.Response.detail.memberCount < 10) {
-                $(".request-btn").attr("disabled", true);
-            }
-        }
-        else {
-            _hideClanContainer();
-        }
-    }).fail(function(data) {
+    })
+    .catch((data) => {
         _hideClanContainer();
     });
 }
 
 const clanAddRequest = function(el) {
     let group_id = $(el).attr("data-groupId");
-    $.ajax({
-        type: "GET",
-        url: "/api/clan/add/" + group_id
-    }).done(function(resp) {
-        if (resp.result) alert("신청이 완료되었습니다. 적용에는 시간이 걸리니 조금만 기다려주세요.");
-        else alert("등록 신청 실패: " + resp.message);
-    }).fail(function() {
-        alert("등록 신청 실패.")
-    });
+    fetch("/api/clan/add" + group_id)
+    .then(resp => resp.json())
+    .then(data => {
+        if (data.result) alert("신청이 완료되었습니다. 적용에는 시간이 걸리니 조금만 기다려주세요.");
+        else alert("등록 신청 실패: " + data.message);
+    })
+    .catch(() => {alert("등록 신청 실패.")})
 }
 
 const searchSubmit = function(e) {
