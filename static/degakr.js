@@ -1,6 +1,7 @@
 let PAGE_CAPACITY = 0;
 let MAX_PAGE = 0;
 let CURRENT_PAGE = 0;
+let CURRENT_MAX_USER = 0;
 const API_KEY = "3632dd9656a54c6d90b31777940b2581";
 const DOM_USER_COPY = "<div class='user-wrap'><div class='user'><div class='emblem'></div><div class='platform'><img draggable='false' src=''></div><div class='display-name'></div><button class='copy material-icons' data-bungie-name='' data-icon='content_copy'></button></div></div>";
 const DOM_USER_DIRECT = "<div class='user-wrap'><div class='user'><div class='emblem'></div><div class='platform'><img draggable='false' src=''></div><div class='display-name'></div><button class='copy material-icons' data-bungie-name='' data-icon='login'></button></div></div>";
@@ -130,15 +131,18 @@ const getMaxUserCount = function () {
     else if (ww > 960) c = 3;
     else if (ww > 640) c = 2;
     else c = 1;
-    return Math.floor(selectElement(".user-list").clientHeight / 44) * c;
+
+    return CURRENT_MAX_USER = Math.floor(selectElement(".user-list").clientHeight / 44) * c;
 };
 
 
-const setPage = function (p) {
+const setPage = function (p = CURRENT_PAGE) {
+    let prev_page_count = CURRENT_MAX_USER;
     let page_count = getMaxUserCount();
     let total_user = selectElements(".user").length;
     let max_page = Math.ceil(total_user / page_count) - 1;
 
+    if (p === CURRENT_PAGE && prev_page_count === page_count) return;
     if (page_count === PAGE_CAPACITY && p === CURRENT_PAGE) return;
 
     if (p > max_page) p = 0;
@@ -174,7 +178,7 @@ const adjustUserElementCount = function(n) {
     let total_user = selectElements(".user").length;
     let el_user_list = selectElement(".user-list")
     if (total_user < n) {
-        for(let i=total_user; i<n; i++) el_user_list.append(DOM_USER);
+        for(let i=total_user; i<n; i++) el_user_list.insertAdjacentHTML("beforeend", DOM_USER);
     }
     else if (total_user > n) selectElements(`.user-wrap:nth-last-child(-n+${total_user - n})`).forEach(el => el.remove());
 }

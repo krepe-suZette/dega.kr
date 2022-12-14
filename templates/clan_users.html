@@ -72,8 +72,11 @@
     ctrlObserverInit();
   });
 
+  let resize_timeout_id;
   window.addEventListener("resize", () => {
-    setPage(CURRENT_PAGE);
+    // setPage();
+    clearTimeout(resize_timeout_id)
+    resize_timeout_id = setTimeout(setPage, 50)
   });
 </script>
 {% endblock %}
