@@ -6,7 +6,7 @@ app = Flask("main")
 p_client = Client()
 data = Data()
 last_update = "2022-12-15"
-__version__ = "1.2.0"
+__version__ = "1.2.1"
 
 
 @app.route("/")
