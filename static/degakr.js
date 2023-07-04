@@ -435,8 +435,8 @@ const getGroupByName = function(name) {
 }
 
 const clanAddRequest = function(el) {
-    let group_id = el.getAttribute("data-groupId");
-    fetch("/api/clan/add" + group_id)
+    let group_id = el.getAttribute("data-group-id");
+    fetch("/api/clan/add/" + group_id)
     .then(resp => resp.json())
     .then(data => {
         if (data.result) alert("신청이 완료되었습니다. 적용에는 시간이 걸리니 조금만 기다려주세요.");
