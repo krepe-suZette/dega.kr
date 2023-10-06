@@ -1,8 +1,8 @@
 from flask import Flask, render_template, jsonify, request
 
-from parser_client import Client, Data
+from .parser_client import Client, Data
 
-app = Flask("main")
+app = Flask(__name__)
 p_client = Client()
 data = Data()
 last_update = "2023-07-05"
