@@ -9,21 +9,24 @@ import aiohttp
 import aiofile
 import bs4
 import pydest
+from dotenv import load_dotenv
 
-_path = "./parser.sock"
-_host = "localhost"
-_port = 50001
-
-with open("API_KEY", "r") as f:
-    API_KEY = f.read().strip()
+load_dotenv()
+_path = os.getenv("PARSER_SOCKET_PATH", "/tmp/parser.sock")
+_host = os.getenv("PARSER_SOCKET_HOST", "localhost")
+_port = int(os.getenv("PARSER_SOCKET_PORT", 50001))
+API_KEY = os.getenv("BUNGIE_API_KEY", "")
+_data_path = os.getenv("DATA_PATH", "./data")
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 fmt = logging.Formatter("%(asctime)s|%(levelname)s|%(message)s")
 fh = logging.FileHandler("parser.log", "a", encoding="utf-8")
+sh = logging.StreamHandler()
 fh.setLevel(logging.INFO)
 fh.setFormatter(fmt)
 logger.addHandler(fh)
+logger.addHandler(sh)
 
 
 def parse_account_info(tag: bs4.Tag):
@@ -49,10 +52,25 @@ class Parser:
         self._api_key = api_key
         self.destiny = pydest.Pydest(api_key)
         self.session = aiohttp.ClientSession()
-        with open("data/clan.json", "r", encoding="utf-8") as f:
-            self.clan: dict = json.load(f)
-        with open("data/user.json", "r", encoding="utf-8") as f:
-            self.user: dict = json.load(f)
+        self.json_user_path = os.path.join(_data_path, "user.json")
+        self.json_clan_path = os.path.join(_data_path, "clan.json")
+        if not os.path.exists(_data_path):
+            os.mkdir(_data_path)
+
+        if os.path.exists(self.json_clan_path):
+            with open(self.json_clan_path, "r", encoding="utf-8") as f:
+                self.clan: dict = json.load(f)
+        else:
+            with open(self.json_clan_path, "w", encoding="utf-8") as f:
+                json.dump({}, f, ensure_ascii=False, indent=2)
+            self.clan: dict = {}
+        if os.path.exists(self.json_user_path):
+            with open(self.json_user_path, "r", encoding="utf-8") as f:
+                self.user: dict = json.load(f)
+        else:
+            with open(self.json_user_path, "w", encoding="utf-8") as f:
+                json.dump({}, f, ensure_ascii=False, indent=2)
+            self.user: dict = {}
 
     def __del__(self):
         self.commit()
@@ -60,15 +78,15 @@ class Parser:
         self.session.close()
 
     async def load(self):
-        async with aiofile.async_open("data/clan.json", "r", encoding="utf-8") as f:
+        async with aiofile.async_open(self.json_clan_path, "r", encoding="utf-8") as f:
             self.clan: dict = json.loads(await f.read())
-        async with aiofile.async_open("data/user.json", "r", encoding="utf-8") as f:
+        async with aiofile.async_open(self.json_user_path, "r", encoding="utf-8") as f:
             self.user: dict = json.loads(await f.read())
 
     async def commit(self):
-        async with aiofile.async_open("data/clan.json", "w", encoding="utf-8") as f:
+        async with aiofile.async_open(self.json_clan_path, "w", encoding="utf-8") as f:
             await f.write(json.dumps(self.clan, ensure_ascii=False, indent=2))
-        async with aiofile.async_open("data/user.json", "w", encoding="utf-8") as f:
+        async with aiofile.async_open(self.json_user_path, "w", encoding="utf-8") as f:
             await f.write(json.dumps(self.user, ensure_ascii=False, indent=2))
 
     async def get_clan_members(self, group_id: int, skip_dupe=True) -> None:

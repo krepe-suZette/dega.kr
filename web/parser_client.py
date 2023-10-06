@@ -4,9 +4,14 @@ import json
 import os
 import argparse
 
-_path = "./parser.sock"
-_host = "localhost"
-_port = 50001
+from dotenv import load_dotenv
+
+load_dotenv()
+_socket_type = os.getenv("PARSER_SOCKET_TYPE", "tcp")
+_path = os.getenv("PARSER_SOCKET_PATH", "/tmp/parser.sock")
+_host = os.getenv("PARSER_SOCKET_HOST", "localhost")
+_port = int(os.getenv("PARSER_SOCKET_PORT", 50001))
+_data_path = os.getenv("DATA_PATH", "data")
 
 SHORT_CMD = {
     "commit": {"type": "commit"},
@@ -19,7 +24,9 @@ SHORT_CMD = {
 class Client:
     # 동기 방식의 Socket 통신 client 입니다. parser_server.py 실행 후 실행해주세요.
     def __init__(self):
-        if os.name == "posix":
+        if _socket_type == "unix":
+            if os.name != "posix":
+                raise OSError("unix socket is not supported in Windows OS")
             self.sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
             self.address = _path
         else:
@@ -57,32 +64,36 @@ class Client:
 
 class Data:
     def __init__(self):
+        self.json_clan_path = os.path.join(_data_path, "clan.json")
+        self.json_user_path = os.path.join(_data_path, "user.json")
+        self.json_blocklist_path = os.path.join(_data_path, "clan_blocklist.json")
+
         self._load_clan()
         self._load_user()
         self._load_clan_blocklist()
 
     def _load_clan(self):
-        with open("data/clan.json", "r", encoding="utf-8") as f:
+        with open(self.json_clan_path, "r", encoding="utf-8") as f:
             self.clan_all: dict = json.load(f)
             self.clan = {k: v for k, v in self.clan_all.items() if v.get("memberCount") > 5}
-        self.last_edit_clan = os.path.getmtime("data/clan.json")
+        self.last_edit_clan = os.path.getmtime(self.json_clan_path)
 
     def _load_user(self):
-        with open("data/user.json", "r", encoding="utf-8") as f:
+        with open(self.json_user_path, "r", encoding="utf-8") as f:
             self.user: dict = json.load(f)
-        self.last_edit_user = os.path.getmtime("data/user.json")
+        self.last_edit_user = os.path.getmtime(self.json_user_path)
 
     def _load_clan_blocklist(self):
-        with open("data/clan_blocklist.json", "r", encoding="utf-8") as f:
+        with open(self.json_blocklist_path, "r", encoding="utf-8") as f:
             self.clan_blocklist: dict = json.load(f)
-        self.last_edit_clan_blocklist = os.path.getmtime("data/clan_blocklist.json")
+        self.last_edit_clan_blocklist = os.path.getmtime(self.json_blocklist_path)
 
     def update(self):
-        if self.last_edit_clan < os.path.getmtime("data/clan.json"):
+        if self.last_edit_clan < os.path.getmtime(self.json_clan_path):
             self._load_clan()
-        if self.last_edit_user < os.path.getmtime("data/user.json"):
+        if self.last_edit_user < os.path.getmtime(self.json_user_path):
             self._load_user()
-        if self.last_edit_clan_blocklist < os.path.getmtime("data/clan_blocklist.json"):
+        if self.last_edit_clan_blocklist < os.path.getmtime(self.json_blocklist_path):
             self._load_clan_blocklist()
 
 

@@ -1,17 +1,22 @@
+import os
+
 from flask import Flask, render_template, jsonify, request
+from dotenv import load_dotenv
 
 from .parser_client import Client, Data
 
 app = Flask(__name__)
 p_client = Client()
 data = Data()
-last_update = "2023-07-05"
-__version__ = "1.2.2"
+
+load_dotenv()
+app.config["version"] = os.getenv("LAST_UPDATE", "???")
+app.config["last_update"] = os.getenv("VERSION", "...")
 
 
 @app.route("/")
 def root():
-    return render_template("root.html", last_update=last_update)
+    return render_template("root.html")
 
 
 @app.route("/update-log")
