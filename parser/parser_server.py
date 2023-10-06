@@ -12,6 +12,7 @@ import pydest
 from dotenv import load_dotenv
 
 load_dotenv()
+_socket_type = os.getenv("PARSER_SOCKET_TYPE", "tcp")
 _path = os.getenv("PARSER_SOCKET_PATH", "/tmp/parser.sock")
 _host = os.getenv("PARSER_SOCKET_HOST", "localhost")
 _port = int(os.getenv("PARSER_SOCKET_PORT", 50001))
@@ -274,11 +275,15 @@ async def run():
             finally:
                 await writer.drain()
 
-    if os.name == "posix":
+    if _socket_type == "unix":
+        if os.name != "posix":
+            logger.error("[Server] Unix socket is not supported in this OS")
+            return
         server = await asyncio.start_unix_server(handler, _path)
     else:
         server = await asyncio.start_server(handler, host=_host, port=_port)
-    logger.info("[Server] Start!")
+    _sock_path = _path if _socket_type == "unix" else f"{_host}:{_port}"
+    logger.info(f"[Server] Start! ({_socket_type} {_sock_path})")
     async with server:
         await server.serve_forever()
 
