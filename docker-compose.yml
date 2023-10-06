@@ -1,0 +1,50 @@
+version: '3'
+services:
+  parser:
+    build:
+      context: .
+      dockerfile: Dockerfile.parser
+    image: dega.kr-parser
+    container_name: dega-parser
+    volumes:
+      - ./data:${DATA_PATH}
+    environment:
+      - BUNGIE_API_KEY=${BUNGIE_API_KEY}
+      - PARSER_SOCKET_TYPE=${PARSER_SOCKET_TYPE}
+      - PARSER_SOCKET_PATH=${PARSER_SOCKET_PATH}
+      - PARSER_SOCKET_HOST=${PARSER_SOCKET_HOST}
+      - PARSER_SOCKET_PORT=${PARSER_SOCKET_PORT}
+      - DATA_PATH=${DATA_PATH}
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    image: dega.kr
+    container_name: dega-web
+    ports:
+      - 80:80
+    depends_on:
+      - parser
+    volumes:
+      - ./data:${DATA_PATH}
+      - static:/code/web/static
+    environment:
+      - PARSER_SOCKET_TYPE=${PARSER_SOCKET_TYPE}
+      - PARSER_SOCKET_PATH=${PARSER_SOCKET_PATH}
+      - PARSER_SOCKET_HOST=${PARSER_SOCKET_HOST}
+      - PARSER_SOCKET_PORT=${PARSER_SOCKET_PORT}
+      - DATA_PATH=${DATA_PATH}
+  
+  static:
+    image: nginx
+    container_name: dega-static
+    ports:
+      - 8080:80
+    volumes:
+      - static:/usr/share/nginx/html/static
+    depends_on:
+      - web
+
+volumes:
+  static:
