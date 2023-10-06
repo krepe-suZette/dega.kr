@@ -6,8 +6,8 @@ COPY ./requirements.txt /code/requirements.txt
 
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
-ENV VERSION=1.2.2
-ENV LAST_UPDATE=2023-07-05
+ENV VERSION=1.3.0
+ENV LAST_UPDATE=2023-10-06
 
 COPY ./web /code/web
 
