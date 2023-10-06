@@ -1,0 +1,5 @@
+beautifulsoup4
+pydest
+aiohttp
+aiofile
+python-dotenv

@@ -1,5 +1,3 @@
 Flask
-beautifulsoup4
-pydest
-aiohttp
-aiofile
+gunicorn
+python-dotenv
