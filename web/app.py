@@ -10,8 +10,8 @@ p_client = Client()
 data = Data()
 
 load_dotenv()
-app.config["version"] = os.getenv("LAST_UPDATE", "???")
-app.config["last_update"] = os.getenv("VERSION", "...")
+app.config["version"] = os.getenv("VERSION", "...")
+app.config["last_update"] = os.getenv("LAST_UPDATE", "")
 
 
 @app.route("/")
