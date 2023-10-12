@@ -1,6 +1,6 @@
 # dega.kr
 
-![img](static/img/help_2.png)
+![img](web/static/img/help_2.png)
 
 데스티니 화력팀 합류 도우미
 
